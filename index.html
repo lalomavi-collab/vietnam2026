@@ -268,6 +268,34 @@ input{font-family:inherit}
 .dl-bar{flex-basis:100%;height:7px;border-radius:99px;background:rgba(31,78,121,.14);overflow:hidden}
 .dl-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5CE1E6,#3EE08F);transition:width .3s ease}
 
+/* ── large screens ────────────────────────────────────────────────────
+   The app stays a single mobile column by design. On a desktop it gets a
+   richer backdrop and a little more width, so it reads as a deliberate
+   card rather than a stranded strip. Content proportions are untouched. */
+@media (min-width:900px){
+  .app{
+    background:
+      radial-gradient(58% 44% at 12% 6%,rgba(92,225,230,.14),transparent 60%),
+      radial-gradient(58% 46% at 88% 12%,rgba(255,90,140,.16),transparent 60%),
+      radial-gradient(64% 48% at 50% 100%,rgba(122,92,255,.16),transparent 62%),
+      #0a0c18;
+    padding:0 24px;
+  }
+  .phone{
+    max-width:560px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 34px 90px rgba(0,0,0,.62);
+  }
+  /* Bigger viewing distance on a monitor — nudge the body copy up a step. */
+  .lead{font-size:14.5px}
+  .hl-text{font-size:14.5px}
+  .day-title{font-size:24px}
+  /* No touch here, and the scrollbar is hidden — so wrap instead of scroll. */
+  .regions{flex-wrap:wrap;overflow:visible;padding-bottom:4px}
+}
+@media (min-width:1400px){
+  .phone{max-width:600px}
+}
+
 /* Only very old 320px phones: the title would take two lines there. */
 @media (max-width:359px){
   .title-note span{font-size:22px}
@@ -665,7 +693,7 @@ function dayHTML(d) {
       '<div class="reel" data-reel="' + d.n + '">' +
         '<div class="reel-fallback">' + esc(d.emoji) + '</div>' +
         list.map((url, i) =>
-          '<div class="reel-frame' + (i === idx ? ' on' : '') + '" style="background-image:' + cssUrl(url) + '"></div>'
+          '<div class="reel-frame' + (i === idx ? ' on' : '') + '" data-src="' + esc(url) + '" style="background-image:' + cssUrl(url) + '"></div>'
         ).join('') +
         '<div class="reel-shade"></div>' +
         '<div class="reel-bar">' +
@@ -837,6 +865,7 @@ function renderHero() {
 
 function renderMain() {
   $('#main').innerHTML = VIEWS[state.tab]();
+  if (state.tab === 'days' && state.open) syncReel(state.open);
 }
 
 function syncStats() {
@@ -847,6 +876,29 @@ function syncStats() {
 
 /* Reel frames are updated in place — a full re-render would restart the
    Ken Burns zoom and kill the cross-fade between photos. */
+/* Photos are banked at 800px so 54 of them fit a phone's cache quota. That
+   is soft on a retina laptop, so while we are online the visible frame is
+   quietly swapped for a sharper copy. Offline, the 800 stays and nothing
+   about this runs. */
+const hiResDone = new Set();
+
+function wantsHiRes() {
+  if (navigator.onLine === false) return false;
+  const shown = Math.min(window.innerWidth, 600);          // the app column
+  return shown * (window.devicePixelRatio || 1) > 900;
+}
+
+function upgradeFrame(el) {
+  const src = el.dataset.src;
+  if (!src || !wantsHiRes()) return;
+  const big = src.replace('?width=800', '?width=1600');
+  if (big === src) return;
+  if (hiResDone.has(big)) { el.style.backgroundImage = cssUrl(big); return; }
+  const img = new Image();
+  img.onload = () => { hiResDone.add(big); el.style.backgroundImage = cssUrl(big); };
+  img.src = big;
+}
+
 function syncReel(n) {
   const reel = document.querySelector('[data-reel="' + n + '"]');
   if (!reel) return;
@@ -856,6 +908,7 @@ function syncReel(n) {
   const idx = (state.slide[n] || 0) % frames.length;
   frames.forEach((f, i) => f.classList.toggle('on', i === idx));
   dots.forEach((d, i) => d.classList.toggle('on', i === idx));
+  upgradeFrame(frames[idx]);
 }
 
 function advance(n) {
@@ -882,6 +935,7 @@ function openDay(n) {
   state.open = wasOpen ? 0 : n;
   persist();
   $('#daysList').innerHTML = DAYS.map(dayHTML).join('');
+  if (state.open) syncReel(state.open);
   if (!wasOpen) {
     const next = DAYS.find(d => d.n === n + 1);
     if (next) preload(next.urls);
