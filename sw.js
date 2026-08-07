@@ -6,7 +6,7 @@
               precached; the ⬇ button in the app fills this cache on demand,
               and this worker serves whatever is already in it. */
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 const SHELL = 'vn-shell-' + VERSION;
 const PHOTOS = 'vn-photos-v1';          // kept unversioned: photos never change
 
@@ -24,7 +24,11 @@ const SHELL_FILES = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/apple-touch-icon.png',
+  './icons/favicon-48.png',
+  './icons/favicon-32.png',
+  './icons/favicon-16.png',
+  './icons/og.png'
 ];
 
 self.addEventListener('install', event => {

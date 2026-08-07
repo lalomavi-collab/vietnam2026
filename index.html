@@ -11,8 +11,21 @@
 <title>וייטנאם 2026</title>
 <link rel="stylesheet" href="./fonts/fonts.css">
 <link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/favicon-32.png" sizes="32x32">
+<link rel="icon" href="./icons/favicon-16.png" sizes="16x16">
 <link rel="icon" href="./icons/icon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+
+<!-- Link preview when the URL is shared in WhatsApp / iMessage. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="וייטנאם 2026">
+<meta property="og:description" content="האפליקציה של הטיול שלנו — 19 ימים, ציד המציאות, מדברור ומדליות.">
+<meta property="og:image" content="https://lalomavi-collab.github.io/vietnam2026/icons/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://lalomavi-collab.github.io/vietnam2026/">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 /* ── base ─────────────────────────────────────────────────────────── */
 html,body{margin:0;padding:0;background:#0d1020;-webkit-tap-highlight-color:transparent}
@@ -58,7 +71,8 @@ input{font-family:inherit}
 .hdr-row{position:relative;display:flex;align-items:center;gap:10px;padding:11px 15px 12px}
 .hero-strip{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.34}
 .hero-pic{position:absolute;top:var(--top);right:var(--right);width:86px;height:70px;background-size:cover;background-position:center;transform:rotate(var(--rot));border:3px solid rgba(255,255,255,.5)}
-.logo{position:relative;width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#FF5A8C,#FFB443);display:grid;place-items:center;font-size:25px;flex:none;box-shadow:0 6px 18px rgba(255,90,140,.35);transform:rotate(-4deg)}
+.logo{position:relative;width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#FF5A8C,#FFB443);display:grid;place-items:center;flex:none;box-shadow:0 6px 18px rgba(255,90,140,.35);transform:rotate(-4deg);color:var(--paper)}
+.logo svg{width:64%;display:block}
 .hdr-mid{position:relative;flex:1;min-width:0}
 .title-note{display:inline-block;background:var(--paper);padding:5px 13px 6px;border-radius:3px;transform:rotate(-1.5deg);box-shadow:0 4px 14px rgba(0,0,0,.4)}
 .title-note span{display:block;font-family:var(--hand);font-size:31px;color:var(--ink);line-height:1.22;letter-spacing:.5px}
@@ -226,7 +240,8 @@ input{font-family:inherit}
              radial-gradient(120% 45% at 10% 100%,rgba(122,92,255,.30),transparent 62%),
              linear-gradient(178deg,#151c36,#0f1428 60%,#161029)}
 .gate-card{width:100%;max-width:330px;text-align:center}
-.gate-logo{width:78px;height:78px;margin:0 auto 18px;border-radius:26px;background:linear-gradient(135deg,#FF5A8C,#FFB443);display:grid;place-items:center;font-size:42px;transform:rotate(-5deg);box-shadow:0 10px 30px rgba(255,90,140,.4)}
+.gate-logo{width:78px;height:78px;margin:0 auto 18px;border-radius:26px;background:linear-gradient(135deg,#FF5A8C,#FFB443);display:grid;place-items:center;transform:rotate(-5deg);box-shadow:0 10px 30px rgba(255,90,140,.4);color:var(--paper)}
+.gate-logo svg{width:62%;display:block}
 .gate-note{background:var(--paper);padding:8px 20px 11px;border-radius:3px;transform:rotate(-1.5deg);box-shadow:0 8px 24px rgba(0,0,0,.5);display:inline-block;margin-bottom:8px}
 .gate-note span{font-family:var(--hand);font-size:38px;color:var(--ink);line-height:1.2}
 .gate-sub{font-size:13px;color:#93a0c4;line-height:1.6;margin:6px 0 22px}
@@ -266,9 +281,20 @@ input{font-family:inherit}
 </style>
 </head>
 <body>
+<!-- The brand mark: nón lá, the Vietnamese conical hat. Defined once, used in
+     the header and on the gate; the PNG icons carry the full note version. -->
+<svg style="display:none" aria-hidden="true">
+  <symbol id="mk-flat" viewBox="0 0 100 78">
+    <path d="M50 6 L12 58 Q50 70 88 58 Z" fill="currentColor"/>
+    <path d="M31 64 Q50 84 69 64" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
 <div class="gate" id="gate">
   <div class="gate-card">
-    <div class="gate-logo">🐉</div>
+    <div class="gate-logo">
+      <svg viewBox="0 0 100 78" aria-hidden="true"><use href="#mk-flat"/></svg>
+    </div>
     <div class="gate-note"><span>וייטנאם 2026</span></div>
     <p class="gate-sub">האפליקציה הזאת היא רק של מי שנוסע איתנו.<br>תקישו את הקוד המשפחתי כדי להיכנס.</p>
     <form class="gate-form" id="gateForm">
@@ -292,7 +318,7 @@ input{font-family:inherit}
     <header class="hdr">
       <div class="hdr-row">
         <div class="hero-strip" id="heroStrip" aria-hidden="true"></div>
-        <div class="logo" aria-hidden="true">🐉</div>
+        <div class="logo" aria-hidden="true"><svg viewBox="0 0 100 78"><use href="#mk-flat"/></svg></div>
         <div class="hdr-mid">
           <div class="title-note"><span>וייטנאם 2026</span></div>
         </div>
