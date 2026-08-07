@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1020">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="וייטנאם 2026 — אפליקציית הטיול המשפחתי.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>וייטנאם 2026</title>
+<link rel="stylesheet" href="./fonts/fonts.css">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<style>
+/* ── base ─────────────────────────────────────────────────────────── */
+html,body{margin:0;padding:0;background:#0d1020;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;scrollbar-width:none;-ms-overflow-style:none}
+::-webkit-scrollbar{width:0;height:0;display:none}
+a{color:#1F4E79;text-decoration:none}
+a:hover{color:#2f6fa8}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input{font-family:inherit}
+
+@keyframes pop{0%{transform:scale(.2) rotate(-16deg);opacity:0}35%{transform:scale(1.3) rotate(8deg);opacity:1}70%{transform:scale(1) rotate(0);opacity:1}100%{transform:scale(1.7);opacity:0}}
+@keyframes rise{0%{transform:translateY(20px);opacity:0}30%{opacity:1}100%{transform:translateY(-120px);opacity:0}}
+@keyframes slidein{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+@keyframes kb{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.18) translate(-2%,-2%)}}
+@keyframes shine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
+:root{
+  --hand:'Gveret Levin','Caveat',cursive;
+  --script:'Caveat',cursive;
+  --mono:'JetBrains Mono',monospace;
+  --paper:#FCF7E8;
+  --ink:#1F4E79;
+  --red:#D64545;
+  --stamp:#C1440E;
+  --pink:#FF5A8C; --amber:#FFB443; --mint:#3EE08F; --cyan:#5CE1E6; --violet:#7A5CFF;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+
+.app{min-height:100vh;background:#0d1020;font-family:'Heebo',system-ui,sans-serif;display:flex;justify-content:center}
+.phone{
+  width:100%;max-width:480px;min-height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;
+  background:
+    radial-gradient(130% 42% at 88% -4%,rgba(255,90,140,.26),transparent 62%),
+    radial-gradient(120% 40% at 6% 14%,rgba(92,225,230,.20),transparent 60%),
+    radial-gradient(120% 44% at 50% 104%,rgba(122,92,255,.26),transparent 62%),
+    linear-gradient(178deg,#151c36,#0f1428 60%,#161029);
+}
+.rainbow{height:5px;background:linear-gradient(90deg,#FF5A8C,#FFB443,#3EE08F,#5CE1E6,#7A5CFF,#FF5A8C);background-size:200% 100%;animation:shine 6s linear infinite}
+
+/* ── header ───────────────────────────────────────────────────────── */
+.hdr{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,rgba(17,22,44,.98),rgba(17,22,44,.88));backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.07)}
+.hdr-row{position:relative;display:flex;align-items:center;gap:10px;padding:11px 15px 12px}
+.hero-strip{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.34}
+.hero-pic{position:absolute;top:var(--top);right:var(--right);width:86px;height:70px;background-size:cover;background-position:center;transform:rotate(var(--rot));border:3px solid rgba(255,255,255,.5)}
+.logo{position:relative;width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#FF5A8C,#FFB443);display:grid;place-items:center;font-size:25px;flex:none;box-shadow:0 6px 18px rgba(255,90,140,.35);transform:rotate(-4deg)}
+.hdr-mid{position:relative;flex:1;min-width:0}
+.title-note{display:inline-block;background:var(--paper);padding:5px 13px 6px;border-radius:3px;transform:rotate(-1.5deg);box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.title-note span{display:block;font-family:var(--hand);font-size:31px;color:var(--ink);line-height:1.22;letter-spacing:.5px}
+/* Own row rather than beside the logo: at 31px the real handwriting title
+   leaves too little width for this line on a 375px phone. */
+.subtitle{font-size:11px;color:#a9b4d4;font-weight:600;letter-spacing:.2px;padding:0 15px 9px;margin-top:-3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{position:relative;width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.07);color:#93a0c4;font-size:16px;flex:none}
+.icon-btn.music{font-size:15px}
+.icon-btn.music.on{background:var(--amber);color:#2b1400}
+
+/* ── stat stickers ────────────────────────────────────────────────── */
+.stats{padding:14px 15px 2px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.stat{border-radius:13px;padding:7px 9px 8px;box-shadow:0 5px 14px rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.85);transform:rotate(var(--rot))}
+.stat--hunt{background:var(--mint);--rot:-2deg}
+.stat--days{background:var(--cyan);--rot:1.6deg}
+.stat--badges{background:var(--amber);--rot:-1.2deg}
+.stat-k{font-size:9.5px;letter-spacing:1.1px;font-weight:900}
+.stat--hunt .stat-k{color:#0a3d22}
+.stat--days .stat-k{color:#08414a}
+.stat--badges .stat-k{color:#5b3a02}
+.stat-v{font-family:var(--script);font-weight:700;font-size:22px;line-height:1;margin-top:1px;direction:ltr;text-align:right}
+.stat--hunt .stat-v{color:#04240f}
+.stat--days .stat-v{color:#032b31}
+.stat--badges .stat-v{color:#3b2500}
+
+/* ── page shell ───────────────────────────────────────────────────── */
+.main{flex:1;padding:14px 15px 112px}
+.page{animation:slidein .32s var(--ease)}
+.paper-head{display:inline-block;position:relative;background:var(--paper);padding:7px 16px 9px;border-radius:3px;box-shadow:0 6px 18px rgba(0,0,0,.4);margin-bottom:2px;transform:rotate(-1.4deg)}
+.paper-head.tilt-r{transform:rotate(1.2deg)}
+.paper-head h1{margin:0;display:block;font-family:var(--hand);font-weight:400;font-size:34px;color:var(--ink);line-height:1.22}
+.tape{position:absolute;top:-8px;right:-10px;width:44px;height:17px;background:var(--tape);opacity:.75;transform:rotate(-8deg)}
+.lead{margin:4px 0 12px;font-size:13.5px;line-height:1.6;color:#93a0c4;text-wrap:pretty}
+
+/* ── days ─────────────────────────────────────────────────────────── */
+.regions{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:0 15px 12px;margin:0 -15px 4px}
+.region{flex:none;padding:7px 14px;border-radius:4px;background:var(--paper);color:var(--ink);font-family:var(--script);font-weight:700;font-size:18px;min-height:38px;white-space:nowrap;box-shadow:0 4px 11px rgba(0,0,0,.35);transform:rotate(var(--rot))}
+.days{display:flex;flex-direction:column;gap:14px}
+.day{border-radius:22px;overflow:hidden;transition:all .22s var(--ease);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
+.day.open{background:linear-gradient(150deg,rgba(255,255,255,.10),rgba(255,255,255,.035));border:1px solid var(--c-soft);box-shadow:0 16px 38px rgba(0,0,0,.46)}
+.day-btn{width:100%;display:flex;align-items:center;gap:11px;padding:12px;text-align:right}
+.pola-wrap{position:relative;flex:none;width:72px;height:82px}
+.pola-back{position:absolute;inset:6px 8px 4px 2px;background:#e9e0c8 var(--back-img,none) center/cover;border-radius:3px;transform:rotate(var(--rb));box-shadow:0 3px 10px rgba(0,0,0,.4)}
+.pola{position:absolute;inset:0 0 auto 0;width:68px;padding:4px 4px 3px;background:var(--paper);border-radius:3px;transform:rotate(var(--rf));box-shadow:0 5px 14px rgba(0,0,0,.5)}
+.pola-img{width:100%;aspect-ratio:1/1;border-radius:1px;background:#dfd8c4 var(--front-img,none) center/cover;display:grid;place-items:center;font-size:24px}
+.pola-cap{font-family:var(--script);font-weight:700;font-size:12.5px;color:#3d4356;text-align:center;line-height:1;padding-top:3px}
+.day-meta{flex:1;min-width:0}
+.day-date{font-size:10.5px;font-weight:800;letter-spacing:.4px;color:var(--c)}
+.day-title{font-family:var(--hand);font-size:22px;color:#fff;line-height:1.05;margin-top:2px}
+.caret{flex:none;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;font-size:12px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.45)}
+.caret.done{background:rgba(62,224,143,.20);color:var(--mint)}
+.day-body{padding:0 10px 12px;animation:slidein .28s var(--ease)}
+
+/* reel */
+.reel{position:relative;width:100%;aspect-ratio:16/10;border-radius:6px;overflow:hidden;background:#1a1f38;box-shadow:0 10px 26px rgba(0,0,0,.5)}
+.reel-fallback{position:absolute;inset:0;background:linear-gradient(140deg,#1d2340,#2a2144);display:grid;place-items:center;font-size:44px}
+.reel-frame{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity .9s ease;opacity:0}
+.reel-frame.on{opacity:1;animation:kb 9s ease-in-out infinite alternate}
+.reel-shade{position:absolute;inset:auto 0 0 0;height:52%;background:linear-gradient(to top,rgba(6,8,18,.82),transparent);pointer-events:none}
+.reel-bar{position:absolute;bottom:8px;right:10px;left:10px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px;pointer-events:none}
+.reel-cap{font-family:var(--script);font-weight:700;font-size:19px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7);line-height:1.05}
+.dots{display:flex;gap:4px}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.42)}
+.dot.on{background:#fff}
+.reel-tape{position:absolute;top:-7px;width:62px;height:20px;background:rgba(255,246,214,.62);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.reel-tape.r{right:16px;transform:rotate(-3deg)}
+.reel-tape.l{left:16px;transform:rotate(4deg)}
+
+/* lined note */
+.note{position:relative;margin-top:14px;padding:16px 15px 15px;border-radius:4px;background-color:var(--paper);background-image:repeating-linear-gradient(180deg,transparent 0,transparent 30px,rgba(31,78,121,.14) 30px,rgba(31,78,121,.14) 31px);box-shadow:0 8px 22px rgba(0,0,0,.4)}
+.note-margin{position:absolute;top:0;bottom:0;right:24px;width:1px;background:rgba(214,69,69,.35)}
+.note-day{display:flex;align-items:center;justify-content:center;gap:9px;margin:0 0 12px}
+.note-day .star{color:var(--ink);font-size:13px}
+.note-day .num{font-family:var(--script);font-weight:700;font-size:31px;color:var(--ink);line-height:1;letter-spacing:1px}
+.hls{display:flex;flex-direction:column;gap:11px}
+.hl{display:flex;gap:10px;align-items:flex-start}
+.hl-time{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--red);flex:none;padding-top:3px;min-width:34px;direction:ltr}
+.hl-icon{font-size:19px;line-height:1.1;flex:none}
+.hl-text{font-family:'Heebo',sans-serif;font-size:13.5px;line-height:1.5;color:#26303f;text-wrap:pretty}
+.wow{margin-top:13px;padding-top:11px;border-top:1px dashed rgba(214,69,69,.45);font-family:var(--script);font-weight:600;font-size:19px;color:var(--ink);line-height:1.25}
+
+/* sticky note */
+.mission{position:relative;margin-top:13px;padding:13px 14px;background:#FFE9A8;box-shadow:0 6px 16px rgba(0,0,0,.34);transform:rotate(-1.2deg);border-radius:2px}
+.mission-k{font-size:9.5px;font-weight:800;letter-spacing:1.4px;color:#8a6a10}
+.mission-v{font-family:var(--script);font-weight:700;font-size:21px;color:#4a3608;line-height:1.2;margin-top:3px}
+
+/* day actions */
+.day-actions{display:flex;gap:8px;margin-top:14px}
+.act{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;border-radius:14px;font-size:13px;font-weight:700}
+.act--map{background:rgba(92,225,230,.14);border:1px solid rgba(92,225,230,.40);color:#B9F7F9}
+.act--next{background:rgba(255,90,140,.14);border:1px solid rgba(255,90,140,.40);color:#FFC2D4}
+.done-btn{width:100%;margin-top:9px;min-height:48px;border-radius:14px;font-family:var(--hand);font-size:20px;transition:all .2s var(--ease);background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
+.done-btn.done{background:rgba(62,224,143,.16);border:1px solid rgba(62,224,143,.5);color:#8df3bd}
+
+/* ── hunt ─────────────────────────────────────────────────────────── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.hunt-card{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:14px 10px 42px;border-radius:3px;min-height:160px;justify-content:center;background:var(--paper);transition:all .22s var(--ease);transform:rotate(var(--rot));box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.hunt-card.on{transform:rotate(0deg);box-shadow:0 10px 26px rgba(62,224,143,.28);outline:3px solid var(--mint);outline-offset:-3px}
+.hunt-emoji{font-size:36px;line-height:1}
+.hunt-label{font-family:var(--hand);font-size:19px;color:#26303f;line-height:1.05}
+.hunt-hint{font-size:11px;color:#6b7382;line-height:1.4}
+.stamp{display:none;position:absolute;bottom:8px;left:50%;transform:translateX(-50%) rotate(-7deg);padding:2px 12px;border:2px solid var(--stamp);border-radius:4px;color:var(--stamp);font-family:var(--script);font-size:17px;font-weight:700;letter-spacing:.5px}
+.hunt-card.on .stamp{display:block}
+
+/* ── phrasebook ───────────────────────────────────────────────────── */
+.phrases{display:flex;flex-direction:column;gap:9px}
+.phrase{position:relative;display:flex;align-items:center;gap:12px;padding:12px;border-radius:3px;text-align:right;background-color:var(--paper);background-image:repeating-linear-gradient(180deg,transparent 0,transparent 26px,rgba(31,78,121,.10) 26px,rgba(31,78,121,.10) 27px);transition:all .2s var(--ease);transform:rotate(var(--rot));box-shadow:0 5px 14px rgba(0,0,0,.35)}
+.phrase.known{outline:2px solid rgba(255,180,67,.55);outline-offset:-2px}
+.phrase.speaking{box-shadow:0 10px 24px rgba(255,180,67,.35);outline:3px solid var(--amber);outline-offset:-3px}
+.orb{width:50px;height:50px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:25px;background:#fff;border:2px solid rgba(31,78,121,.25)}
+.phrase.speaking .orb{animation:pulse .5s ease-in-out infinite}
+.phrase-txt{flex:1;min-width:0;text-align:right}
+.vi{font-family:var(--script);font-weight:700;font-size:26px;color:var(--ink);direction:ltr;text-align:right;line-height:1}
+.he{font-size:13.5px;color:var(--stamp);font-weight:700;margin-top:2px}
+.mean{font-size:12px;color:#5c6470;margin-top:1px}
+.spk{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:15px;background:rgba(31,78,121,.10)}
+.phrase.speaking .spk{background:var(--amber)}
+
+/* ── badges ───────────────────────────────────────────────────────── */
+.badge{display:flex;flex-direction:column;align-items:center;text-align:center;padding:15px 11px 13px;border-radius:3px;min-height:182px;transition:all .22s var(--ease);transform:rotate(var(--rot));background:rgba(255,255,255,.045);outline:2px dashed rgba(255,255,255,.20);outline-offset:-4px}
+.badge.on{background:var(--paper);box-shadow:0 9px 24px rgba(255,180,67,.30);outline:3px solid var(--amber);outline-offset:-3px}
+.seal{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:31px;background:rgba(255,255,255,.06);border:2px dashed rgba(255,255,255,.20);filter:grayscale(1);opacity:.6}
+.badge.on .seal{background:linear-gradient(140deg,#FFB443,#FF5A8C);box-shadow:0 8px 20px rgba(255,180,67,.4);border:3px solid #fff;filter:none;opacity:1}
+.b-name{font-family:var(--hand);font-size:21px;line-height:1;margin-top:10px;color:#c3ccea}
+.badge.on .b-name{color:var(--ink)}
+.b-how{font-size:11.5px;line-height:1.45;margin-top:5px;color:#8b95b8}
+.badge.on .b-how{color:#5c6470}
+.b-pill{margin-top:auto;padding:3px 13px;border-radius:4px;font-family:var(--script);font-size:16px;font-weight:700;letter-spacing:.3px;border:2px dashed rgba(255,255,255,.18);color:#7b86ab}
+.badge.on .b-pill{border:2px solid var(--stamp);color:var(--stamp);transform:rotate(-4deg)}
+
+/* ── money ────────────────────────────────────────────────────────── */
+.pad{position:relative;padding:16px 15px;border-radius:4px;background-color:var(--paper);background-image:repeating-linear-gradient(180deg,transparent 0,transparent 30px,rgba(31,78,121,.12) 30px,rgba(31,78,121,.12) 31px);box-shadow:0 8px 22px rgba(0,0,0,.4)}
+.pad-tape{position:absolute;top:-9px;left:22px;width:58px;height:19px;background:rgba(122,92,255,.55);transform:rotate(5deg)}
+.pad-label{font-family:var(--script);font-weight:700;font-size:21px;color:var(--ink)}
+.vnd-row{display:flex;align-items:center;gap:9px;margin-top:8px}
+.vnd-input{flex:1;min-width:0;font-family:var(--mono);font-size:26px;font-weight:700;color:var(--ink);background:#fff;border:2px dashed rgba(31,78,121,.4);border-radius:10px;padding:11px 13px;direction:ltr;text-align:left;outline:none}
+.vnd-sym{font-size:24px;font-weight:700;color:var(--stamp)}
+.quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.quick button{padding:8px 13px;border-radius:999px;background:var(--ink);border:2px solid #fff;font-family:var(--mono);font-size:12.5px;font-weight:700;color:#fff;min-height:40px;box-shadow:0 3px 9px rgba(0,0,0,.25)}
+.results{margin-top:11px;display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.res{display:flex;flex-direction:column;align-items:center;text-align:center;padding:14px 10px;border-radius:3px;background:var(--paper);box-shadow:0 6px 16px rgba(0,0,0,.38);transform:rotate(var(--rot))}
+.res-emoji{font-size:32px;line-height:1}
+.res-val{font-family:var(--script);font-weight:700;font-size:30px;color:var(--ink);margin-top:4px;line-height:1;direction:ltr}
+.res-label{font-size:11.5px;color:#5c6470;margin-top:3px;line-height:1.35}
+.tip{margin-top:11px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);font-size:12.5px;line-height:1.7;color:#a8b3d3}
+.tip b{color:#fff}
+
+/* ── bottom nav ───────────────────────────────────────────────────── */
+.nav{position:sticky;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px 8px 12px;background:linear-gradient(180deg,rgba(15,20,40,.70),rgba(13,16,32,.99));backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.08)}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:56px;border-radius:14px;transition:all .2s var(--ease);background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.09);color:#8b97bd}
+.tab.on{background:var(--paper);color:var(--ink);border:2px solid #fff;transform:rotate(-2deg) translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.4);font-weight:800}
+.tab-icon{font-size:21px;line-height:1}
+.tab-label{font-size:10.5px;font-weight:800;line-height:1}
+
+/* ── celebration burst ────────────────────────────────────────────── */
+.burst{position:absolute;inset:0;z-index:60;pointer-events:none;display:grid;place-items:center}
+.burst-emoji{font-size:118px;animation:pop .95s var(--ease) forwards;filter:drop-shadow(0 10px 34px rgba(255,180,67,.55))}
+.burst-text{position:absolute;bottom:24%;font-family:var(--hand);font-size:30px;color:#fff;text-align:center;padding:0 24px;animation:rise 1.1s ease-out forwards}
+
+/* ── family code gate ─────────────────────────────────────────────── */
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.gate[hidden]{display:none}   /* author display: wins over the hidden attribute without this */
+.gate{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px;
+  background:radial-gradient(120% 45% at 80% 0%,rgba(255,90,140,.30),transparent 62%),
+             radial-gradient(120% 45% at 10% 100%,rgba(122,92,255,.30),transparent 62%),
+             linear-gradient(178deg,#151c36,#0f1428 60%,#161029)}
+.gate-card{width:100%;max-width:330px;text-align:center}
+.gate-logo{width:78px;height:78px;margin:0 auto 18px;border-radius:26px;background:linear-gradient(135deg,#FF5A8C,#FFB443);display:grid;place-items:center;font-size:42px;transform:rotate(-5deg);box-shadow:0 10px 30px rgba(255,90,140,.4)}
+.gate-note{background:var(--paper);padding:8px 20px 11px;border-radius:3px;transform:rotate(-1.5deg);box-shadow:0 8px 24px rgba(0,0,0,.5);display:inline-block;margin-bottom:8px}
+.gate-note span{font-family:var(--hand);font-size:38px;color:var(--ink);line-height:1.2}
+.gate-sub{font-size:13px;color:#93a0c4;line-height:1.6;margin:6px 0 22px}
+.gate-form{background:var(--paper);border-radius:4px;padding:18px 16px 16px;box-shadow:0 10px 28px rgba(0,0,0,.45);transform:rotate(.8deg);
+  background-image:repeating-linear-gradient(180deg,transparent 0,transparent 30px,rgba(31,78,121,.12) 30px,rgba(31,78,121,.12) 31px)}
+.gate-form.bad{animation:shake .42s ease}
+.gate-label{font-family:var(--script);font-weight:700;font-size:22px;color:var(--ink);display:block;margin-bottom:9px}
+.gate-input{width:100%;font-family:var(--mono);font-size:24px;font-weight:700;color:var(--ink);background:#fff;border:2px dashed rgba(31,78,121,.4);border-radius:12px;padding:12px;text-align:center;direction:ltr;outline:none;text-transform:uppercase;letter-spacing:2px}
+.gate-input:focus{border-color:var(--stamp);border-style:solid}
+.gate-go{width:100%;margin-top:12px;min-height:52px;border-radius:14px;font-family:var(--hand);font-size:23px;background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
+.gate-err{min-height:20px;margin-top:9px;font-size:12.5px;font-weight:700;color:#FF8FAE}
+
+/* ── offline download banner ──────────────────────────────────────── */
+.offer[hidden]{display:none}
+.offer{margin:12px 15px 0;padding:12px 13px;border-radius:3px;background:var(--paper);box-shadow:0 7px 20px rgba(0,0,0,.4);transform:rotate(-.8deg);
+  background-image:repeating-linear-gradient(180deg,transparent 0,transparent 26px,rgba(31,78,121,.10) 26px,rgba(31,78,121,.10) 27px);
+  display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.offer-txt{flex:1;min-width:0}
+.offer-txt b{display:block;font-family:var(--script);font-weight:700;font-size:21px;color:var(--ink);line-height:1.1}
+.offer-txt span{display:block;font-size:11.5px;color:#5c6470;line-height:1.4;margin-top:2px}
+.offer-go{flex:none;min-height:44px;padding:0 16px;border-radius:12px;font-family:var(--hand);font-size:19px;background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.offer.done{transform:rotate(-.8deg);outline:3px solid var(--mint);outline-offset:-3px}
+.dl-bar[hidden]{display:none}
+.dl-bar{flex-basis:100%;height:7px;border-radius:99px;background:rgba(31,78,121,.14);overflow:hidden}
+.dl-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5CE1E6,#3EE08F);transition:width .3s ease}
+
+/* Only very old 320px phones: the title would take two lines there. */
+@media (max-width:359px){
+  .title-note span{font-size:22px}
+  .subtitle{font-size:10px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .rainbow,.reel-frame.on,.phrase.speaking .orb{animation:none}
+  .page,.day-body{animation-duration:.01ms}
+}
+</style>
+</head>
+<body>
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-logo">🐉</div>
+    <div class="gate-note"><span>וייטנאם 2026</span></div>
+    <p class="gate-sub">האפליקציה הזאת היא רק של מי שנוסע איתנו.<br>תקישו את הקוד המשפחתי כדי להיכנס.</p>
+    <form class="gate-form" id="gateForm">
+      <label class="gate-label" for="code">הקוד המשפחתי</label>
+      <input class="gate-input" id="code" type="text" inputmode="text" autocomplete="off"
+             autocapitalize="characters" spellcheck="false" placeholder="••••••">
+      <button class="gate-go" type="submit">יאללה, נכנסים!</button>
+      <div class="gate-err" id="gateErr"></div>
+    </form>
+  </div>
+</div>
+<script>
+/* Runs before paint, so a phone that already unlocked never flashes the gate. */
+(function(){ try { if (localStorage.getItem('vn-kids-pass') === '1') document.getElementById('gate').hidden = true; } catch (e) {} })();
+</script>
+
+<div class="app">
+  <div class="phone">
+    <div class="rainbow"></div>
+
+    <header class="hdr">
+      <div class="hdr-row">
+        <div class="hero-strip" id="heroStrip" aria-hidden="true"></div>
+        <div class="logo" aria-hidden="true">🐉</div>
+        <div class="hdr-mid">
+          <div class="title-note"><span>וייטנאם 2026</span></div>
+        </div>
+        <button class="icon-btn music" id="musicBtn" data-act="music" title="מוזיקה" aria-label="מוזיקת רקע">🔇</button>
+        <button class="icon-btn" data-act="reset" title="להתחיל מהתחלה" aria-label="לאפס הכול">↺</button>
+      </div>
+      <div class="subtitle">19 ימים · 9–27 בספטמבר · 11 מגלי ארצות</div>
+    </header>
+
+    <div class="stats">
+      <div class="stat stat--hunt"><div class="stat-k">ציד</div><div class="stat-v" id="statHunt">0/12</div></div>
+      <div class="stat stat--days"><div class="stat-k">ימים</div><div class="stat-v" id="statDays">0/19</div></div>
+      <div class="stat stat--badges"><div class="stat-k">מדליות</div><div class="stat-v" id="statBadges">0/10</div></div>
+    </div>
+
+    <div class="offer" id="offer" hidden>
+      <div class="offer-txt">
+        <b id="offerTitle">לשמור את הטיול בטלפון?</b>
+        <span id="offerSub">פעם אחת על Wi-Fi — ואז כל התמונות עובדות גם בלי אינטרנט בוייטנאם.</span>
+      </div>
+      <button class="offer-go" id="offerGo" data-act="offline">⬇ שמור</button>
+      <div class="dl-bar" id="dlBar" hidden><i></i></div>
+    </div>
+
+    <main class="main" id="main"></main>
+
+    <nav class="nav" id="nav"></nav>
+    <div id="burstHost"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ══ data ═══════════════════════════════════════════════════════════ */
+const KEY = 'vn-kids-2026';
+const gm = q => 'https://www.google.com/maps/search/' + encodeURIComponent(q);
+/* 800px, not the prototype's 1000: the reel is ~450 CSS px wide, and 54 photos
+   have to fit in a phone's cache quota for the offline trip. */
+const commons = file => 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(file) + '?width=800';
+const C = { pink:'#FF5A8C', amber:'#FFB443', mint:'#3EE08F', cyan:'#5CE1E6', violet:'#7A5CFF' };
+
+const DAYS = [
+  { n:1, date:"ד׳ 9.9", region:"הנוי", color:C.cyan, emoji:"✈️", title:"נחתנו בוייטנאם!",
+    hl:[["14:00","🛬","נחיתה בנוי באי, נהג פרטי אוסף את כל ה-11 שלנו"],["15:00","🏨","צ׳ק-אין במלון Classyc ברובע הקדום"],["18:00","🍜","סיבוב ראשון ברחובות ההומים של הנוי"]],
+    wow:"בהנוי חיים כמעט 9 מיליון אנשים — ויש בה יותר קטנועים מאנשים בכל ישראל.",
+    mission:"לספור כמה קטנועים עוברים ברחוב אחד בדקה. מי שניחש הכי קרוב — מנצח.",
+    pics:["Old Quarter street scene, Hanoi (1) (38464672752).jpg","Old Quarter market, Hanoi, 20240123 1811 3411.jpg","Street seller of fingered citrons in Old Town of Hanoi, 20240204 1335 5772.jpg"], cap:"הנוי · הרובע הקדום", m:"Hanoi Old Quarter" },
+  { n:2, date:"ה׳ 10.9", region:"טו לה", color:C.mint, emoji:"🍃", title:"דרך התה אל עמק מואנג לו",
+    hl:[["08:30","🚐","יוצאים מהנוי — נסיעה בין הרים ומדרגות אורז"],["11:00","🫖","מטע תה: קוטפים עלים צעירים ומייבשים בשיטה המסורתית"],["16:00","🏡","עמק מואנג לו — הבית של שבט התאי, בתי עץ ובמבוק בני 700 שנה"]],
+    wow:"מואנג לו הוא שדה האורז השני בגודלו בכל צפון-מערב וייטנאם.",
+    mission:"לצלם עלה תה אחד ביד — ולהריח אותו אחרי הייבוש.",
+    pics:["Mu Cang Chai.jpg","Chế Cu Nha, Mù Cang Chải, Yên Bái, Vietnam - panoramio.jpg","SÁNG SỚM Ở MÙ CANG CHẢI - panoramio.jpg"], cap:"עמק האורז", m:"Muong Lo Valley Nghia Lo" },
+  { n:3, date:"ו׳ 11.9", region:"טו לה", color:C.violet, emoji:"🪂", title:"זיפליין ומעיינות חמים",
+    hl:[["10:00","🧗","אריס היל: זיפליין וגשרי חבלים גבוהים מעל העמק"],["14:00","♨️","מעיינות חמים טבעיים בריזורט — מים חמים ישר מהאדמה"],["17:00","🚶","סיור בכפרים הקטנים סביב טו לה"]],
+    wow:"המים במעיין מגיעים מעומק האדמה בטמפרטורה של יותר מ-40 מעלות. בלי דוד שמש.",
+    mission:"להיכנס למעיין החם ולהחזיק עשר שניות בלי לצווח.",
+    pics:["Khau Phạ nhìn từ trên cao.jpg","Chế Cu Nha, Mù Cang Chải, Yên Bái, Vietnam - panoramio (1).jpg","Mu Cang Chai.jpg"], cap:"מעיינות חמים", m:"Le Champ Tu Le Resort" },
+  { n:4, date:"ש׳ 12.9", region:"סאפה", color:C.amber, emoji:"⛰️", title:"מעבר קאו פא ← סאפה",
+    hl:[["09:00","🛣️","עוצרים במעבר ההרים קאו פא — אחד הנופים המפורסמים בוייטנאם"],["12:00","👣","כפר לה פאן טאן של שבט המונג, שמגדל תירס בין הסלעים"],["17:00","🏨","ממשיכים לסאפה, עיר ההרים"]],
+    wow:"שבט המונג עוד מדבר בשפה שלו ולובש בגדים רקומים ביד — הם בחרו לא להתחבר לחיים המודרניים.",
+    mission:"למצוא רקמה בבגד מקומי ולזהות איזו חיה מסתתרת בדוגמה.",
+    pics:["Khau Phạ.jpg","Khau Phạ Pass, Vietnam (Unsplash).jpg","KHAU PHẠ MÙA NƯỚC ĐỔ - panoramio.jpg"], cap:"מעבר קאו פא", m:"Khau Pha Pass" },
+  { n:5, date:"א׳ 13.9", region:"סאפה", color:C.cyan, emoji:"🌉", title:"מפל האהבה וגשר הזכוכית",
+    hl:[["09:00","🥾","טרק 30 דקות ביער עד מפל האהבה, בגובה 100 מטר"],["13:00","🪟","גשר הזכוכית רונג מיי — 2,000 מטר מעל פני הים, כולו שקוף"],["15:00","🎢","בתוספת תשלום: כבל אופניים, זיפליין או בנג׳י"]],
+    wow:"רצפת הגשר היא זכוכית — ורואים דרכה את העמק ישר מתחת לרגליים.",
+    mission:"לצעוד על הזכוכית עד האמצע ולהסתכל למטה. אמיצים בלבד.",
+    pics:["Nhảy dù lượn từ đèo Khau Phạ ngắm bản Lìm mông.jpg","Rice terraces in Sa Pa 09.jpg","Road and paddy fields in Sa Pa, Vietnam, 20240126 1202 3586.jpg"], cap:"גשר הזכוכית", m:"Rong May Glass Bridge Sapa" },
+  { n:6, date:"ב׳ 14.9", region:"סאפה", color:C.mint, emoji:"🐃", title:"טרק בעמק מואנג הואה",
+    hl:[["09:00","🌾","הליכה בין מדרגות אורז לכפר לאו צ׳אי"],["12:00","🏘️","טא ואן — הכפר של שבט הדזאי, בלב העמק"],["15:00","💦","קאט קאט, ובסוף מפל קאט קאט"]],
+    wow:"מדרגות האורז נחצבו במדרון לפני מאות שנים — כל מדרגה מחזיקה מים כמו בריכה קטנה.",
+    mission:"לראות תאו מים אמיתי עובד בשדה — ולסמן אותו בציד המציאות.",
+    pics:["Water buffaloes in Lào Cai, Sa Pa, Vietnam, 20240125 1244 3437.jpg","Water wheel in Cat Cat village, Sa Pa, Vietnam, 20240126 1142 3546.jpg","Cát Cát Village 1.jpg"], cap:"עמק מואנג הואה", m:"Ta Van Village Sapa" },
+  { n:7, date:"ג׳ 15.9", region:"הנוי", color:C.pink, emoji:"🎢", title:"רכבת הרים + אוכל רחוב",
+    hl:[["09:00","🎿","אלפיין קוסטר: מחליקים במסלול ארוך בהר — ואתם שולטים בבלמים"],["12:00","🚐","נסיעה חזרה להנוי"],["18:00","☕","סיור אוכל רחוב: באן קואון, בון צ׳ה וקפה ביצה"]],
+    wow:"קפה ביצה הוא קפה עם חלמון מוקצף מעליו. נראה מוזר, טועם כמו קרם קרמל חם.",
+    mission:"לטעום מנה אחת שלא הכרתם — ולדרג אותה מ-1 עד 10.",
+    pics:["Hanoi Street Food (95655835).jpeg","Street food preparation in Hanoi (49356318418).jpg","Street food - Hanoi (15657896380).jpg"], cap:"אוכל רחוב בהנוי", m:"Hanoi Old Quarter street food" },
+  { n:8, date:"ד׳ 16.9", region:"הנוי", color:C.amber, emoji:"🛻", title:"ג׳יפים בסמטאות + פארק מים",
+    hl:[["09:00","🚙","סיור ג׳יפ בסמטאות שרק מקומיים מכירים, ובית האופרה"],["12:00","🌊","אגם המערב — קוראים לו ׳מזגן העיר׳"],["15:00","🏄","ונציה הקטנה: פארק מים ומגלשות"]],
+    wow:"הנוי נקראת ׳פריז הקטנה׳ — הצרפתים בנו בה שדרות ובתים כמו בפריז לפני יותר מ-100 שנה.",
+    mission:"לספור כמה מגלשות יש בפארק — ולנצח את כולם בירידה.",
+    pics:["West Lake (Hanoi).jpg","Bicycle Tour, Tây Hồ, Hanoi (7060800725).jpg","Cycling around Tây Hồ District, Hanoi (6914731878).jpg"], cap:"פארק המים", m:"Hanoi Little Venice water park" },
+  { n:9, date:"ה׳ 17.9", region:"הא לונג", color:C.cyan, emoji:"🚢", title:"מפליגים במפרץ הא לונג",
+    hl:[["12:15","⛴️","עולים על ספינת Orchid — קבינה פרטית וארוחה תוך הפלגה"],["15:00","🕳️","מערת טרונג טראנג: 300 מטר של נטיפים בצורות מוזרות"],["17:30","🦑","שחייה במים הירוקים, ובלילה — דיג דיונונים מהסיפון"]],
+    wow:"מפרץ הא לונג נבחר לאחד משבעת פלאי הטבע החדשים. יש בו כמעט אלפיים איים.",
+    mission:"למצוא אי שנראה כמו חיה ולתת לו שם משפחתי.",
+    pics:["Halong Bay in Vietnam.jpg","Ha Long bay tourism 34.jpg","View of sea from Titov Island, Ha Long Bay, Vietnam, 20240128 1337 3732.jpg"], cap:"מפרץ הא לונג", m:"Lan Ha Bay Cat Ba" },
+  { n:10, date:"ו׳ 18.9", region:"נין בין", color:C.mint, emoji:"🛶", title:"קייאקים בזריחה ← נין בין",
+    hl:[["06:30","🧘","טאי צ׳י על גג הספינה מול הזריחה"],["07:30","🛶","קייאקים באזור ׳או אק׳ בין הצוקים"],["12:00","🚐","יורדים מהספינה ונוסעים לנין בין"]],
+    wow:"׳או אק׳ פירושו בריכת הצפרדעים. מגיעים לשם רק בקייאק — סירה גדולה לא נכנסת.",
+    mission:"לחתור לבד חמישים חתירות בלי לעצור.",
+    pics:["Bai Chay beach, Ha Long, Vietnam, 20240129 0915 3958.jpg","Halong ensemble (colour corrected).jpg","Ninh Binh-Tam Coc 04 voyage1.jpg"], cap:"קייאקים באו אק", m:"Emeralda Tam Coc Resort" },
+  { n:11, date:"ש׳ 19.9", region:"נין בין", color:C.violet, emoji:"🧗", title:"טאם קוק ומערת מואה",
+    hl:[["09:00","🚣","שיט בין הרי הגיר — החותרים המקומיים חותרים ברגליים!"],["12:00","🛕","מקדש ביץ׳ דונג בין בריכות לוטוס"],["15:00","🪜","מערת מואה: 500 מדרגות אבן לפסגה, ונוף על כל העמק"]],
+    wow:"׳טאם קוק׳ פירושו שלוש מערות — הסירה עוברת בתוך שלוש מערות מים אמיתיות.",
+    mission:"לטפס את כל 500 המדרגות ולצלם סלפי בפסגה.",
+    pics:["Tam Cốc-Bích Động in Ninh Binh province.jpg","2024-03-30-Mua Cave Dragon Mountain-3758.jpg","Mua Cave, Ninh Binh, Vietnam, 20240202 0926 4964.jpg"], cap:"טאם קוק", m:"Mua Cave Ninh Binh" },
+  { n:12, date:"א׳ 20.9", region:"נין בין", color:C.pink, emoji:"🏎️", title:"יום אקסטרים באגם",
+    hl:[["09:00","🏁","גו-קארט בין עצי אורן"],["11:00","🪢","זיפליין, קייאק ורכבי ATV באגם דונג צ׳ואונג"],["16:00","🚐","בערב חוזרים להנוי"]],
+    wow:"האגם הוא אגם מים מתוקים טבעי מוקף יער אורנים — נוף שנראה יותר אירופה מאסיה.",
+    mission:"לנצח בגו-קארט מבוגר אחד. אחד מספיק.",
+    pics:["Go kart racing (6239255960).jpg","Go-kart.jpg","View of Ninh Binh atop limestone rocks near Mua Cave.jpg"], cap:"אגם דונג צ׳ואונג", m:"Dong Chuong Lake Ninh Binh" },
+  { n:13, date:"ב׳ 21.9", region:"הנוי", color:C.amber, emoji:"🚂", title:"יום חופשי — רחוב הרכבת",
+    hl:[["10:00","🚆","Train Street: רכבת עוברת בין הבתים במרחק חצי מטר מהשולחנות"],["15:00","🐢","אגם הואן קיים ומקדש האי"],["19:00","🎁","שוק הלילה — הזמן לקנות מזכרות"]],
+    wow:"הרכבת ברחוב הזה עוברת פעמיים ביום, וכולם מזיזים כיסאות שנייה לפני שהיא מגיעה.",
+    mission:"לעמוד מאחורי הקו ולצלם את הרכבת עוברת. בלי לזוז מהקיר.",
+    pics:["Old Quarter market, Hanoi, Vietnam, 20240204 1810 5887.jpg","Street Food vendors Soft crab Hanoi Vietnam.jpg","Old Quarter market, Hanoi, Vietnam, 20240123 0841 3046.jpg"], cap:"רחוב הרכבת", m:"Hanoi Train Street" },
+  { n:14, date:"ג׳ 22.9", region:"הוי אן", color:C.cyan, emoji:"🛫", title:"טסים לדה נאנג ← הוי אן",
+    hl:[["11:00","🛫","טיסה פנימית הנוי–דה נאנג"],["14:00","🚗","נהג אוסף אותנו לעיר הפנסים הוי אן"],["16:00","🏊","מלון Bel Marina עם בריכה — ארבעה לילות"]],
+    wow:"הוי אן היתה נמל סחר בין-לאומי לפני 400 שנה. הבתים הצהובים בה נשמרו בדיוק כמו שהיו.",
+    mission:"למצוא את הפנס הכי מוזר בעיר ולצלם אותו.",
+    pics:["Hội An, Ancient Town, 2020-01 CN-01.jpg","Hội An, Ancient Town, 2020-01 CN-05.jpg","Hội An, Ancient Town, 2020-01 CN-06.jpg"], cap:"הוי אן · עיר הפנסים", m:"Hoi An Ancient Town" },
+  { n:15, date:"ד׳ 23.9", region:"הוי אן", color:C.amber, emoji:"🤲", title:"בא נא הילס וגשר הזהב",
+    hl:[["09:00","🚡","רכבל שובר שיאי עולם: 5,771 מטר אורך ו-1,368 מטר הפרש גובה"],["11:00","🌸","גן הפרחים ורכבת ההר המשופעת"],["13:00","🌉","גשר הזהב — שתי ידי ענק מחזיקות שביל בגובה 1,400 מטר"]],
+    wow:"הידיים נראות כמו אבן עתיקה, אבל הן עשויות רשת פלדה וסיבי זכוכית — ונבנו ב-2018.",
+    mission:"להצטלם כאילו הידיים מחזיקות אתכם.",
+    pics:["The Golden Bridge, Ba Na Hills, Vietnam.jpg","Aerial view of the Golden Bridge, Ba Na Hills, Da Nang, Vietnam.jpg","Golden Bridge above the clouds Ba Na Hills Da Nang Vietnam.jpg"], cap:"גשר הזהב", m:"Golden Bridge Ba Na Hills Danang" },
+  { n:16, date:"ה׳ 24.9", region:"הוי אן", color:C.mint, emoji:"👨‍🍳", title:"סירות סל וסדנת בישול",
+    hl:[["08:30","🧺","שוק הוי אן — קונים חומרי גלם עם השף"],["09:45","🛢️","סירות סל עגולות ביער קוקוס המים — לומדים לחתור ולדוג סרטנים"],["10:30","🥞","סדנת בישול: דף אורז, חלב אורז ופנקייק באן שאו — ואוכלים"]],
+    wow:"סירת הסל היא סירה עגולה מבמבוק. המקומיים מסובבים אותה במקום כמו סביבון.",
+    mission:"לגלגל ספרינג רול אחד לבד ולתת למישהו לטעום.",
+    pics:["Hội An, Ancient Town, 2020-01 CN-10.jpg","Tofu noodle soup (Phở chay) - Pho Hanoi Authentic 2024-12-01.jpg","Hội An, Ancient Town, 2020-01 CN-11.jpg"], cap:"סירות הסל", m:"Hoi An Market" },
+  { n:17, date:"ו׳ 25.9", region:"הוי אן", color:C.violet, emoji:"🏮", title:"יום חופשי בהוי אן",
+    hl:[["10:00","🏮","סדנת פנסים: בונים פנס במו ידיים ולוקחים הביתה"],["13:00","🚣","אופציה להרפתקה: ראפטינג ומגלשות ביער הואה פו ת׳אן"],["19:00","🕯️","משחררים פנס נר על הנהר טו בון ומבקשים משאלה"]],
+    wow:"פעמיים בחודש, בירח מלא, מכבים בהוי אן את כל תאורת הרחוב ומדליקים רק פנסים.",
+    mission:"לשחרר פנס על הנהר ולא לספר לאף אחד מה ביקשתם.",
+    pics:["Hội An lantern festival (44810593224).jpg","Hội An lantern festival (45536262991).jpg","Hội An lantern festival (45485644722).jpg"], cap:"פנסים על הנהר", m:"Thu Bon River Hoi An" },
+  { n:18, date:"ש׳ 26.9", region:"הנוי", color:C.cyan, emoji:"🧳", title:"טיסה חזרה להנוי",
+    hl:[["08:00","🌅","בוקר אחרון בהוי אן — מי שמזדרז מספיק לרדת לבריכה"],["12:00","🛫","טיסה דה נאנג–הנוי"],["19:00","🍲","לילה אחרון: פו מהדוכן שממול"]],
+    wow:"פו הוא מרק נודלס אורז. בצפון מגישים אותו פשוט, בדרום — עם ערמת עשבים.",
+    mission:"לדרג את שלושת הרגעים הכי טובים בטיול, לפי הסדר.",
+    pics:["Pho in rock bowl.jpg","Nam pho bowl.jpg","Old Quarter street scene, Hanoi (1) (38464672752).jpg"], cap:"קערת פו אחרונה", m:"Hoan Kiem Lake Hanoi" },
+  { n:19, date:"א׳ 27.9", region:"הנוי", color:C.pink, emoji:"🏆", title:"קניות אחרונות והביתה",
+    hl:[["10:00","🛍️","מפנים את החדר ב-12:00 — עד אז מזכרות אחרונות"],["12:00","🚗","נהג אוסף לשדה התעופה"],["14:00","🏆","בודקים מי אלוף הציד של הטיול"]],
+    wow:"עברתם כ-1,400 קילומטר בתוך וייטנאם — יותר מאורך ישראל שבע פעמים.",
+    mission:"לכתוב מילה אחת שמסכמת את כל הטיול.",
+    pics:["Nội Bài International Airport May 2026.jpg","Halong Bay in Vietnam.jpg","Rice terraces in Sa Pa 02.jpg"], cap:"להתראות וייטנאם", m:"Noi Bai International Airport" }
+].map(d => ({ ...d, highlights: d.hl.map(([time, icon, text]) => ({ time, icon, text })), map: gm(d.m), urls: d.pics.map(commons) }));
+
+const HUNT = [
+  { id:'buffalo', emoji:'🐃', label:'תאו מים', hint:'שדות האורז בסאפה או טאם קוק' },
+  { id:'hat', emoji:'👒', label:'כובע קוני', hint:'נון לה — הכובע המחודד' },
+  { id:'moto4', emoji:'🛵', label:'קטנוע עם 4 אנשים', hint:'הנוי, כל צומת' },
+  { id:'eggcoffee', emoji:'☕', label:'קפה ביצה', hint:'הרובע הקדום, יום 7' },
+  { id:'train', emoji:'🚂', label:'רכבת חולפת קרוב', hint:'Train Street, יום 13' },
+  { id:'boat', emoji:'🧺', label:'סירת סל עגולה', hint:'הוי אן, יום 16' },
+  { id:'lantern', emoji:'🏮', label:'פנס על נהר', hint:'הוי אן בערב' },
+  { id:'rice', emoji:'🌾', label:'מדרגות אורז', hint:'טו לה וסאפה' },
+  { id:'dragon', emoji:'🐉', label:'פסל דרקון', hint:'מקדשים וגשרים' },
+  { id:'duck', emoji:'🦆', label:'ברווזים בשדה מוצף', hint:'בדרך לנין בין' },
+  { id:'fruit', emoji:'🥭', label:'פרי שלא הכרתם', hint:'שוק הוי אן' },
+  { id:'chick', emoji:'🐓', label:'תרנגול ברחוב', hint:'כל כפר' }
+];
+
+const PHRASES = [
+  { id:'hi', vi:'Xin chào', he:"סִין צָ'אוֹ", meaning:'שלום', emoji:'👋' },
+  { id:'ty', vi:'Cảm ơn', he:'קָאם אוֹן', meaning:'תודה', emoji:'🙏' },
+  { id:'yes', vi:'Vâng', he:'וָואנְג', meaning:'כן', emoji:'✅' },
+  { id:'no', vi:'Không', he:'קוֹם', meaning:'לא / בלי', emoji:'🚫' },
+  { id:'name', vi:'Tên tôi là...', he:'טֶן טוֹי לָה', meaning:'קוראים לי...', emoji:'🪪' },
+  { id:'how', vi:'Bao nhiêu tiền?', he:'בָּאוֹ נְיֶאוּ טְיֶן', meaning:'כמה זה עולה?', emoji:'💰' },
+  { id:'yum', vi:'Ngon quá!', he:'נְגוֹן קְוָוה', meaning:'טעים בטירוף!', emoji:'😋' },
+  { id:'water', vi:'Nước', he:'נוּאַק', meaning:'מים', emoji:'💧' },
+  { id:'icecream', vi:'Kem', he:'קֶם', meaning:'גלידה', emoji:'🍦' },
+  { id:'bye', vi:'Tạm biệt', he:'טָאם בְּיֶט', meaning:'להתראות', emoji:'✌️' }
+];
+
+const REGIONS = [
+  { name:'הנוי', emoji:'🛵', d:1 }, { name:'טו לה', emoji:'🍃', d:2 }, { name:'סאפה', emoji:'⛰️', d:4 },
+  { name:'הא לונג', emoji:'🚢', d:9 }, { name:'נין בין', emoji:'🛶', d:10 }, { name:'הוי אן', emoji:'🏮', d:14 }
+];
+
+const TABS = [
+  { id:'days', icon:'📅', label:'יומן' }, { id:'hunt', icon:'🔎', label:'ציד' },
+  { id:'talk', icon:'🗣️', label:'מילים' }, { id:'badges', icon:'🏆', label:'הישגים' },
+  { id:'money', icon:'🍦', label:'גלידות' }
+];
+
+const BADGES = [
+  { id:'starter', emoji:'🧭', name:'יצאנו לדרך', how:'לסיים 2 ימים', test:s => s.done.length >= 2 },
+  { id:'mountain', emoji:'⛰️', name:'כובש ההרים', how:'ימים 4–6 בסאפה', test:s => [4,5,6].every(n => s.done.includes(n)) },
+  { id:'captain', emoji:'⚓', name:'קפטן הספינה', how:'הפלגה + קייאקים', test:s => [9,10].every(n => s.done.includes(n)) },
+  { id:'foodking', emoji:'🍜', name:'מלך המאכלים', how:'סיור אוכל + סדנת בישול', test:s => [7,16].every(n => s.done.includes(n)) },
+  { id:'jungle', emoji:'🦋', name:"חוקר הג'ונגל", how:'טרק + מערת מואה', test:s => [6,11].every(n => s.done.includes(n)) },
+  { id:'hawk', emoji:'👁️', name:'עין הנץ', how:'6 פריטים בציד', test:s => s.found.length >= 6 },
+  { id:'collector', emoji:'💎', name:'אספן על', how:'כל 12 פריטי הציד', test:s => s.found.length >= 12 },
+  { id:'local', emoji:'🗣️', name:'כמעט מקומי', how:'להשמיע 8 מילים', test:s => s.said.length >= 8 },
+  { id:'brave', emoji:'😱', name:'אמיץ הזכוכית', how:'גשר הזכוכית + רכבת ההרים', test:s => [5,7].every(n => s.done.includes(n)) },
+  { id:'champ', emoji:'👑', name:'אלוף וייטנאם', how:'כל 19 הימים', test:s => s.done.length === 19 }
+];
+
+const RESULTS = [
+  { emoji:'🍦', label:'כפות גלידה (25,000₫)', per:25000 },
+  { emoji:'₪',  label:'שקלים (≈7,100₫)',     per:7100 },
+  { emoji:'🥖', label:'כריכי באן מי (30,000₫)', per:30000 },
+  { emoji:'🍜', label:'קערות פו (50,000₫)',   per:50000 }
+];
+
+/* ══ state ══════════════════════════════════════════════════════════ */
+const state = { tab:'days', open:1, found:[], done:[], said:[], vnd:'50000', slide:{}, music:false, speaking:null };
+
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    state.found = s.found || [];
+    state.done  = s.done  || [];
+    state.said  = s.said  || [];
+    state.tab   = s.tab   || 'days';
+    state.open  = s.open ?? 1;
+  } catch (e) {}
+}
+function persist() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify({
+      found:state.found, done:state.done, said:state.said, tab:state.tab, open:state.open
+    }));
+  } catch (e) {}
+}
+
+const earned = s => BADGES.filter(b => b.test(s)).map(b => b.id);
+
+/* Apply a change, then celebrate the first newly unlocked badge.
+   Returns true when a badge fired, so callers skip their own celebration. */
+function applyChange(patch) {
+  const before = earned(state);
+  Object.assign(state, patch);
+  persist();
+  const fresh = earned(state).filter(id => !before.includes(id));
+  syncStats();
+  if (fresh.length) {
+    const b = BADGES.find(x => x.id === fresh[0]);
+    celebrate(b.emoji, 'מדליה חדשה: ' + b.name);
+    return true;
+  }
+  return false;
+}
+
+/* ══ helpers ════════════════════════════════════════════════════════ */
+const $  = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const cssUrl = u => "url('" + String(u).replace(/'/g, "%27") + "')";
+
+/* ══ audio ══════════════════════════════════════════════════════════ */
+let audioCtx = null, musicTimer = null, burstTimer = null, speakTimer = null;
+
+function ac() {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return null;
+  if (!audioCtx) audioCtx = new AC();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function note(f, t, dur, vol, type) {
+  const c = ac(); if (!c) return;
+  const o = c.createOscillator(), g = c.createGain();
+  o.type = type || 'triangle';
+  o.frequency.value = f;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol, t + 0.03);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(c.destination);
+  o.start(t); o.stop(t + dur + 0.05);
+}
+function toggleMusic() {
+  const btn = $('#musicBtn');
+  if (state.music) {
+    clearInterval(musicTimer); musicTimer = null;
+    state.music = false;
+    btn.classList.remove('on'); btn.textContent = '🔇';
+    return;
+  }
+  const c = ac(); if (!c) return;
+  const scale = [523.25, 587.33, 659.25, 783.99, 880, 1046.5];
+  const pattern = [0, 2, 4, 3, 1, 5, 4, 2];
+  let step = 0;
+  const tick = () => {
+    const t = ac().currentTime;
+    const f = scale[pattern[step % pattern.length]];
+    note(f, t, 0.9, 0.07, 'sine');
+    note(f / 2, t, 1.1, 0.035, 'triangle');
+    step++;
+  };
+  tick();
+  musicTimer = setInterval(tick, 620);
+  state.music = true;
+  btn.classList.add('on'); btn.textContent = '🎵';
+}
+
+function celebrate(emoji, text) {
+  const host = $('#burstHost');
+  host.innerHTML =
+    '<div class="burst">' +
+      '<div class="burst-emoji">' + esc(emoji) + '</div>' +
+      '<div class="burst-text">' + esc(text) + '</div>' +
+    '</div>';
+  clearTimeout(burstTimer);
+  burstTimer = setTimeout(() => { host.innerHTML = ''; }, 1100);
+  const c = ac(); if (!c) return;
+  [660, 880, 1320].forEach((f, i) => note(f, c.currentTime + i * 0.09, 0.24, 0.16));
+}
+
+/* ══ views ══════════════════════════════════════════════════════════ */
+function headHTML(title, tape, tiltRight) {
+  return '<div class="paper-head' + (tiltRight ? ' tilt-r' : '') + '">' +
+           '<div class="tape" style="--tape:' + tape + '"></div>' +
+           '<h1>' + esc(title) + '</h1>' +
+         '</div>';
+}
+
+function dayHTML(d) {
+  const isDone = state.done.includes(d.n);
+  const isOpen = state.open === d.n;
+  const list = d.urls;
+  const idx = list.length ? ((state.slide[d.n] || 0) % list.length) : 0;
+
+  const summary =
+    '<button class="day-btn" data-act="day-open" data-n="' + d.n + '" aria-expanded="' + isOpen + '">' +
+      '<div class="pola-wrap">' +
+        '<div class="pola-back" style="--rb:' + (d.n % 2 ? 6 : -7) + 'deg' +
+          (list.length > 1 ? ';--back-img:' + cssUrl(list[1]) : '') + '"></div>' +
+        '<div class="pola" style="--rf:' + (d.n % 2 ? -3 : 3) + 'deg">' +
+          '<div class="pola-img"' + (list.length ? ' style="--front-img:' + cssUrl(list[0]) + '"' : '') + '>' +
+            (list.length ? '' : esc(d.emoji)) +
+          '</div>' +
+          '<div class="pola-cap">DAY ' + d.n + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="day-meta">' +
+        '<div class="day-date">' + esc(d.date) + ' · ' + esc(d.region) + '</div>' +
+        '<div class="day-title">' + esc(d.title) + '</div>' +
+      '</div>' +
+      '<div class="caret' + (isDone ? ' done' : '') + '">' + (isDone ? '✓' : (isOpen ? '▲' : '▼')) + '</div>' +
+    '</button>';
+
+  if (!isOpen) return '<div class="day" id="day-' + d.n + '" style="--c:' + d.color + ';--c-soft:' + d.color + '66">' + summary + '</div>';
+
+  const body =
+    '<div class="day-body">' +
+      '<div class="reel" data-reel="' + d.n + '">' +
+        '<div class="reel-fallback">' + esc(d.emoji) + '</div>' +
+        list.map((url, i) =>
+          '<div class="reel-frame' + (i === idx ? ' on' : '') + '" style="background-image:' + cssUrl(url) + '"></div>'
+        ).join('') +
+        '<div class="reel-shade"></div>' +
+        '<div class="reel-bar">' +
+          '<div class="reel-cap">' + esc(d.cap) + '</div>' +
+          '<div class="dots">' + list.map((_, i) => '<div class="dot' + (i === idx ? ' on' : '') + '"></div>').join('') + '</div>' +
+        '</div>' +
+        '<div class="reel-tape r"></div><div class="reel-tape l"></div>' +
+      '</div>' +
+
+      '<div class="note">' +
+        '<div class="note-margin"></div>' +
+        '<div class="note-day"><span class="star">✳</span><span class="num">DAY ' + d.n + '</span><span class="star">✳</span></div>' +
+        '<div class="hls">' +
+          d.highlights.map(h =>
+            '<div class="hl">' +
+              '<div class="hl-time">' + esc(h.time) + '</div>' +
+              '<div class="hl-icon">' + esc(h.icon) + '</div>' +
+              '<div class="hl-text">' + esc(h.text) + '</div>' +
+            '</div>'
+          ).join('') +
+        '</div>' +
+        '<div class="wow">' + esc(d.wow) + '</div>' +
+      '</div>' +
+
+      '<div class="mission">' +
+        '<div class="mission-k">המשימה הסודית של היום</div>' +
+        '<div class="mission-v">' + esc(d.mission) + '</div>' +
+      '</div>' +
+
+      '<div class="day-actions">' +
+        '<a class="act act--map" href="' + esc(d.map) + '" target="_blank" rel="noopener">📍 איפה זה?</a>' +
+        '<button class="act act--next" data-act="day-next" data-n="' + d.n + '">⏭ תמונה הבאה</button>' +
+      '</div>' +
+      '<button class="done-btn' + (isDone ? ' done' : '') + '" data-act="day-done" data-n="' + d.n + '">' +
+        (isDone ? 'סומן כהושלם ✓' : 'סיימנו את היום הזה!') +
+      '</button>' +
+    '</div>';
+
+  return '<div class="day open" id="day-' + d.n + '" style="--c:' + d.color + ';--c-soft:' + d.color + '66">' + summary + body + '</div>';
+}
+
+function daysHTML() {
+  return '<div class="page">' +
+    headHTML('מה עושים היום?', C.mint) +
+    '<p class="lead">כל יום הוא דף אחר באלבום. פותחים יום, והתמונות של המקום מתחילות להתחלף לבד. בסוף היום מסמנים ✓ ואוספים מדליה.</p>' +
+    '<div class="regions">' +
+      REGIONS.map((r, i) =>
+        '<button class="region" data-act="region" data-n="' + r.d + '" style="--rot:' + (i % 2 ? 1.6 : -1.6) + 'deg">' +
+          esc(r.emoji) + ' ' + esc(r.name) +
+        '</button>'
+      ).join('') +
+    '</div>' +
+    '<div class="days" id="daysList">' + DAYS.map(dayHTML).join('') + '</div>' +
+  '</div>';
+}
+
+function huntHTML() {
+  return '<div class="page">' +
+    headHTML('ציד המציאות 🔎', C.pink) +
+    '<p class="lead">רואים משהו מהרשימה? לוחצים על הכרטיס והוא נדלק. מי שאוסף הכי הרבה — מנצח.</p>' +
+    '<div class="grid2">' +
+      HUNT.map((it, i) => {
+        const on = state.found.includes(it.id);
+        return '<button class="hunt-card' + (on ? ' on' : '') + '" data-act="hunt" data-id="' + it.id + '" ' +
+                 'aria-pressed="' + on + '" style="--rot:' + ((i % 3 - 1) * 1.4) + 'deg">' +
+                 '<div class="hunt-emoji">' + esc(it.emoji) + '</div>' +
+                 '<div class="hunt-label">' + esc(it.label) + '</div>' +
+                 '<div class="hunt-hint">' + esc(it.hint) + '</div>' +
+                 '<div class="stamp">נמצא ✓</div>' +
+               '</button>';
+      }).join('') +
+    '</div>' +
+  '</div>';
+}
+
+function talkHTML() {
+  return '<div class="page">' +
+    headHTML('מדברור וייטנאמי 🗣️', C.cyan, true) +
+    '<p class="lead">וייטנאמית היא שפה מושרת — אותה מילה בטון אחר היא מילה אחרת לגמרי. לוחצים, שומעים, וחוזרים בקול רם.</p>' +
+    '<div class="phrases">' +
+      PHRASES.map((p, i) => {
+        const known = state.said.includes(p.id);
+        return '<button class="phrase' + (known ? ' known' : '') + '" data-act="say" data-id="' + p.id + '" ' +
+                 'style="--rot:' + (i % 2 ? .7 : -.7) + 'deg">' +
+                 '<div class="orb">' + esc(p.emoji) + '</div>' +
+                 '<div class="phrase-txt">' +
+                   '<div class="vi">' + esc(p.vi) + '</div>' +
+                   '<div class="he">' + esc(p.he) + '</div>' +
+                   '<div class="mean">' + esc(p.meaning) + '</div>' +
+                 '</div>' +
+                 '<div class="spk">🔊</div>' +
+               '</button>';
+      }).join('') +
+    '</div>' +
+  '</div>';
+}
+
+function badgesHTML() {
+  const got = earned(state);
+  return '<div class="page">' +
+    headHTML('ההישגים שלי 🏆', C.amber) +
+    '<p class="lead">כל משימה שנסגרת פותחת חותמת בדרכון. יש לכם ' + got.length + '/' + BADGES.length + ' חותמות.</p>' +
+    '<div class="grid2">' +
+      BADGES.map((b, i) => {
+        const on = got.includes(b.id);
+        return '<div class="badge' + (on ? ' on' : '') + '" style="--rot:' + (i % 2 ? 1.3 : -1.3) + 'deg">' +
+                 '<div class="seal">' + (on ? esc(b.emoji) : '🔒') + '</div>' +
+                 '<div class="b-name">' + esc(b.name) + '</div>' +
+                 '<div class="b-how">' + esc(b.how) + '</div>' +
+                 '<div class="b-pill">' + (on ? 'נפתחה' : 'נעולה') + '</div>' +
+               '</div>';
+      }).join('') +
+    '</div>' +
+  '</div>';
+}
+
+const vndNumber = () => parseInt(String(state.vnd).replace(/[^0-9]/g, ''), 10) || 0;
+
+function moneyHTML() {
+  const money = vndNumber();
+  return '<div class="page">' +
+    headHTML('מחשבון גלידות 🍦', C.violet, true) +
+    '<p class="lead">בוייטנאם המחירים נראים ענקיים — אבל 50,000 דונג הם בערך שתי כפות גלידה. תקישו מספר ותראו.</p>' +
+    '<div class="pad">' +
+      '<div class="pad-tape"></div>' +
+      '<label class="pad-label" for="vnd">כמה דונג כתוב על המחיר?</label>' +
+      '<div class="vnd-row">' +
+        '<input class="vnd-input" id="vnd" type="tel" inputmode="numeric" placeholder="50000" value="' + esc(state.vnd) + '">' +
+        '<div class="vnd-sym">₫</div>' +
+      '</div>' +
+      '<div class="quick">' +
+        ['10000','50000','200000','500000'].map(v =>
+          '<button data-act="quick" data-v="' + v + '">' + Number(v).toLocaleString('en-US') + '</button>'
+        ).join('') +
+      '</div>' +
+    '</div>' +
+    '<div class="results">' +
+      RESULTS.map((r, i) =>
+        '<div class="res" style="--rot:' + (i % 2 ? 1.1 : -1.1) + 'deg">' +
+          '<div class="res-emoji">' + esc(r.emoji) + '</div>' +
+          '<div class="res-val" data-res="' + i + '">' + (money / r.per).toFixed(1) + '</div>' +
+          '<div class="res-label">' + esc(r.label) + '</div>' +
+        '</div>'
+      ).join('') +
+    '</div>' +
+    '<div class="tip"><b>טריק הזיכרון:</b> מוחקים שלושה אפסים ומחלקים בשבע — וקיבלתם שקלים. 100,000₫ ≈ 14 ₪. השטר הגדול ביותר הוא 500,000₫ — בערך 70 ₪.</div>' +
+  '</div>';
+}
+
+const VIEWS = { days:daysHTML, hunt:huntHTML, talk:talkHTML, badges:badgesHTML, money:moneyHTML };
+
+/* ══ render ═════════════════════════════════════════════════════════ */
+function renderNav() {
+  $('#nav').innerHTML = TABS.map(t =>
+    '<button class="tab' + (state.tab === t.id ? ' on' : '') + '" data-act="tab" data-id="' + t.id + '" ' +
+      'aria-current="' + (state.tab === t.id) + '">' +
+      '<span class="tab-icon">' + t.icon + '</span>' +
+      '<span class="tab-label">' + esc(t.label) + '</span>' +
+    '</button>'
+  ).join('');
+}
+
+function renderHero() {
+  $('#heroStrip').innerHTML = DAYS.filter(d => [9,15,17,6,11].includes(d.n)).map((d, i) =>
+    '<div class="hero-pic" style="--top:' + (i % 2 ? -8 : 2) + 'px;--right:' + (i * 92 + 8) + 'px;' +
+      '--rot:' + (i % 2 ? 4 : -4) + 'deg;background-image:' + cssUrl(d.urls[0]) + '"></div>'
+  ).join('');
+}
+
+function renderMain() {
+  $('#main').innerHTML = VIEWS[state.tab]();
+}
+
+function syncStats() {
+  $('#statHunt').textContent   = state.found.length + '/12';
+  $('#statDays').textContent   = state.done.length + '/19';
+  $('#statBadges').textContent = earned(state).length + '/' + BADGES.length;
+}
+
+/* Reel frames are updated in place — a full re-render would restart the
+   Ken Burns zoom and kill the cross-fade between photos. */
+function syncReel(n) {
+  const reel = document.querySelector('[data-reel="' + n + '"]');
+  if (!reel) return;
+  const frames = Array.from(reel.querySelectorAll('.reel-frame'));
+  const dots = Array.from(reel.querySelectorAll('.dot'));
+  if (!frames.length) return;
+  const idx = (state.slide[n] || 0) % frames.length;
+  frames.forEach((f, i) => f.classList.toggle('on', i === idx));
+  dots.forEach((d, i) => d.classList.toggle('on', i === idx));
+}
+
+function advance(n) {
+  const day = DAYS.find(d => d.n === n);
+  if (!day || day.urls.length < 2) return;
+  state.slide[n] = ((state.slide[n] || 0) + 1) % day.urls.length;
+  syncReel(n);
+}
+
+const preload = urls => urls.forEach(u => { const i = new Image(); i.src = u; });
+
+/* ══ actions ════════════════════════════════════════════════════════ */
+function goTab(id) {
+  if (state.tab === id) return;
+  state.tab = id;
+  persist();
+  renderNav();
+  renderMain();
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+function openDay(n) {
+  const wasOpen = state.open === n;
+  state.open = wasOpen ? 0 : n;
+  persist();
+  $('#daysList').innerHTML = DAYS.map(dayHTML).join('');
+  if (!wasOpen) {
+    const next = DAYS.find(d => d.n === n + 1);
+    if (next) preload(next.urls);
+  }
+}
+
+function toggleDay(n) {
+  const has = state.done.includes(n);
+  const done = has ? state.done.filter(x => x !== n) : [...state.done, n];
+  const badged = applyChange({ done });
+
+  const card = document.getElementById('day-' + n);
+  if (card) {
+    const caret = card.querySelector('.caret');
+    caret.classList.toggle('done', !has);
+    caret.textContent = !has ? '✓' : '▲';
+    const btn = card.querySelector('.done-btn');
+    btn.classList.toggle('done', !has);
+    btn.textContent = !has ? 'סומן כהושלם ✓' : 'סיימנו את היום הזה!';
+  }
+  if (!has && !badged) celebrate('✓', 'יום ' + n + ' הושלם');
+}
+
+function toggleHunt(id) {
+  const it = HUNT.find(x => x.id === id);
+  const has = state.found.includes(id);
+  const found = has ? state.found.filter(x => x !== id) : [...state.found, id];
+  const badged = applyChange({ found });
+
+  const card = document.querySelector('[data-act="hunt"][data-id="' + id + '"]');
+  if (card) {
+    card.classList.toggle('on', !has);
+    card.setAttribute('aria-pressed', String(!has));
+  }
+  if (!has && !badged) celebrate(it.emoji, 'נמצא! ' + it.label);
+}
+
+function say(id) {
+  const p = PHRASES.find(x => x.id === id);
+  try {
+    const sp = window.speechSynthesis;
+    if (sp) {
+      sp.cancel();
+      const u = new SpeechSynthesisUtterance(p.vi);
+      u.lang = 'vi-VN';
+      u.rate = 0.8;
+      sp.speak(u);
+    }
+  } catch (e) {}
+
+  $$('.phrase.speaking').forEach(el => el.classList.remove('speaking'));
+  const card = document.querySelector('[data-act="say"][data-id="' + id + '"]');
+  if (card) card.classList.add('speaking');
+  clearTimeout(speakTimer);
+  speakTimer = setTimeout(() => { if (card) card.classList.remove('speaking'); }, 900);
+
+  if (!state.said.includes(id)) {
+    applyChange({ said:[...state.said, id] });
+    if (card) card.classList.add('known');
+  }
+}
+
+function setVnd(v, syncInput) {
+  state.vnd = String(v).replace(/[^0-9]/g, '').slice(0, 10);
+  const money = vndNumber();
+  RESULTS.forEach((r, i) => {
+    const el = document.querySelector('[data-res="' + i + '"]');
+    if (el) el.textContent = (money / r.per).toFixed(1);
+  });
+  if (syncInput) {
+    const input = $('#vnd');
+    if (input) input.value = state.vnd;
+  }
+}
+
+function reset() {
+  if (!window.confirm('לאפס את כל הסימונים והמדליות?')) return;
+  state.found = []; state.done = []; state.said = []; state.open = 1; state.slide = {};
+  persist();
+  syncStats();
+  renderMain();
+}
+
+/* ══ wiring ═════════════════════════════════════════════════════════ */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const act = el.dataset.act;
+  if (act === 'music')     return toggleMusic();
+  if (act === 'offline')   return void primePhotos();
+  if (act === 'reset')     return reset();
+  if (act === 'tab')       return goTab(el.dataset.id);
+  if (act === 'hunt')      return toggleHunt(el.dataset.id);
+  if (act === 'say')       return say(el.dataset.id);
+  if (act === 'day-open')  return openDay(+el.dataset.n);
+  if (act === 'day-done')  return toggleDay(+el.dataset.n);
+  if (act === 'day-next')  return advance(+el.dataset.n);
+  if (act === 'quick')     return setVnd(el.dataset.v, true);
+  if (act === 'region') {
+    const n = +el.dataset.n;
+    if (state.open !== n) openDay(n);
+    setTimeout(() => {
+      const target = document.getElementById('day-' + n);
+      if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 80, behavior:'smooth' });
+    }, 80);
+  }
+});
+
+document.addEventListener('input', e => {
+  if (e.target.id === 'vnd') {
+    const cleaned = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+    if (cleaned !== e.target.value) e.target.value = cleaned;
+    setVnd(cleaned, false);
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && state.music) toggleMusic();
+});
+
+/* ══ family gate ════════════════════════════════════════════════════
+   Not real security — it keeps the trip out of casual view. Combined with
+   the noindex meta and robots.txt, the page never reaches a search engine. */
+const FAMILY_CODE = 'PHO2026';          // ← לשנות כאן את הקוד המשפחתי
+const PASS_KEY = 'vn-kids-pass';
+
+function initGate() {
+  const gate = $('#gate');
+  if (!gate || gate.hidden) return;     // already unlocked by the inline check in <body>
+  const form = $('#gateForm'), input = $('#code'), err = $('#gateErr');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const typed = input.value.replace(/\s+/g, '').toUpperCase();
+    if (typed === FAMILY_CODE.toUpperCase()) {
+      try { localStorage.setItem(PASS_KEY, '1'); } catch (e) {}
+      gate.hidden = true;
+      return;
+    }
+    err.textContent = 'הקוד לא נכון. תשאלו את אמא או אבא 🙂';
+    form.classList.remove('bad');
+    void form.offsetWidth;              // restart the shake animation
+    form.classList.add('bad');
+    input.select();
+  });
+  setTimeout(() => input.focus(), 250);
+}
+
+/* ══ offline ════════════════════════════════════════════════════════ */
+const PHOTO_CACHE = 'vn-photos-v1';
+const ALL_PHOTOS = [...new Set(DAYS.flatMap(d => d.urls))];
+
+async function cachedCount() {
+  if (!('caches' in window)) return 0;
+  try { return (await (await caches.open(PHOTO_CACHE)).keys()).length; } catch (e) { return 0; }
+}
+
+let priming = false;
+
+async function primePhotos() {
+  const card = $('#offer'), title = $('#offerTitle'), sub = $('#offerSub');
+  const go = $('#offerGo'), bar = $('#dlBar'), fill = bar.querySelector('i');
+  if (!('caches' in window)) {
+    card.hidden = false;
+    title.textContent = 'אי אפשר לשמור לאופליין';
+    sub.textContent = 'הדפדפן הזה לא תומך בזה. נסו בכרום או בספארי.';
+    go.hidden = true;
+    return;
+  }
+  if (priming) return;
+  priming = true;
+  go.hidden = true;
+  bar.hidden = false;
+  title.textContent = 'שומר את הטיול…';
+
+  const cache = await caches.open(PHOTO_CACHE);
+  const queue = ALL_PHOTOS.slice();
+  const total = ALL_PHOTOS.length;
+  let done = 0, failed = 0;
+
+  const tick = () => {
+    fill.style.width = Math.round(done / total * 100) + '%';
+    sub.textContent = 'שומר את התמונות בטלפון… ' + done + ' מתוך ' + total;
+  };
+  tick();
+
+  /* Six workers — enough to saturate hotel wifi without stalling the UI. */
+  const worker = async () => {
+    while (queue.length) {
+      const url = queue.shift();
+      try {
+        if (!(await cache.match(url))) {
+          const res = await fetch(url, { mode:'no-cors', cache:'no-store' });
+          await cache.put(url, res);
+        }
+      } catch (e) { failed++; }
+      done++; tick();
+    }
+  };
+  await Promise.all(Array.from({ length:6 }, worker));
+  priming = false;
+  bar.hidden = true;
+
+  if (failed) {
+    card.classList.remove('done');
+    title.textContent = 'נשמר חלקית';
+    sub.textContent = 'נשמרו ' + (total - failed) + ' מתוך ' + total + ' תמונות. נסו שוב כשיש רשת טובה.';
+    go.hidden = false;
+    go.textContent = '↻ שוב';
+  } else {
+    card.classList.add('done');
+    title.textContent = 'הטיול שמור בטלפון ✓';
+    sub.textContent = 'עכשיו הכול עובד גם בלי אינטרנט. אפשר להוסיף את האפליקציה למסך הבית.';
+    setTimeout(() => { card.hidden = true; }, 8000);
+  }
+}
+
+async function initOffline() {
+  if ('serviceWorker' in navigator) {
+    try { await navigator.serviceWorker.register('./sw.js'); } catch (e) {}
+  }
+  if (!('caches' in window)) return;
+  /* Offer the download only when photos are actually missing. */
+  if ((await cachedCount()) < ALL_PHOTOS.length) $('#offer').hidden = false;
+}
+
+/* ══ boot ═══════════════════════════════════════════════════════════ */
+initGate();
+load();
+renderHero();
+renderNav();
+renderMain();
+syncStats();
+DAYS.slice(0, 3).forEach(d => preload(d.urls));
+setInterval(() => { if (state.open) advance(state.open); }, 3600);
+initOffline();
+})();
+</script>
+</body>
+</html>
