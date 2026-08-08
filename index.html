@@ -113,6 +113,8 @@ input{font-family:inherit}
 .region{flex:none;padding:7px 14px;border-radius:4px;background:var(--paper);color:var(--ink);font-family:var(--script);font-weight:700;font-size:18px;min-height:38px;white-space:nowrap;box-shadow:0 4px 11px rgba(0,0,0,.35);transform:rotate(var(--rot))}
 .days{display:flex;flex-direction:column;gap:14px}
 .day{border-radius:22px;overflow:hidden;transition:all .22s var(--ease);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
+.day.is-today{border-color:rgba(255,180,67,.55)}
+.today-chip{display:inline-block;background:#FFB443;color:#3b2500;font-size:9px;font-weight:900;letter-spacing:.6px;padding:1px 6px;border-radius:4px;margin-inline-end:6px;vertical-align:1px}
 .day.open{background:linear-gradient(150deg,rgba(255,255,255,.10),rgba(255,255,255,.035));border:1px solid var(--c-soft);box-shadow:0 16px 38px rgba(0,0,0,.46)}
 .day-btn{width:100%;display:flex;align-items:center;gap:11px;padding:12px;text-align:right}
 .pola-wrap{position:relative;flex:none;width:72px;height:82px}
@@ -669,14 +671,14 @@ const DAYS = [
     hl:[["09:00","🏁","גו-קארט בין עצי אורן"],["11:00","🪢","זיפליין, קייאק ורכבי ATV באגם דונג צ׳ואונג"],["16:00","🚐","בערב חוזרים להנוי"]],
     wow:"האגם הוא אגם מים מתוקים טבעי מוקף יער אורנים — נוף שנראה יותר אירופה מאסיה.",
     mission:"לנצח בגו-קארט מבוגר אחד. אחד מספיק.",
-    hotel:"מלון קלאסיק · הנוי", hotelEn:"Classyc Hotel, Hanoi",
+    hotel:"מלון מריטל · הנוי", hotelEn:"Meritel Hotel, Hanoi",
     quest:"רגע של תחרות — מישהו ממש רוצה לנצח",
     pics:["Go kart racing (6239255960).jpg","Go-kart.jpg","View of Ninh Binh atop limestone rocks near Mua Cave.jpg"], cap:"אגם דונג צ׳ואונג", m:"Dong Chuong Lake Ninh Binh" },
   { n:13, date:"ב׳ 21.9", region:"הנוי", color:C.amber, emoji:"🚂", title:"יום חופשי + שוק הלילה",
     hl:[["10:00","🛍️","חופש בהנוי: שווקים, סמטאות ובתי קפה למי שרוצה, בריכה במלון למי שלא. אין לוח זמנים"],["15:00","🚆","רחוב הרכבת: הרכבת עוברת בין הבתים במרחק חצי מטר מהשולחנות"],["19:30","🌃","שוק הלילה של הנוי — אלף דוכנים, אוכל רחוב, מוזיקה ואורות. הערב מתפצל: לנוער ולהורים כל אחד שלו"]],
     wow:"שוק הלילה של הרובע הקדום נפרש על שלושה קילומטרים ונפתח רק בסופי שבוע. הרחובות נסגרים לתנועה לגמרי.",
     mission:"למצוא בשוק פריט אחד מתחת ל-50,000 דונג ששווה כל שקל.",
-    hotel:"מלון קלאסיק · הנוי", hotelEn:"Classyc Hotel, Hanoi",
+    hotel:"מלון מריטל · הנוי", hotelEn:"Meritel Hotel, Hanoi",
     quest:"הרכבת עוברת. פריים אחד, אין הזדמנות שנייה",
     pics:["Old Quarter market, Hanoi, Vietnam, 20240204 1810 5887.jpg","Street Food vendors Soft crab Hanoi Vietnam.jpg","Old Quarter market, Hanoi, Vietnam, 20240123 0841 3046.jpg"], cap:"רחוב הרכבת", m:"Hanoi Train Street" },
   { n:14, date:"ג׳ 22.9", region:"הוי אן", color:C.cyan, emoji:"🛫", title:"טסים להוי אן ← פסטיבל האורות",
@@ -923,6 +925,26 @@ function headHTML(title, tape, tiltRight) {
          '</div>';
 }
 
+/* Day 1 is 9 September 2026, so day n is the 8+n th. Compared in local
+   time — the phone will be on Vietnam time during the trip, which is the
+   answer we want. */
+const TRIP_YEAR = 2026, TRIP_MONTH = 8;          // 8 = September
+function tripToday() {
+  const start = new Date(TRIP_YEAR, TRIP_MONTH, 9); start.setHours(0,0,0,0);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const n = Math.round((today - start) / 86400000) + 1;
+  return { n, inTrip: n >= 1 && n <= 19, until: 1 - n };
+}
+
+function paintSubtitle() {
+  const t = tripToday();
+  const el = document.querySelector('.subtitle');
+  if (!el) return;
+  if (t.inTrip) el.textContent = 'יום ' + t.n + ' מתוך 19 · נשארו ' + (19 - t.n) + ' ימים';
+  else if (t.until > 0) el.textContent = 'עוד ' + t.until + ' ימים לטיול · 9\u201327 בספטמבר';
+}
+
 /* A day's timeline, with the evening line that matches the current vibe
    slotted in by time so the schedule still reads in order. */
 function dayRows(d) {
@@ -983,6 +1005,8 @@ function dayHTML(d) {
   const list = d.urls;
   const idx = list.length ? ((state.slide[d.n] || 0) % list.length) : 0;
 
+  const t = tripToday();
+  const isToday = t.inTrip && t.n === d.n;
   const summary =
     '<button class="day-btn" data-act="day-open" data-n="' + d.n + '" aria-expanded="' + isOpen + '">' +
       '<div class="pola-wrap">' +
@@ -996,13 +1020,14 @@ function dayHTML(d) {
         '</div>' +
       '</div>' +
       '<div class="day-meta">' +
-        '<div class="day-date">' + esc(d.date) + ' · ' + esc(d.region) + '</div>' +
+        '<div class="day-date">' + (isToday ? '<span class="today-chip">היום</span>' : '')
+          + esc(d.date) + ' · ' + esc(d.region) + '</div>' +
         '<div class="day-title">' + esc(d.title) + '</div>' +
       '</div>' +
       '<div class="caret' + (isDone ? ' done' : '') + '">' + (isDone ? '✓' : (isOpen ? '▲' : '▼')) + '</div>' +
     '</button>';
 
-  if (!isOpen) return '<div class="day" id="day-' + d.n + '" style="--c:' + d.color + ';--c-soft:' + d.color + '66">' + summary + '</div>';
+  if (!isOpen) return '<div class="day' + (isToday ? ' is-today' : '') + '" id="day-' + d.n + '" style="--c:' + d.color + ';--c-soft:' + d.color + '66">' + summary + '</div>';
 
   const body =
     '<div class="day-body">' +
@@ -1051,7 +1076,7 @@ function dayHTML(d) {
       '</button>' +
     '</div>';
 
-  return '<div class="day open" id="day-' + d.n + '" style="--c:' + d.color + ';--c-soft:' + d.color + '66">' + summary + body + '</div>';
+  return '<div class="day open' + (isToday ? ' is-today' : '') + '" id="day-' + d.n + '" style="--c:' + d.color + ';--c-soft:' + d.color + '66">' + summary + body + '</div>';
 }
 
 function daysHTML() {
@@ -1922,9 +1947,23 @@ function sosSetup() {
 importIceFromHash();
 initGate();
 load();
+(() => {
+  /* During the trip, land on today rather than wherever they left off —
+     but only once per calendar day, so a deliberate choice still sticks. */
+  const t = tripToday();
+  if (!t.inTrip) return;
+  try {
+    const stamp = 'd' + t.n;
+    if (localStorage.getItem('vn-kids-day') !== stamp) {
+      localStorage.setItem('vn-kids-day', stamp);
+      state.open = t.n;
+    }
+  } catch (e) { state.open = t.n; }
+})();
 renderHero();
 renderNav();
 paintVibe();
+paintSubtitle();
 renderMain();
 syncStats();
 DAYS.slice(0, 3).forEach(d => preload(d.urls));
