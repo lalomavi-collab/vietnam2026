@@ -351,6 +351,48 @@ input{font-family:inherit}
 .pod-note b{color:var(--stamp)}
 .pod-note.warn{margin-top:6px;color:#8a6a10}
 
+/* ── speed round ──────────────────────────────────────────────────────*/
+.qz-start{display:block;width:100%;margin-top:11px;padding:13px;border-radius:15px;text-align:right;
+  background:linear-gradient(135deg,#7A5CFF,#FF5A8C);border:2px solid rgba(255,255,255,.85);
+  box-shadow:0 8px 22px rgba(122,92,255,.35)}
+.qz-start b{display:block;font-family:var(--hand);font-size:21px;color:#fff;font-weight:400}
+.qz-start span{display:block;font-size:11.5px;color:rgba(255,255,255,.9);margin-top:2px;line-height:1.4}
+.quiz[hidden]{display:none}
+.quiz{position:fixed;inset:0;z-index:225;display:grid;place-items:center;padding:18px 16px;
+  background:linear-gradient(178deg,#1b1240,#0f1428 60%,#2a1030)}
+.qz-card{width:100%;max-width:430px}
+.qz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.qz-top span{font-size:12px;font-weight:800;color:#a9b4d4}
+.qz-top b{font-family:var(--mono);font-size:26px;color:#FFB443;line-height:1;min-width:36px;text-align:center}
+.qz-track{height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;margin-bottom:18px}
+.qz-track i{display:block;height:100%;background:linear-gradient(90deg,#3EE08F,#FFB443,#FF3B5C);
+  transition:width .1s linear}
+.qz-q{font-family:var(--hand);font-size:25px;color:#fff;line-height:1.3;text-align:center;margin-bottom:18px;
+  text-wrap:pretty}
+.qz-as{display:flex;flex-direction:column;gap:9px}
+.qz-a{min-height:56px;padding:10px 14px;border-radius:14px;text-align:right;font-size:14px;line-height:1.4;
+  background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.14);color:#e7ecff;
+  transition:all .18s var(--ease)}
+.qz-a:active{transform:scale(.98)}
+.qz-a.ok{background:rgba(62,224,143,.28);border-color:var(--mint);color:#fff;font-weight:700}
+.qz-a.no{background:rgba(255,59,92,.24);border-color:#FF3B5C;color:#fff}
+.qz-a.dim{opacity:.35}
+.qz-got{margin-top:14px;text-align:center;font-family:var(--hand);font-size:24px;color:#ff9db0}
+.qz-got.win{color:#7BE7A6}
+.qz-quit{width:100%;margin-top:14px;min-height:40px;border-radius:12px;background:none;
+  border:1px dashed rgba(255,255,255,.22);color:#8b97bd;font-size:12px}
+.qz-end{text-align:center}
+.qz-end-m{font-size:64px;line-height:1}
+.qz-end h2{font-family:var(--hand);font-size:32px;color:#fff;margin:6px 0 2px;font-weight:400}
+.qz-end-s{font-family:var(--script);font-weight:700;font-size:64px;color:#FFB443;line-height:1;direction:ltr}
+.qz-end p{font-size:13px;color:#a9b4d4;margin:4px 0 0}
+.qz-end-x{display:inline-block;margin-top:12px;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:700;
+  background:rgba(62,224,143,.16);border:1px solid rgba(62,224,143,.4);color:#8df3bd}
+.qz-again{width:100%;margin-top:20px;min-height:52px;border-radius:14px;font-family:var(--hand);font-size:19px;
+  background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
+.qz-close{width:100%;margin-top:9px;min-height:44px;border-radius:12px;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);color:#fff;font-size:13px}
+
 /* ── trivia ───────────────────────────────────────────────────────────*/
 .tv-wrap{margin-top:20px}
 .tv-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;background:var(--paper);
@@ -654,6 +696,10 @@ input{font-family:inherit}
     <button class="book-btn ghost" data-act="book-x">סגירה</button>
   </div>
   <div class="book-body" id="bookBody"></div>
+</div>
+
+<div class="quiz" id="quiz" hidden>
+  <div class="qz-card" id="quizBody"></div>
 </div>
 
 <div class="setup" id="setup" hidden>
@@ -1283,7 +1329,7 @@ const RESULTS = [
 ];
 
 /* ══ state ══════════════════════════════════════════════════════════ */
-const state = { tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, missions:[], vibe:'teen', vnd:'50000', slide:{}, music:false, speaking:null };
+const state = { tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, missions:[], quizBest:0, quizPlays:0, vibe:'teen', vnd:'50000', slide:{}, music:false, speaking:null };
 
 function load() {
   try {
@@ -1296,6 +1342,8 @@ function load() {
     state.eaten = s.eaten || [];
     state.answers = s.answers || {};
     state.missions = s.missions || [];
+    state.quizBest = s.quizBest || 0;
+    state.quizPlays = s.quizPlays || 0;
     state.vibe  = s.vibe  || 'teen';
     state.tab   = s.tab   || 'days';
     state.open  = s.open ?? 1;
@@ -1304,7 +1352,7 @@ function load() {
 function persist() {
   try {
     localStorage.setItem(KEY, JSON.stringify({
-      found:state.found, done:state.done, said:state.said, eaten:state.eaten, answers:state.answers, missions:state.missions,
+      found:state.found, done:state.done, said:state.said, eaten:state.eaten, answers:state.answers, missions:state.missions, quizBest:state.quizBest, quizPlays:state.quizPlays,
       vibe:state.vibe, tab:state.tab, open:state.open
     }));
   } catch (e) {}
@@ -1458,6 +1506,116 @@ function toggleFood(id) {
   if (!has && !badged) celebrate(it.emoji, 'טעמתם! ' + it.name);
 }
 
+/* ══ speed round ════════════════════════════════════════════════════
+   Ten questions, fifteen seconds each, and the clock is the game: answer
+   instantly for the full 1000, and the value decays to 500 by the time
+   the bar runs out. Wrong or too slow is nothing. That spread is what
+   makes two people who both know the answer finish apart. */
+const QUIZ_N = 10, QUIZ_SECS = 15, QUIZ_MAX = 1000;
+let quiz = null, quizTimer = null;
+
+const flatQuestions = () => TRIVIA.flatMap(set => set.qs);
+
+function startQuiz() {
+  const all = flatQuestions().slice();
+  for (let i = all.length - 1; i > 0; i--) {          // shuffle, then take ten
+    const j = Math.floor(Math.random() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]];
+  }
+  quiz = { qs: all.slice(0, QUIZ_N), i: 0, score: 0, picked: null, t0: 0, left: QUIZ_SECS, done: false };
+  $('#quiz').hidden = false;
+  document.body.style.overflow = 'hidden';
+  askQuiz();
+}
+
+function askQuiz() {
+  quiz.picked = null;
+  quiz.left = QUIZ_SECS;
+  quiz.t0 = Date.now();
+  paintQuiz();
+  clearInterval(quizTimer);
+  quizTimer = setInterval(() => {
+    quiz.left = Math.max(0, QUIZ_SECS - (Date.now() - quiz.t0) / 1000);
+    const bar = $('#qzBar');
+    if (bar) bar.style.width = (quiz.left / QUIZ_SECS * 100) + '%';
+    const num = $('#qzSecs');
+    if (num) num.textContent = Math.ceil(quiz.left);
+    if (quiz.left <= 0) pickQuiz(-1);
+  }, 100);
+}
+
+function pickQuiz(oi) {
+  if (quiz.picked !== null) return;
+  clearInterval(quizTimer);
+  const q = quiz.qs[quiz.i];
+  const used = Math.min(QUIZ_SECS, (Date.now() - quiz.t0) / 1000);
+  const gained = oi === q.c ? Math.round(QUIZ_MAX * (1 - (used / QUIZ_SECS) / 2)) : 0;
+  quiz.picked = oi;
+  quiz.gained = gained;
+  quiz.score += gained;
+  paintQuiz();
+  setTimeout(() => {
+    quiz.i++;
+    if (quiz.i >= quiz.qs.length) endQuiz(); else askQuiz();
+  }, 1600);
+}
+
+function endQuiz() {
+  quiz.done = true;
+  const record = quiz.score > state.quizBest;
+  applyChange({ quizBest: Math.max(state.quizBest, quiz.score), quizPlays: state.quizPlays + 1 });
+  quiz.record = record;
+  paintQuiz();
+  if (record) celebrate('🏆', 'שיא חדש! ' + quiz.score);
+}
+
+function closeQuiz() {
+  clearInterval(quizTimer);
+  quiz = null;
+  $('#quiz').hidden = true;
+  document.body.style.overflow = '';
+  renderMain();
+}
+
+function paintQuiz() {
+  const box = $('#quizBody');
+  if (quiz.done) {
+    box.innerHTML =
+      '<div class="qz-end">' +
+        '<div class="qz-end-m">' + (quiz.record ? '🏆' : '🎯') + '</div>' +
+        '<h2>' + (quiz.record ? 'שיא חדש!' : 'סיימתם') + '</h2>' +
+        '<div class="qz-end-s">' + quiz.score + '</div>' +
+        '<p>נקודות בסבב הזה' + (quiz.record ? '' : ' · השיא שלכם: ' + state.quizBest) + '</p>' +
+        '<div class="qz-end-x">שווה ' + Math.round(state.quizBest / 200) + ' נק׳ בתחרות המשפחתית</div>' +
+        '<button class="qz-again" data-act="quiz-start">↻ סבב נוסף</button>' +
+        '<button class="qz-close" data-act="quiz-x">חזרה</button>' +
+      '</div>';
+    return;
+  }
+  const q = quiz.qs[quiz.i];
+  const shown = quiz.picked !== null;
+  box.innerHTML =
+    '<div class="qz-top">' +
+      '<span>שאלה ' + (quiz.i + 1) + '/' + quiz.qs.length + '</span>' +
+      '<b id="qzSecs">' + Math.ceil(quiz.left) + '</b>' +
+      '<span>' + quiz.score + ' נק׳</span>' +
+    '</div>' +
+    '<div class="qz-track"><i id="qzBar" style="width:' + (quiz.left / QUIZ_SECS * 100) + '%"></i></div>' +
+    '<div class="qz-q">' + esc(q.q) + '</div>' +
+    '<div class="qz-as">' + q.a.map((opt, oi) => {
+      let cls = 'qz-a';
+      if (shown && oi === q.c) cls += ' ok';
+      else if (shown && oi === quiz.picked) cls += ' no';
+      else if (shown) cls += ' dim';
+      return '<button class="' + cls + '"' + (shown ? ' disabled' : '') +
+        ' data-act="quiz-pick" data-o="' + oi + '">' + esc(opt) + '</button>';
+    }).join('') + '</div>' +
+    (shown
+      ? '<div class="qz-got' + (quiz.gained ? ' win' : '') + '">' +
+        (quiz.gained ? '+' + quiz.gained + ' נקודות' : (quiz.picked === -1 ? 'נגמר הזמן' : 'לא נכון')) + '</div>'
+      : '<button class="qz-quit" data-act="quiz-x">יציאה</button>');
+}
+
 function toggleMission(n) {
   const has = state.missions.includes(n);
   const missions = has ? state.missions.filter(x => x !== n) : [...state.missions, n];
@@ -1493,6 +1651,10 @@ function triviaHTML() {
   return '<div class="tv-wrap">' +
     '<div class="tv-head"><b>טריוויה וייטנאם</b>' +
       '<span>' + sc.pts + '/' + TRIVIA_MAX + ' נק׳</span></div>' +
+    '<button class="qz-start" data-act="quiz-start">' +
+      '<b>⚡ סבב מהיר · 10 שאלות</b>' +
+      '<span>15 שניות לשאלה. מי שעונה מהר — מקבל יותר.' +
+      (state.quizBest ? ' השיא שלכם: ' + state.quizBest : '') + '</span></button>' +
     '<p class="foods-sub">שאלה נענית פעם אחת בלבד — אז תחשבו. שאלות "שימו לב" שוות 3 נקודות, כי אפשר לענות עליהן רק אם באמת הסתכלתם סביב.</p>' +
     TRIVIA.map((set, si) => {
       const answered = set.qs.filter((_, qi) => state.answers[qid(si, qi)] !== undefined).length;
@@ -2015,6 +2177,9 @@ document.addEventListener('click', e => {
   if (act === 'food')      return toggleFood(el.dataset.id);
   if (act === 'answer')    return answerQ(+el.dataset.s, +el.dataset.q, +el.dataset.o);
   if (act === 'mission')   return toggleMission(+el.dataset.n);
+  if (act === 'quiz-start') return startQuiz();
+  if (act === 'quiz-pick')  return pickQuiz(+el.dataset.o);
+  if (act === 'quiz-x')     return closeQuiz();
   if (act === 'shoot')     return shoot(+el.dataset.n);
   if (act === 'shot-del')  return void delShot(el.dataset.id);
   if (act === 'who')       { askName(true); renderMain(); return; }
@@ -2523,6 +2688,7 @@ function myScore() {
   const myStories = Object.values(stories()).flat().filter(x => x.by === myName()).length;
   return {
     trivia:   triviaScore().pts,
+    quiz:     Math.round(state.quizBest / 200),
     photos:   mine * 2,
     stories:  myStories * 3,
     missions: state.missions.length * 3,
