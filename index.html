@@ -343,6 +343,17 @@ input{font-family:inherit}
   background:rgba(31,78,121,.05);font-size:14px;line-height:1.6;break-inside:avoid}
 .bk-story cite{display:block;margin-top:5px;font-style:normal;font-weight:700;font-size:11.5px;color:#8a6a10}
 .bk-grid figcaption em{display:block;font-family:'Heebo',sans-serif;font-style:normal;font-size:10.5px;color:#8a6a10;font-weight:700}
+.pool{display:flex;gap:8px;margin-bottom:13px}
+.pool-b{flex:1;min-height:46px;border-radius:13px;background:rgba(255,255,255,.06);
+  border:2px dashed rgba(255,255,255,.22);color:#c3ccea;font-size:12.5px;font-weight:700}
+.board{background:var(--paper);border-radius:3px;padding:10px 13px 11px;margin-bottom:13px;
+  box-shadow:0 6px 16px rgba(0,0,0,.36);transform:rotate(.7deg)}
+.board>b{display:block;font-family:var(--hand);font-size:19px;color:var(--ink);font-weight:400;margin-bottom:5px}
+.board-row{display:flex;align-items:center;gap:9px;padding:4px 0;border-top:1px dashed rgba(31,78,121,.18)}
+.board-row:first-of-type{border-top:0}
+.board-i{width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center}
+.board-n{flex:1;font-size:13.5px;font-weight:700;color:#26303f}
+.board-c{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--stamp)}
 .quests{display:flex;flex-direction:column;gap:11px}
 .quest{background:var(--paper);border-radius:3px;padding:13px;box-shadow:0 6px 16px rgba(0,0,0,.38);
   background-image:repeating-linear-gradient(180deg,transparent 0,transparent 26px,rgba(31,78,121,.09) 26px,rgba(31,78,121,.09) 27px)}
@@ -610,6 +621,7 @@ input{font-family:inherit}
     <nav class="nav" id="nav"></nav>
     <div id="burstHost"></div>
     <input type="file" id="shotFile" accept="image/*" capture="environment" hidden>
+    <input type="file" id="albumFile" accept="application/json,.json" hidden>
     <div class="busy" id="shotBusy" hidden><div class="busy-in">שומר את התמונה…</div></div>
   </div>
 </div>
@@ -1270,7 +1282,17 @@ function albumHTML() {
         + '<button class="alb-go is-movie" data-act="movie">🎬 להריץ את הסרט</button>'
         + '<button class="alb-go is-book" data-act="booklet">📖 החוברת</button>'
         + '</div>'
+        + (contributors().length > 1
+            ? '<div class="board"><b>מי תרם הכי הרבה</b>' + contributors().map(([who, n], i) =>
+                '<div class="board-row"><span class="board-i">' + (i + 1) + '</span>' +
+                '<span class="board-n">' + esc(who) + '</span>' +
+                '<span class="board-c">' + n + '</span></div>').join('') + '</div>'
+            : '')
       : '<div class="alb-empty">עוד לא צילמתם כלום. תתחילו מיום 1 👇</div>') +
+    '<div class="pool">' +
+      '<button class="pool-b" data-act="export">📤 לשלוח את האלבום שלי</button>' +
+      '<button class="pool-b" data-act="import">📥 לצרף אלבום שקיבלתי</button>' +
+    '</div>' +
     '<div class="quests">' +
       DAYS.map(d => {
         const mine = mineOf(d.n);
@@ -1493,6 +1515,8 @@ document.addEventListener('click', e => {
   if (act === 'story')     return addStory(+el.dataset.n);
   if (act === 'story-del') return delStory(+el.dataset.n, +el.dataset.i);
   if (act === 'install')   return void installApp();
+  if (act === 'export')    return void exportAlbum();
+  if (act === 'import')    return $('#albumFile').click();
   if (act === 'movie')     return openMovie();
   if (act === 'movie-x')   return closeMovie();
   if (act === 'booklet')   return openBooklet();
@@ -1518,6 +1542,11 @@ document.addEventListener('click', e => {
 
 document.addEventListener('change', e => {
   if (e.target.id === 'shotFile') void onShotPicked(e);
+  if (e.target.id === 'albumFile') {
+    const f = e.target.files && e.target.files[0];
+    if (f) void importAlbum(f);
+    e.target.value = '';
+  }
 });
 
 document.addEventListener('input', e => {
@@ -1863,6 +1892,91 @@ async function delShot(id) {
   await shotsDel(id);
   dropShotURL(id);
   await refreshShots(true);
+}
+
+/* ══ pooling the album ══════════════════════════════════════════════
+   Everyone shoots on their own phone, and a static site has nowhere
+   shared to put it. So each person exports one file and shares it into
+   the family chat; whoever is building the book imports them all. The
+   photos never leave the family — no server, no account, no third party
+   holding pictures of the kids. */
+const blobToDataURL = b => new Promise(r => {
+  const f = new FileReader(); f.onload = () => r(f.result); f.readAsDataURL(b);
+});
+const dataURLToBlob = async u => (await fetch(u)).blob();
+
+async function exportAlbum() {
+  const all = await shotsAll();
+  const st = stories();
+  if (!all.length && !Object.keys(st).length) { window.alert('אין עדיין מה לייצא.'); return; }
+  const busy = $('#shotBusy'); busy.hidden = false;
+  busy.querySelector('.busy-in').textContent = 'אורז את האלבום…';
+  try {
+    const payload = { v:1, who: myName() || 'אנונימי', stories: st, shots: [] };
+    for (const sh of all) {
+      payload.shots.push({ id:sh.id, day:sh.day, caption:sh.caption || '',
+                           by: sh.by || payload.who, w:sh.w, h:sh.h,
+                           data: await blobToDataURL(sh.blob) });
+    }
+    const name = 'vietnam2026-' + (myName() || 'album').replace(/\s+/g,'-') + '.json';
+    const blob = new Blob([JSON.stringify(payload)], { type:'application/json' });
+    const file = new File([blob], name, { type:'application/json' });
+    /* Sharing the file straight into WhatsApp beats a download the kid
+       then has to find in Files. */
+    if (navigator.canShare && navigator.canShare({ files:[file] })) {
+      await navigator.share({ files:[file], title:'האלבום שלי מוייטנאם' });
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = name; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    }
+  } catch (e) {
+    if (e && e.name !== 'AbortError') window.alert('הייצוא נכשל. נסו שוב.');
+  } finally { busy.hidden = true; busy.querySelector('.busy-in').textContent = 'שומר את התמונה…'; }
+}
+
+async function importAlbum(file) {
+  const busy = $('#shotBusy'); busy.hidden = false;
+  busy.querySelector('.busy-in').textContent = 'מצרף את האלבום…';
+  let added = 0, dupes = 0, addedStories = 0;
+  try {
+    const payload = JSON.parse(await file.text());
+    if (!payload || payload.v !== 1) throw new Error('bad file');
+    const have = new Set((await shotsAll()).map(x => x.id));
+    for (const sh of payload.shots || []) {
+      if (have.has(sh.id)) { dupes++; continue; }
+      await shotsPut({ id:sh.id, day:sh.day, caption:sh.caption || '', by:sh.by || payload.who,
+                       w:sh.w, h:sh.h, blob: await dataURLToBlob(sh.data) });
+      added++;
+    }
+    const mine = stories();
+    for (const [day, list] of Object.entries(payload.stories || {})) {
+      mine[day] = mine[day] || [];
+      const seen = new Set(mine[day].map(x => x.by + '|' + x.text));
+      for (const st of list) {
+        if (seen.has(st.by + '|' + st.text)) continue;
+        mine[day].push(st); addedStories++;
+      }
+    }
+    try { localStorage.setItem(STORY_KEY, JSON.stringify(mine)); } catch (e) {}
+    await refreshShots(true);
+    window.alert('צורף האלבום של ' + (payload.who || '?') + ':\n'
+      + added + ' תמונות חדשות, ' + addedStories + ' סיפורים'
+      + (dupes ? '\n(' + dupes + ' כבר היו אצלכם)' : ''));
+  } catch (e) {
+    window.alert('הקובץ לא נראה כמו אלבום של האפליקציה.');
+  } finally { busy.hidden = true; busy.querySelector('.busy-in').textContent = 'שומר את התמונה…'; }
+}
+
+/* Once albums are pooled, this is the leaderboard — no server needed. */
+function contributors() {
+  const tally = {};
+  shots.forEach(sh => { const k = sh.by || '?'; tally[k] = (tally[k] || 0) + 1; });
+  Object.values(stories()).forEach(list => list.forEach(st => {
+    tally[st.by] = (tally[st.by] || 0) + 1;
+  }));
+  return Object.entries(tally).sort((a, b) => b[1] - a[1]);
 }
 
 /* ══ the movie ══════════════════════════════════════════════════════
