@@ -294,6 +294,8 @@ input{font-family:inherit}
 
 /* ── offline download banner ──────────────────────────────────────── */
 .offer[hidden]{display:none}
+.offer.install{background:linear-gradient(135deg,#FFF6E0,#FCF7E8);outline:3px solid var(--amber);outline-offset:-3px}
+.offer.install .offer-go{background:linear-gradient(135deg,#7A5CFF,#FF5A8C);color:#fff;padding:0 20px;min-height:48px}
 .offer{margin:12px 15px 0;padding:12px 13px;border-radius:3px;background:var(--paper);box-shadow:0 7px 20px rgba(0,0,0,.4);transform:rotate(-.8deg);
   background-image:repeating-linear-gradient(180deg,transparent 0,transparent 26px,rgba(31,78,121,.10) 26px,rgba(31,78,121,.10) 27px);
   display:flex;align-items:center;gap:11px;flex-wrap:wrap}
@@ -307,11 +309,9 @@ input{font-family:inherit}
 .dl-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5CE1E6,#3EE08F);transition:width .3s ease}
 
 /* ── vibe switch ──────────────────────────────────────────────────────*/
-.vibe{display:flex;gap:7px;padding:12px 15px 0}
-.vibe-b{flex:1;min-height:40px;border-radius:12px;font-size:12.5px;font-weight:800;
-  background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.10);color:#8b97bd;transition:all .2s var(--ease)}
-.vibe-b.on{background:var(--paper);color:var(--ink);border-color:#fff;box-shadow:0 5px 14px rgba(0,0,0,.35);transform:translateY(-1px)}
-.hl-vibe{background:rgba(255,180,67,.16);border-radius:8px;padding:6px 7px;margin:-2px -7px}
+.hl-vibe{border-radius:8px;padding:7px;margin:-2px -7px}
+.hl-teen{background:rgba(122,92,255,.14);box-shadow:inset 3px 0 0 #7A5CFF}
+.hl-parent{background:rgba(193,68,14,.10);box-shadow:inset 3px 0 0 var(--stamp)}
 
 /* ── personal mission ─────────────────────────────────────────────────*/
 .mine{display:block;width:100%;text-align:right;margin-top:11px;padding:12px 13px;border-radius:3px;
@@ -350,6 +350,28 @@ input{font-family:inherit}
 .pod-note{margin-top:10px;font-size:11.5px;line-height:1.55;color:#5c6470}
 .pod-note b{color:var(--stamp)}
 .pod-note.warn{margin-top:6px;color:#8a6a10}
+
+/* ── install guide ────────────────────────────────────────────────────*/
+.howto[hidden]{display:none}
+.howto{position:fixed;inset:0;z-index:250;display:grid;place-items:center;padding:20px 16px;overflow-y:auto;
+  background:rgba(6,8,18,.88);backdrop-filter:blur(6px)}
+.ht-card{width:100%;max-width:390px;background:var(--paper);border-radius:6px;padding:20px 18px 16px;
+  box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.ht-card h2{font-family:var(--hand);font-size:28px;color:var(--ink);margin:0 0 2px;font-weight:400;text-align:center}
+.ht-sub{font-size:12.5px;color:#5c6470;text-align:center;margin:0 0 16px}
+.ht-step{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:1px dashed rgba(31,78,121,.22)}
+.ht-step:first-of-type{border-top:0}
+.ht-n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;
+  font-size:13px;font-weight:800;display:grid;place-items:center}
+.ht-step > div:nth-child(2){flex:1;min-width:0}
+.ht-step b{display:block;font-size:14px;color:#26303f;line-height:1.35}
+.ht-step i{display:block;font-style:normal;font-size:11.5px;color:#6b7382;margin-top:2px;line-height:1.4}
+.ht-icon{flex:none;width:34px;color:var(--stamp)}
+.ht-icon svg{width:100%;display:block}
+.ht-warn{margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(214,69,69,.10);
+  border:1px solid rgba(214,69,69,.3);font-size:12px;line-height:1.55;color:#7a1d1d}
+.ht-close{width:100%;margin-top:14px;min-height:48px;border-radius:13px;font-family:var(--hand);font-size:19px;
+  background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
 
 /* ── game time ────────────────────────────────────────────────────────*/
 .gt-next{margin-top:11px;padding:10px 13px;border-radius:13px;background:rgba(92,225,230,.12);
@@ -717,6 +739,56 @@ input{font-family:inherit}
   <div class="book-body" id="bookBody"></div>
 </div>
 
+<div class="howto" id="howto" hidden>
+  <div class="ht-card">
+    <h2>להוסיף למסך הבית</h2>
+    <p class="ht-sub">שלוש לחיצות, ואז זה נפתח כמו אפליקציה רגילה.</p>
+
+    <div class="ht-step">
+      <span class="ht-n">1</span>
+      <div><b>לוחצים על כפתור השיתוף</b>
+        <i>הוא בתחתית המסך באמצע (באייפונים ישנים — למעלה מימין)</i></div>
+      <div class="ht-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 52">
+          <rect x="6" y="20" width="28" height="28" rx="5" fill="none" stroke="currentColor" stroke-width="3.4"/>
+          <path d="M20 32 V6" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+          <path d="M12 14 L20 5 L28 14" fill="none" stroke="currentColor" stroke-width="3.4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="ht-step">
+      <span class="ht-n">2</span>
+      <div><b>גוללים למטה ובוחרים "הוסף למסך הבית"</b>
+        <i>Add to Home Screen — עם אייקון של ריבוע ופלוס</i></div>
+      <div class="ht-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 40">
+          <rect x="4" y="4" width="32" height="32" rx="8" fill="none" stroke="currentColor" stroke-width="3.4"/>
+          <path d="M20 12 V28 M12 20 H28" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="ht-step">
+      <span class="ht-n">3</span>
+      <div><b>לוחצים "הוסף" למעלה מימין</b>
+        <i>ואז סוגרים את הדפדפן ופותחים את האייקון החדש</i></div>
+      <div class="ht-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 40">
+          <path d="M8 21 L17 30 L33 11" fill="none" stroke="currentColor" stroke-width="4.4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="ht-warn">⚠️ אם פתחתם את הקישור מתוך וואטסאפ — כפתור השיתוף לא יופיע.
+      לוחצים על אייקון המצפן למטה ("פתח בספארי") ומתחילים משלב 1.</div>
+
+    <button class="ht-close" data-act="howto-x">הבנתי</button>
+  </div>
+</div>
+
 <div class="gametime" id="gametime" hidden>
   <div class="gt-card">
     <div class="gt-emoji">🎮</div>
@@ -814,11 +886,6 @@ input{font-family:inherit}
       </div>
       <div class="subtitle">19 ימים · 9–27 בספטמבר · 11 מגלי ארצות</div>
     </header>
-
-    <div class="vibe">
-      <button class="vibe-b" data-act="vibe" data-v="teen">🎧 מצב נוער</button>
-      <button class="vibe-b" data-act="vibe" data-v="parent">🍷 מצב הורים</button>
-    </div>
 
     <div class="stats">
       <div class="stat stat--hunt"><div class="stat-k">ציד</div><div class="stat-v" id="statHunt">0/12</div></div>
@@ -1502,27 +1569,19 @@ function paintSubtitle() {
 /* A day's timeline, with the evening line that matches the current vibe
    slotted in by time so the schedule still reads in order. */
 function dayRows(d) {
-  const v = VIBES[d.n] && VIBES[d.n][state.vibe];
   const rows = d.highlights.slice();
-  if (v) {
-    const row = { time:v[0], icon:v[1], text:v[2], vibe:true };
+  const pair = VIBES[d.n];
+  if (!pair) return rows;
+  /* Both evenings, slotted by time so the day still reads in order. */
+  ['teen', 'parent'].forEach(k => {
+    const v = pair[k];
+    if (!v) return;
+    const row = { time:v[0], icon:v[1], text:v[2], vibe:k };
     let i = rows.findIndex(r => r.time > row.time);
     if (i < 0) i = rows.length;
     rows.splice(i, 0, row);
-  }
+  });
   return rows;
-}
-
-function setVibe(v) {
-  if (state.vibe === v) return;
-  state.vibe = v;
-  persist();
-  paintVibe();
-  if (state.tab === 'days') { $('#daysList').innerHTML = DAYS.map(dayHTML).join(''); if (state.open) syncReel(state.open); }
-}
-
-function paintVibe() {
-  $$('.vibe-b').forEach(b => b.classList.toggle('on', b.dataset.v === state.vibe));
 }
 
 function toggleFood(id) {
@@ -1884,7 +1943,7 @@ function dayHTML(d) {
         '<div class="note-day"><span class="star">✳</span><span class="num">DAY ' + d.n + '</span><span class="star">✳</span></div>' +
         '<div class="hls">' +
           dayRows(d).map(h =>
-            '<div class="hl' + (h.vibe ? ' hl-vibe' : '') + '">' +
+            '<div class="hl' + (h.vibe ? ' hl-vibe hl-' + h.vibe : '') + '">' +
               '<div class="hl-time">' + esc(h.time) + '</div>' +
               '<div class="hl-icon">' + esc(h.icon) + '</div>' +
               '<div class="hl-text">' + esc(h.text) + '</div>' +
@@ -2292,7 +2351,6 @@ document.addEventListener('click', e => {
   if (act === 'sos-close') return closeSOS();
   if (act === 'sos-setup') return sosSetup();
   if (act === 'sos-share') return void shareIce();
-  if (act === 'vibe')      return setVibe(el.dataset.v);
   if (act === 'food')      return toggleFood(el.dataset.id);
   if (act === 'answer')    return answerQ(+el.dataset.s, +el.dataset.q, +el.dataset.o);
   if (act === 'mission')   return toggleMission(+el.dataset.n);
@@ -2309,6 +2367,7 @@ document.addEventListener('click', e => {
   if (act === 'story')     return addStory(+el.dataset.n);
   if (act === 'story-del') return delStory(+el.dataset.n, +el.dataset.i);
   if (act === 'install')   return void installApp();
+  if (act === 'howto-x')   return closeHowto();
   if (act === 'export')    return void exportAlbum();
   if (act === 'pick-me')   { setMe(el.dataset.n); paintSetup(); return; }
   if (act === 'pick-pic')  return $('#avatarFile').click();
@@ -2473,6 +2532,8 @@ function isStandalone() {
   return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 }
 
+/* iOS never fires beforeinstallprompt, so there is nothing to trigger —
+   the only honest thing is to show exactly where the button is. */
 async function installApp() {
   if (installEvent) {
     installEvent.prompt();
@@ -2481,7 +2542,12 @@ async function installApp() {
     if (res && res.outcome === 'accepted') $('#install').hidden = true;
     return;
   }
-  window.alert('להוספה למסך הבית:\n\n\u2022 באייפון — לוחצים על כפתור השיתוף (הריבוע עם החץ למעלה) ואז "הוסף למסך הבית".\n\n\u2022 באנדרואיד — תפריט שלוש הנקודות ואז "התקן אפליקציה".');
+  $('#howto').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeHowto() {
+  $('#howto').hidden = true;
+  document.body.style.overflow = '';
 }
 
 function initInstall() {
@@ -2513,7 +2579,7 @@ function myName() {
 function setMe(name) {
   try { localStorage.setItem(ME_KEY, name); } catch (e) {}
   const who = ALL_PEOPLE.find(x => x.n === name);
-  if (who) { state.vibe = who.kid ? 'teen' : 'parent'; persist(); paintVibe(); }
+  if (who) { state.vibe = who.kid ? 'teen' : 'parent'; persist(); }
 }
 function askName(force) {
   if (force) openSetup(0);
@@ -3239,7 +3305,6 @@ load();
 })();
 renderHero();
 renderNav();
-paintVibe();
 paintSubtitle();
 renderMain();
 syncStats();
