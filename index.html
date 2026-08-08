@@ -375,6 +375,7 @@ input{font-family:inherit}
 
     <button class="sos-close" data-act="sos-close">חזרה לאפליקציה</button>
     <button class="sos-setup" data-act="sos-setup">⚙︎ הגדרת מספרי החירום (להורים)</button>
+    <button class="sos-setup" data-act="sos-share">📤 לשלוח את המספרים לטלפון של ילד אחר</button>
   </div>
 </div>
 
@@ -1090,6 +1091,7 @@ document.addEventListener('click', e => {
   if (act === 'sos')       return openSOS();
   if (act === 'sos-close') return closeSOS();
   if (act === 'sos-setup') return sosSetup();
+  if (act === 'sos-share') return void shareIce();
   if (act === 'reset')     return reset();
   if (act === 'tab')       return goTab(el.dataset.id);
   if (act === 'hunt')      return toggleHunt(el.dataset.id);
@@ -1240,6 +1242,50 @@ let sosWatch = null, lastFix = null;
 function iceContacts() {
   try { return JSON.parse(localStorage.getItem(ICE_KEY)) || []; } catch (e) { return []; }
 }
+
+/* Contacts travel in the URL fragment, never in this repository. A fragment
+   is not sent to the server, so the numbers exist only in the link a parent
+   sends and in each phone's own storage. */
+const b64 = {
+  enc: obj => btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(obj))))
+                .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),
+  dec: s => JSON.parse(new TextDecoder().decode(
+        Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')), c => c.charCodeAt(0))))
+};
+
+function iceLink() {
+  const list = iceContacts();
+  if (!list.length) return '';
+  return location.origin + location.pathname + '#ice=' + b64.enc(list);
+}
+
+function importIceFromHash() {
+  const m = /(?:^|[#&])ice=([^&]+)/.exec(location.hash || '');
+  if (!m) return;
+  let list;
+  try { list = b64.dec(m[1]); } catch (e) { return; }
+  if (!Array.isArray(list) || !list.length) return;
+  const clean = list.filter(c => c && c.name && c.phone).slice(0, 4)
+                    .map(c => ({ name:String(c.name).slice(0,20), phone:String(c.phone).slice(0,20) }));
+  if (!clean.length) return;
+  try { localStorage.setItem(ICE_KEY, JSON.stringify(clean)); } catch (e) {}
+  /* Drop it from the address bar so the numbers do not sit in history. */
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  setTimeout(() => celebrate('🆘', 'מספרי החירום נשמרו: ' + clean.map(c => c.name).join(' · ')), 700);
+}
+
+async function shareIce() {
+  const url = iceLink();
+  if (!url) { window.alert('אין עדיין מספרים לשתף.'); return; }
+  const text = 'קישור להגדרת מספרי החירום באפליקציית וייטנאם 2026. לפתוח פעם אחת בטלפון של הילד:\n' + url;
+  try {
+    if (navigator.share) { await navigator.share({ text }); return; }
+    await navigator.clipboard.writeText(url);
+    window.alert('הקישור הועתק. שלחו אותו לטלפון של כל ילד ופתחו אותו שם פעם אחת.');
+  } catch (e) {
+    window.prompt('העתיקו את הקישור ושלחו אותו לטלפון של כל ילד:', url);
+  }
+}
 /* +972-50-123-4567 -> 972501234567, the form wa.me and tel: both accept */
 const cleanNum = n => String(n).replace(/[^\d+]/g, '').replace(/^\+/, '');
 
@@ -1326,6 +1372,7 @@ function sosSetup() {
 }
 
 /* ══ boot ═══════════════════════════════════════════════════════════ */
+importIceFromHash();
 initGate();
 load();
 renderHero();
