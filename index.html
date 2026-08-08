@@ -274,6 +274,33 @@ input{font-family:inherit}
 .dl-bar{flex-basis:100%;height:7px;border-radius:99px;background:rgba(31,78,121,.14);overflow:hidden}
 .dl-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5CE1E6,#3EE08F);transition:width .3s ease}
 
+/* ── vibe switch ──────────────────────────────────────────────────────*/
+.vibe{display:flex;gap:7px;padding:12px 15px 0}
+.vibe-b{flex:1;min-height:40px;border-radius:12px;font-size:12.5px;font-weight:800;
+  background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.10);color:#8b97bd;transition:all .2s var(--ease)}
+.vibe-b.on{background:var(--paper);color:var(--ink);border-color:#fff;box-shadow:0 5px 14px rgba(0,0,0,.35);transform:translateY(-1px)}
+.hl-vibe{background:rgba(255,180,67,.16);border-radius:8px;padding:6px 7px;margin:-2px -7px}
+
+/* ── foodie checklist ─────────────────────────────────────────────────*/
+.foods-wrap{margin-top:20px}
+.foods-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  background:var(--paper);border-radius:3px;padding:8px 13px;transform:rotate(-1deg);box-shadow:0 6px 16px rgba(0,0,0,.38)}
+.foods-h b{font-family:var(--hand);font-size:25px;color:var(--ink);font-weight:400}
+.foods-h span{font-family:var(--script);font-weight:700;font-size:21px;color:var(--stamp);direction:ltr}
+.foods-sub{margin:7px 0 11px;font-size:12.5px;color:#93a0c4;line-height:1.5}
+.foods{display:flex;flex-direction:column;gap:8px}
+.food{position:relative;display:grid;grid-template-columns:38px 1fr auto;grid-template-rows:auto auto;
+  gap:2px 10px;align-items:center;text-align:right;padding:10px 12px;border-radius:3px;background:var(--paper);
+  box-shadow:0 5px 13px rgba(0,0,0,.33);transition:all .2s var(--ease)}
+.food.on{outline:3px solid var(--mint);outline-offset:-3px;box-shadow:0 8px 20px rgba(62,224,143,.25)}
+.food-e{grid-row:1/3;font-size:27px;line-height:1}
+.food-n{font-family:var(--hand);font-size:19px;color:#26303f;line-height:1}
+.food-v{grid-column:3;grid-row:1;font-family:var(--mono);font-size:10.5px;color:#8a6a10;direction:ltr}
+.food-d{grid-column:2/4;grid-row:2;font-size:11.5px;color:#6b7382;line-height:1.35}
+.food-tick{position:absolute;top:8px;left:10px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  font-size:12px;background:rgba(31,78,121,.10);color:transparent}
+.food.on .food-tick{background:var(--mint);color:#04240f}
+
 /* ── album ────────────────────────────────────────────────────────────*/
 .alb-top{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px}
 .alb-stat{background:var(--paper);border-radius:3px;padding:10px;text-align:center;box-shadow:0 6px 16px rgba(0,0,0,.38);transform:rotate(-1deg)}
@@ -297,7 +324,7 @@ input{font-family:inherit}
 .shot{position:relative;width:78px;height:78px;border-radius:2px;overflow:hidden;background:#dfd8c4;box-shadow:0 3px 9px rgba(0,0,0,.3)}
 .shot img{width:100%;height:100%;object-fit:cover;display:block}
 .shot-x{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;font-size:12px;line-height:1}
-.quest-add{width:calc(100% - 58px);margin-top:10px;margin-inline-end:58px;min-height:44px;border-radius:12px;background:rgba(31,78,121,.09);border:2px dashed rgba(31,78,121,.32);color:var(--ink);font-family:var(--hand);font-size:18px}
+.quest-add{width:100%;margin-top:10px;min-height:44px;border-radius:12px;background:rgba(31,78,121,.09);border:2px dashed rgba(31,78,121,.32);color:var(--ink);font-family:var(--hand);font-size:18px}
 .quest.done .quest-add{background:rgba(62,224,143,.14);border-color:rgba(31,78,121,.22)}
 
 .busy[hidden]{display:none}
@@ -349,12 +376,13 @@ input{font-family:inherit}
 /* ── emergency ────────────────────────────────────────────────────────
    Deliberately loud and always on screen. A child in trouble should not
    have to find the right tab. */
-@keyframes sosPulse{0%,100%{box-shadow:0 6px 20px rgba(214,25,52,.5),0 0 0 0 rgba(214,25,52,.55)}
-                    70%{box-shadow:0 6px 20px rgba(214,25,52,.5),0 0 0 16px rgba(214,25,52,0)}}
-.sos-fab{position:fixed;bottom:92px;left:max(9px,calc(50% - var(--col)/2 + 9px));z-index:120;width:52px;height:52px;border-radius:50%;
-  background:linear-gradient(150deg,#FF3B5C,#D61934);color:#fff;font-family:var(--hand);font-size:21px;
-  display:grid;place-items:center;border:3px solid rgba(255,255,255,.92);animation:sosPulse 2.6s ease-out infinite;font-size:17px}
-.sos-fab:active{transform:scale(.94)}
+@keyframes sosPulse{0%,100%{box-shadow:0 3px 10px rgba(214,25,52,.45),0 0 0 0 rgba(214,25,52,.5)}
+                    70%{box-shadow:0 3px 10px rgba(214,25,52,.45),0 0 0 10px rgba(214,25,52,0)}}
+.sos-top{background:linear-gradient(150deg,#FF3B5C,#D61934);color:#fff;font-size:15px;
+  border:2px solid rgba(255,255,255,.85);box-shadow:0 3px 10px rgba(214,25,52,.45);animation:sosPulse 3.4s ease-out infinite}
+.sos-top:active{transform:scale(.94)}
+.reset-link{width:100%;margin-top:16px;min-height:44px;border-radius:12px;background:rgba(255,255,255,.05);
+  border:1px dashed rgba(255,255,255,.2);color:#8b95b8;font-size:12.5px}
 
 .sos[hidden]{display:none}
 .sos{position:fixed;inset:0;z-index:220;overflow-y:auto;padding:18px 16px 26px;
@@ -513,10 +541,15 @@ input{font-family:inherit}
           <div class="title-note"><span>וייטנאם 2026</span></div>
         </div>
         <button class="icon-btn music" id="musicBtn" data-act="music" title="מוזיקה" aria-label="מוזיקת רקע">🔇</button>
-        <button class="icon-btn" data-act="reset" title="להתחיל מהתחלה" aria-label="לאפס הכול">↺</button>
+        <button class="icon-btn sos-top" id="sosFab" data-act="sos" title="חירום" aria-label="כפתור חירום">🆘</button>
       </div>
       <div class="subtitle">19 ימים · 9–27 בספטמבר · 11 מגלי ארצות</div>
     </header>
+
+    <div class="vibe">
+      <button class="vibe-b" data-act="vibe" data-v="teen">🎧 מצב נוער</button>
+      <button class="vibe-b" data-act="vibe" data-v="parent">🍷 מצב הורים</button>
+    </div>
 
     <div class="stats">
       <div class="stat stat--hunt"><div class="stat-k">ציד</div><div class="stat-v" id="statHunt">0/12</div></div>
@@ -537,7 +570,6 @@ input{font-family:inherit}
 
     <nav class="nav" id="nav"></nav>
     <div id="burstHost"></div>
-    <button class="sos-fab" id="sosFab" data-act="sos" aria-label="כפתור חירום">עזרה</button>
     <input type="file" id="shotFile" accept="image/*" capture="environment" hidden>
     <div class="busy" id="shotBusy" hidden><div class="busy-in">שומר את התמונה…</div></div>
   </div>
@@ -619,13 +651,13 @@ const DAYS = [
     hotel:"ספינת אורכיד קלאסיק", hotelEn:"Orchid Classic Cruise, Lan Ha Bay",
     quest:"שקיעה מהסיפון. בלי אף אחד בפריים",
     pics:["Halong Bay in Vietnam.jpg","Ha Long bay tourism 34.jpg","View of sea from Titov Island, Ha Long Bay, Vietnam, 20240128 1337 3732.jpg"], cap:"מפרץ הא לונג", m:"Lan Ha Bay Cat Ba" },
-  { n:10, date:"ו׳ 18.9", region:"נין בין", color:C.mint, emoji:"🛶", title:"קייאקים בזריחה ← נין בין",
-    hl:[["06:30","🧘","טאי צ׳י על גג הספינה מול הזריחה"],["07:30","🛶","קייאקים באזור ׳או אק׳ בין הצוקים"],["12:00","🚐","יורדים מהספינה ונוסעים לנין בין"]],
-    wow:"׳או אק׳ פירושו בריכת הצפרדעים. מגיעים לשם רק בקייאק — סירה גדולה לא נכנסת.",
-    mission:"לחתור לבד חמישים חתירות בלי לעצור.",
+  { n:10, date:"ו׳ 18.9", region:"נין בין", color:C.mint, emoji:"🛶", title:"בוקר מפנק על הסיפון ← נין בין",
+    hl:[["07:30","🥐","בראנץ׳ על הסיפון מול צוקי הגיר: מזנון פתוח, פירות טרופיים וביצים בהזמנה. בלי למהר לשום מקום"],["10:00","🕳️","סיור מודרך במערות קאט בא — אולמות ענק בתוך ההר, נטיפים מוארים ומעברים צרים"],["13:00","🚐","יורדים מהספינה ונוסעים לנין בין"]],
+    wow:"אחת המערות בקאט בא שימשה בית חולים סודי בזמן המלחמה. חצבו אותה בתוך ההר כדי שלא תיראה מהאוויר.",
+    mission:"למצוא בתוך המערה צורה שנראית כמו חיה — ולשכנע את כולם שאתם צודקים.",
     hotel:"אמרלדה טאם קוק ריזורט", hotelEn:"Emeralda Tam Coc Resort, Ninh Binh",
     quest:"השתקפות במים — סלע, סירה או שמיים",
-    pics:["Bai Chay beach, Ha Long, Vietnam, 20240129 0915 3958.jpg","Halong ensemble (colour corrected).jpg","Ninh Binh-Tam Coc 04 voyage1.jpg"], cap:"קייאקים באו אק", m:"Emeralda Tam Coc Resort" },
+    pics:["Bai Chay beach, Ha Long, Vietnam, 20240129 0915 3958.jpg","Halong ensemble (colour corrected).jpg","Ninh Binh-Tam Coc 04 voyage1.jpg"], cap:"מערות קאט בא", m:"Emeralda Tam Coc Resort" },
   { n:11, date:"ש׳ 19.9", region:"נין בין", color:C.violet, emoji:"🧗", title:"טאם קוק ומערת מואה",
     hl:[["09:00","🚣","שיט בין הרי הגיר — החותרים המקומיים חותרים ברגליים!"],["12:00","🛕","מקדש ביץ׳ דונג בין בריכות לוטוס"],["15:00","🪜","מערת מואה: 500 מדרגות אבן לפסגה, ונוף על כל העמק"]],
     wow:"׳טאם קוק׳ פירושו שלוש מערות — הסירה עוברת בתוך שלוש מערות מים אמיתיות.",
@@ -640,27 +672,27 @@ const DAYS = [
     hotel:"מלון קלאסיק · הנוי", hotelEn:"Classyc Hotel, Hanoi",
     quest:"רגע של תחרות — מישהו ממש רוצה לנצח",
     pics:["Go kart racing (6239255960).jpg","Go-kart.jpg","View of Ninh Binh atop limestone rocks near Mua Cave.jpg"], cap:"אגם דונג צ׳ואונג", m:"Dong Chuong Lake Ninh Binh" },
-  { n:13, date:"ב׳ 21.9", region:"הנוי", color:C.amber, emoji:"🚂", title:"יום חופשי — רחוב הרכבת",
-    hl:[["10:00","🚆","Train Street: רכבת עוברת בין הבתים במרחק חצי מטר מהשולחנות"],["15:00","🐢","אגם הואן קיים ומקדש האי"],["19:00","🎁","שוק הלילה — הזמן לקנות מזכרות"]],
-    wow:"הרכבת ברחוב הזה עוברת פעמיים ביום, וכולם מזיזים כיסאות שנייה לפני שהיא מגיעה.",
-    mission:"לעמוד מאחורי הקו ולצלם את הרכבת עוברת. בלי לזוז מהקיר.",
+  { n:13, date:"ב׳ 21.9", region:"הנוי", color:C.amber, emoji:"🚂", title:"יום חופשי + שוק הלילה",
+    hl:[["10:00","🛍️","חופש בהנוי: שווקים, סמטאות ובתי קפה למי שרוצה, בריכה במלון למי שלא. אין לוח זמנים"],["15:00","🚆","רחוב הרכבת: הרכבת עוברת בין הבתים במרחק חצי מטר מהשולחנות"],["19:30","🌃","שוק הלילה של הנוי — אלף דוכנים, אוכל רחוב, מוזיקה ואורות. הערב מתפצל: לנוער ולהורים כל אחד שלו"]],
+    wow:"שוק הלילה של הרובע הקדום נפרש על שלושה קילומטרים ונפתח רק בסופי שבוע. הרחובות נסגרים לתנועה לגמרי.",
+    mission:"למצוא בשוק פריט אחד מתחת ל-50,000 דונג ששווה כל שקל.",
     hotel:"מלון קלאסיק · הנוי", hotelEn:"Classyc Hotel, Hanoi",
     quest:"הרכבת עוברת. פריים אחד, אין הזדמנות שנייה",
     pics:["Old Quarter market, Hanoi, Vietnam, 20240204 1810 5887.jpg","Street Food vendors Soft crab Hanoi Vietnam.jpg","Old Quarter market, Hanoi, Vietnam, 20240123 0841 3046.jpg"], cap:"רחוב הרכבת", m:"Hanoi Train Street" },
-  { n:14, date:"ג׳ 22.9", region:"הוי אן", color:C.cyan, emoji:"🛫", title:"טסים לדה נאנג ← הוי אן",
-    hl:[["11:00","🛫","טיסה פנימית הנוי–דה נאנג"],["14:00","🚗","נהג אוסף אותנו לעיר הפנסים הוי אן"],["16:00","🏊","מלון Bel Marina עם בריכה — ארבעה לילות"]],
-    wow:"הוי אן היתה נמל סחר בין-לאומי לפני 400 שנה. הבתים הצהובים בה נשמרו בדיוק כמו שהיו.",
-    mission:"למצוא את הפנס הכי מוזר בעיר ולצלם אותו.",
+  { n:14, date:"ג׳ 22.9", region:"הוי אן", color:C.cyan, emoji:"🛫", title:"טסים להוי אן ← פסטיבל האורות",
+    hl:[["11:00","🛫","טיסה פנימית הנוי–דה נאנג, כשעה וחצי באוויר. נהג אוסף אותנו להוי אן"],["17:00","🏮","סיור מודרך בעיר העתיקה: בתים צהובים בני 400 שנה, גשר יפני ופנסי משי בכל פינה"],["20:00","🕯️","פסטיבל האורות על נהר הטו בון — משחררים פנס נר על המים ומבקשים משאלה"]],
+    wow:"פעמיים בחודש, בירח מלא, מכבים בהוי אן את כל תאורת הרחוב ומדליקים רק פנסים. הנהר נראה כמו שמיים הפוכים.",
+    mission:"לשחרר פנס על הנהר ולא לספר לאף אחד מה ביקשתם.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"מסגרת בתוך מסגרת: לצלם דרך חלון, קשת או דלת",
-    pics:["Hội An, Ancient Town, 2020-01 CN-01.jpg","Hội An, Ancient Town, 2020-01 CN-05.jpg","Hội An, Ancient Town, 2020-01 CN-06.jpg"], cap:"הוי אן · עיר הפנסים", m:"Hoi An Ancient Town" },
-  { n:15, date:"ד׳ 23.9", region:"הוי אן", color:C.amber, emoji:"🤲", title:"בא נא הילס וגשר הזהב",
-    hl:[["09:00","🚡","רכבל שובר שיאי עולם: 5,771 מטר אורך ו-1,368 מטר הפרש גובה"],["11:00","🌸","גן הפרחים ורכבת ההר המשופעת"],["13:00","🌉","גשר הזהב — שתי ידי ענק מחזיקות שביל בגובה 1,400 מטר"]],
-    wow:"הידיים נראות כמו אבן עתיקה, אבל הן עשויות רשת פלדה וסיבי זכוכית — ונבנו ב-2018.",
-    mission:"להצטלם כאילו הידיים מחזיקות אתכם.",
+    pics:["Hội An, Ancient Town, 2020-01 CN-01.jpg","Hội An, Ancient Town, 2020-01 CN-05.jpg","Hội An, Ancient Town, 2020-01 CN-06.jpg"], cap:"פנסים על הנהר", m:"Hoi An Ancient Town" },
+  { n:15, date:"ד׳ 23.9", region:"הוי אן", color:C.amber, emoji:"🤲", title:"בא נא הילס — יום פארק שלם",
+    hl:[["09:00","🚡","רכבל שובר שיאי עולם: 5,771 מטר ו-1,368 מטר הפרש גובה. האוזניים נסתמות בדרך"],["11:00","🎢","פארק המתקנים: אלפיין קוסטר במורד ההר עם בלם ביד שלכם, מגדל נפילה, וסימולטורים בפנטזי פארק"],["14:00","🌉","גשר הזהב — שתי ידי ענק מחזיקות שביל בגובה 1,400 מטר מעל העננים"]],
+    wow:"פנטזי פארק הוא מפארקי המשחקים המקורים הגדולים באסיה: שלוש קומות של מתקנים בתוך טירה, כולל נפילה חופשית.",
+    mission:"לרדת באלפיין קוסטר בלי לגעת בבלם פעם אחת. מי שנגע — מודה.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"הידיים של גשר הזהב מזווית שאף אחד לא מצלם ממנה",
-    pics:["The Golden Bridge, Ba Na Hills, Vietnam.jpg","Aerial view of the Golden Bridge, Ba Na Hills, Da Nang, Vietnam.jpg","Golden Bridge above the clouds Ba Na Hills Da Nang Vietnam.jpg"], cap:"גשר הזהב", m:"Golden Bridge Ba Na Hills Danang" },
+    pics:["The Golden Bridge, Ba Na Hills, Vietnam.jpg","Aerial view of the Golden Bridge, Ba Na Hills, Da Nang, Vietnam.jpg","Golden Bridge above the clouds Ba Na Hills Da Nang Vietnam.jpg"], cap:"בא נא הילס", m:"Golden Bridge Ba Na Hills Danang" },
   { n:16, date:"ה׳ 24.9", region:"הוי אן", color:C.mint, emoji:"👨‍🍳", title:"סירות סל וסדנת בישול",
     hl:[["08:30","🧺","שוק הוי אן — קונים חומרי גלם עם השף"],["09:45","🛢️","סירות סל עגולות ביער קוקוס המים — לומדים לחתור ולדוג סרטנים"],["10:30","🥞","סדנת בישול: דף אורז, חלב אורז ופנקייק באן שאו — ואוכלים"]],
     wow:"סירת הסל היא סירה עגולה מבמבוק. המקומיים מסובבים אותה במקום כמו סביבון.",
@@ -668,17 +700,17 @@ const DAYS = [
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"תקריב של משהו שאתם מבשלים. קרוב מאוד",
     pics:["Hội An, Ancient Town, 2020-01 CN-10.jpg","Tofu noodle soup (Phở chay) - Pho Hanoi Authentic 2024-12-01.jpg","Hội An, Ancient Town, 2020-01 CN-11.jpg"], cap:"סירות הסל", m:"Hoi An Market" },
-  { n:17, date:"ו׳ 25.9", region:"הוי אן", color:C.violet, emoji:"🏮", title:"יום חופשי בהוי אן",
-    hl:[["10:00","🏮","סדנת פנסים: בונים פנס במו ידיים ולוקחים הביתה"],["13:00","🚣","אופציה להרפתקה: ראפטינג ומגלשות ביער הואה פו ת׳אן"],["19:00","🕯️","משחררים פנס נר על הנהר טו בון ומבקשים משאלה"]],
-    wow:"פעמיים בחודש, בירח מלא, מכבים בהוי אן את כל תאורת הרחוב ומדליקים רק פנסים.",
-    mission:"לשחרר פנס על הנהר ולא לספר לאף אחד מה ביקשתם.",
+  { n:17, date:"ו׳ 25.9", region:"הוי אן", color:C.violet, emoji:"🏮", title:"ראפטינג בבוקר, מופע אש בלילה",
+    hl:[["09:00","🌊","ראפטינג ומגלשות הרים ביער הואה פו ת׳אן: מים קרים, סירה שמתהפכת ומסלול מגלשות ארוך"],["15:00","🏖️","מועדון חוף: מיטות שיזוף מול הים, מוזיקה ואוכל עד השקיעה"],["20:00","🔥","מופע אש חי על החוף עם די-ג׳יי — לפידים, אקרובטיקה וקצב"]],
+    wow:"רקדני האש של חופי דה נאנג מתאמנים שנים עם מקלות כבויים לפני שהם נוגעים באש אמיתית.",
+    mission:"לצלם את מופע האש בחשיפה ארוכה — שהלהבה תצא קו ולא נקודה.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"אור נגד חושך: פנס דולק בערב, והכול סביבו כהה",
-    pics:["Hội An lantern festival (44810593224).jpg","Hội An lantern festival (45536262991).jpg","Hội An lantern festival (45485644722).jpg"], cap:"פנסים על הנהר", m:"Thu Bon River Hoi An" },
-  { n:18, date:"ש׳ 26.9", region:"הנוי", color:C.cyan, emoji:"🧳", title:"טיסה חזרה להנוי",
-    hl:[["08:00","🌅","בוקר אחרון בהוי אן — מי שמזדרז מספיק לרדת לבריכה"],["12:00","🛫","טיסה דה נאנג–הנוי"],["19:00","🍲","לילה אחרון: פו מהדוכן שממול"]],
-    wow:"פו הוא מרק נודלס אורז. בצפון מגישים אותו פשוט, בדרום — עם ערמת עשבים.",
-    mission:"לדרג את שלושת הרגעים הכי טובים בטיול, לפי הסדר.",
+    pics:["Hội An lantern festival (44810593224).jpg","Hội An lantern festival (45536262991).jpg","Hội An lantern festival (45485644722).jpg"], cap:"מופע האש על החוף", m:"Thu Bon River Hoi An" },
+  { n:18, date:"ש׳ 26.9", region:"הנוי", color:C.cyan, emoji:"🧳", title:"קניות אחרונות וצ׳ק-ליסט אוכל",
+    hl:[["08:00","🌅","בוקר אחרון בהוי אן — מי שמזדרז מספיק לרדת לבריכה"],["12:00","🛫","טיסה דה נאנג–הנוי, כשעה וחצי"],["19:00","🍜","הערב האחרון: קניות ברובע הקדום, ולסגור את כל המנות שעוד לא טעמנו"]],
+    wow:"פו הוא מרק נודלס אורז. בצפון מגישים אותו פשוט ונקי, בדרום — עם ערמת עשבים ונבטים.",
+    mission:"לסמן את הפריט האחרון בצ׳ק-ליסט האוכל. מי שסיים את כל העשרה — אלוף הטיול.",
     hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
     quest:"פורטרט אחרון של מישהו מהמשפחה — הכי אמיתי שיצא לכם",
     pics:["Pho in rock bowl.jpg","Nam pho bowl.jpg","Old Quarter street scene, Hanoi (1) (38464672752).jpg"], cap:"קערת פו אחרונה", m:"Hoan Kiem Lake Hanoi" },
@@ -706,6 +738,19 @@ const HUNT = [
   { id:'chick', emoji:'🐓', label:'תרנגול ברחוב', hint:'כל כפר' }
 ];
 
+const FOODS = [
+  { id:'pho',    emoji:'🍜', name:'פו',            vi:'Phở',            note:'מרק נודלס אורז. הארוחה הלאומית' },
+  { id:'banhmi', emoji:'🥖', name:'באן מי',        vi:'Bánh mì',        note:'בגט צרפתי במילוי וייטנאמי' },
+  { id:'egg',    emoji:'☕', name:'קפה ביצה',      vi:'Cà phê trứng',   note:'חלמון מוקצף מעל קפה. הנוי בלבד' },
+  { id:'spring', emoji:'🌯', name:'ספרינג רול טרי', vi:'Gỏi cuốn',      note:'דף אורז שקוף, ירקות ונענע' },
+  { id:'bun',    emoji:'🔥', name:'בון צ׳ה',        vi:'Bún chả',       note:'בשר על הגריל בקערת רוטב' },
+  { id:'cao',    emoji:'🍲', name:'קאו לאו',        vi:'Cao lầu',       note:'נודלס של הוי אן בלבד' },
+  { id:'coco',   emoji:'🥥', name:'גלידת קוקוס',    vi:'Kem dừa',       note:'מוגשת בתוך הקוקוס' },
+  { id:'banhxeo',emoji:'🥞', name:'באן שאו',        vi:'Bánh xèo',      note:'פנקייק כורכום פריך' },
+  { id:'sinh',   emoji:'🥭', name:'שייק פירות',     vi:'Sinh tố',       note:'מנגו, פסיפלורה או אבוקדו' },
+  { id:'chao',   emoji:'🍚', name:'שאו',            vi:'Cháo',          note:'דייסת אורז לארוחת בוקר' }
+];
+
 const PHRASES = [
   { id:'hi', vi:'Xin chào', he:"סִין צָ'אוֹ", meaning:'שלום', emoji:'👋' },
   { id:'ty', vi:'Cảm ơn', he:'קָאם אוֹן', meaning:'תודה', emoji:'🙏' },
@@ -718,6 +763,16 @@ const PHRASES = [
   { id:'icecream', vi:'Kem', he:'קֶם', meaning:'גלידה', emoji:'🍦' },
   { id:'bye', vi:'Tạm biệt', he:'טָאם בְּיֶט', meaning:'להתראות', emoji:'✌️' }
 ];
+
+/* Two readings of the same evening. The switch in the header picks one. */
+const VIBES = {
+  13: { teen:   ["21:00","🎧","הנוער: רחוב הבירה טא היאן — אורות ניאון, מוזיקה, ואוכל רחוב עד מאוחר"],
+        parent: ["20:00","🍷","ההורים: ארוחה שקטה ברובע הצרפתי, ואחריה קפה על שפת אגם הואן קיים"] },
+  15: { teen:   ["16:00","🎢","הנוער: סיבוב שני על האלפיין קוסטר, ומגדל הנפילה בפנטזי פארק"],
+        parent: ["16:00","🌸","ההורים: גני הפרחים הצרפתיים ומרפסת התצפית מעל העננים"] },
+  17: { teen:   ["22:00","🎧","הנוער: הדי-ג׳יי ממשיך על החוף אחרי מופע האש"],
+        parent: ["19:00","🦐","ההורים: מסעדת דגים על המים לפני שהמוזיקה מתחזקת"] }
+};
 
 const REGIONS = [
   { name:'הנוי', emoji:'🛵', d:1 }, { name:'טו לה', emoji:'🍃', d:2 }, { name:'סאפה', emoji:'⛰️', d:4 },
@@ -752,7 +807,7 @@ const RESULTS = [
 ];
 
 /* ══ state ══════════════════════════════════════════════════════════ */
-const state = { tab:'days', open:1, found:[], done:[], said:[], vnd:'50000', slide:{}, music:false, speaking:null };
+const state = { tab:'days', open:1, found:[], done:[], said:[], eaten:[], vibe:'teen', vnd:'50000', slide:{}, music:false, speaking:null };
 
 function load() {
   try {
@@ -762,6 +817,8 @@ function load() {
     state.found = s.found || [];
     state.done  = s.done  || [];
     state.said  = s.said  || [];
+    state.eaten = s.eaten || [];
+    state.vibe  = s.vibe  || 'teen';
     state.tab   = s.tab   || 'days';
     state.open  = s.open ?? 1;
   } catch (e) {}
@@ -769,7 +826,8 @@ function load() {
 function persist() {
   try {
     localStorage.setItem(KEY, JSON.stringify({
-      found:state.found, done:state.done, said:state.said, tab:state.tab, open:state.open
+      found:state.found, done:state.done, said:state.said, eaten:state.eaten,
+      vibe:state.vibe, tab:state.tab, open:state.open
     }));
   } catch (e) {}
 }
@@ -865,6 +923,60 @@ function headHTML(title, tape, tiltRight) {
          '</div>';
 }
 
+/* A day's timeline, with the evening line that matches the current vibe
+   slotted in by time so the schedule still reads in order. */
+function dayRows(d) {
+  const v = VIBES[d.n] && VIBES[d.n][state.vibe];
+  const rows = d.highlights.slice();
+  if (v) {
+    const row = { time:v[0], icon:v[1], text:v[2], vibe:true };
+    let i = rows.findIndex(r => r.time > row.time);
+    if (i < 0) i = rows.length;
+    rows.splice(i, 0, row);
+  }
+  return rows;
+}
+
+function setVibe(v) {
+  if (state.vibe === v) return;
+  state.vibe = v;
+  persist();
+  paintVibe();
+  if (state.tab === 'days') { $('#daysList').innerHTML = DAYS.map(dayHTML).join(''); if (state.open) syncReel(state.open); }
+}
+
+function paintVibe() {
+  $$('.vibe-b').forEach(b => b.classList.toggle('on', b.dataset.v === state.vibe));
+}
+
+function toggleFood(id) {
+  const it = FOODS.find(f => f.id === id);
+  const has = state.eaten.includes(id);
+  const eaten = has ? state.eaten.filter(x => x !== id) : [...state.eaten, id];
+  const badged = applyChange({ eaten });
+  const card = document.querySelector('[data-act="food"][data-id="' + id + '"]');
+  if (card) { card.classList.toggle('on', !has); card.setAttribute('aria-pressed', String(!has)); }
+  const n = $('#foodCount'); if (n) n.textContent = eaten.length + '/' + FOODS.length;
+  if (!has && !badged) celebrate(it.emoji, 'טעמתם! ' + it.name);
+}
+
+function foodsHTML() {
+  return '<div class="foods-wrap">' +
+    '<div class="foods-h"><b>צ׳ק-ליסט הטעימות</b><span id="foodCount">' +
+      state.eaten.length + '/' + FOODS.length + '</span></div>' +
+    '<p class="foods-sub">עשר מנות שחייבים לסמן לפני הטיסה הביתה.</p>' +
+    '<div class="foods">' + FOODS.map(f => {
+      const on = state.eaten.includes(f.id);
+      return '<button class="food' + (on ? ' on' : '') + '" data-act="food" data-id="' + f.id + '" aria-pressed="' + on + '">' +
+        '<span class="food-e">' + esc(f.emoji) + '</span>' +
+        '<span class="food-n">' + esc(f.name) + '</span>' +
+        '<span class="food-v">' + esc(f.vi) + '</span>' +
+        '<span class="food-d">' + esc(f.note) + '</span>' +
+        '<span class="food-tick">✓</span>' +
+      '</button>';
+    }).join('') + '</div></div>';
+}
+
 function dayHTML(d) {
   const isDone = state.done.includes(d.n);
   const isOpen = state.open === d.n;
@@ -911,8 +1023,8 @@ function dayHTML(d) {
         '<div class="note-margin"></div>' +
         '<div class="note-day"><span class="star">✳</span><span class="num">DAY ' + d.n + '</span><span class="star">✳</span></div>' +
         '<div class="hls">' +
-          d.highlights.map(h =>
-            '<div class="hl">' +
+          dayRows(d).map(h =>
+            '<div class="hl' + (h.vibe ? ' hl-vibe' : '') + '">' +
               '<div class="hl-time">' + esc(h.time) + '</div>' +
               '<div class="hl-icon">' + esc(h.icon) + '</div>' +
               '<div class="hl-text">' + esc(h.text) + '</div>' +
@@ -973,6 +1085,7 @@ function huntHTML() {
                '</button>';
       }).join('') +
     '</div>' +
+    foodsHTML() +
   '</div>';
 }
 
@@ -1014,6 +1127,7 @@ function badgesHTML() {
                '</div>';
       }).join('') +
     '</div>' +
+    '<button class="reset-link" data-act="reset">↺ להתחיל את הטיול מהתחלה</button>' +
   '</div>';
 }
 
@@ -1273,6 +1387,8 @@ document.addEventListener('click', e => {
   if (act === 'sos-close') return closeSOS();
   if (act === 'sos-setup') return sosSetup();
   if (act === 'sos-share') return void shareIce();
+  if (act === 'vibe')      return setVibe(el.dataset.v);
+  if (act === 'food')      return toggleFood(el.dataset.id);
   if (act === 'shoot')     return shoot(+el.dataset.n);
   if (act === 'shot-del')  return void delShot(el.dataset.id);
   if (act === 'movie')     return openMovie();
@@ -1808,6 +1924,7 @@ initGate();
 load();
 renderHero();
 renderNav();
+paintVibe();
 renderMain();
 syncStats();
 DAYS.slice(0, 3).forEach(d => preload(d.urls));
