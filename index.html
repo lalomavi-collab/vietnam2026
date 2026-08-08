@@ -53,11 +53,12 @@ input{font-family:inherit}
   --stamp:#C1440E;
   --pink:#FF5A8C; --amber:#FFB443; --mint:#3EE08F; --cyan:#5CE1E6; --violet:#7A5CFF;
   --ease:cubic-bezier(.2,.8,.2,1);
+  --col:480px;            /* app column width — the SOS button tracks it */
 }
 
 .app{min-height:100vh;background:#0d1020;font-family:'Heebo',system-ui,sans-serif;display:flex;justify-content:center}
 .phone{
-  width:100%;max-width:480px;min-height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;
+  width:100%;max-width:var(--col);min-height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;
   background:
     radial-gradient(130% 42% at 88% -4%,rgba(255,90,140,.26),transparent 62%),
     radial-gradient(120% 40% at 6% 14%,rgba(92,225,230,.20),transparent 60%),
@@ -268,6 +269,44 @@ input{font-family:inherit}
 .dl-bar{flex-basis:100%;height:7px;border-radius:99px;background:rgba(31,78,121,.14);overflow:hidden}
 .dl-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5CE1E6,#3EE08F);transition:width .3s ease}
 
+/* ── emergency ────────────────────────────────────────────────────────
+   Deliberately loud and always on screen. A child in trouble should not
+   have to find the right tab. */
+@keyframes sosPulse{0%,100%{box-shadow:0 6px 20px rgba(214,25,52,.5),0 0 0 0 rgba(214,25,52,.55)}
+                    70%{box-shadow:0 6px 20px rgba(214,25,52,.5),0 0 0 16px rgba(214,25,52,0)}}
+.sos-fab{position:fixed;bottom:78px;left:max(14px,calc(50% - var(--col)/2 + 14px));z-index:120;width:62px;height:62px;border-radius:50%;
+  background:linear-gradient(150deg,#FF3B5C,#D61934);color:#fff;font-family:var(--hand);font-size:21px;
+  display:grid;place-items:center;border:3px solid rgba(255,255,255,.92);animation:sosPulse 2.6s ease-out infinite}
+.sos-fab:active{transform:scale(.94)}
+
+.sos[hidden]{display:none}
+.sos{position:fixed;inset:0;z-index:220;overflow-y:auto;padding:18px 16px 26px;
+  background:linear-gradient(178deg,#3a0a12,#1b0509 60%,#240710)}
+.sos-in{max-width:460px;margin:0 auto}
+.sos-h{font-family:var(--hand);font-size:38px;color:#fff;line-height:1.15;text-align:center;margin:6px 0 2px}
+.sos-sub{text-align:center;font-size:13px;color:#ffc7d0;line-height:1.6;margin-bottom:16px}
+.sos-loc{background:var(--paper);border-radius:4px;padding:14px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.sos-loc b{display:block;font-family:var(--script);font-weight:700;font-size:22px;color:var(--ink);line-height:1.1}
+.sos-coord{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--stamp);direction:ltr;margin-top:6px;word-break:break-all}
+.sos-meta{font-size:11.5px;color:#5c6470;margin-top:5px}
+.sos-acts{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+.sos-btn{display:flex;align-items:center;justify-content:center;gap:9px;min-height:58px;border-radius:16px;
+  font-family:var(--hand);font-size:22px;border:2px solid rgba(255,255,255,.9);color:#2b0714;
+  background:linear-gradient(135deg,#FFD36E,#FFB443)}
+.sos-btn.call{background:linear-gradient(135deg,#7BE7A6,#3EE08F)}
+.sos-btn.msg{background:linear-gradient(135deg,#8FE9EC,#5CE1E6)}
+.sos-btn[hidden]{display:none}
+.sos-note{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.14);font-size:12.5px;line-height:1.65;color:#ffd9df}
+.sos-close{width:100%;margin-top:14px;min-height:50px;border-radius:14px;background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.20);color:#fff;font-family:var(--hand);font-size:20px}
+.sos-setup{width:100%;margin-top:8px;min-height:44px;border-radius:12px;background:none;
+  border:1px dashed rgba(255,255,255,.28);color:#ffb9c4;font-size:12.5px}
+.sos-field{display:block;margin-top:9px}
+.sos-field span{display:block;font-size:12px;color:#ffd9df;margin-bottom:4px;font-weight:700}
+.sos-field input{width:100%;font-family:var(--mono);font-size:17px;font-weight:700;color:var(--ink);
+  background:#fff;border:2px solid rgba(31,78,121,.3);border-radius:10px;padding:10px;direction:ltr;text-align:left;outline:none}
+
 /* ── large screens ────────────────────────────────────────────────────
    The app stays a single mobile column by design. On a desktop it gets a
    richer backdrop and a little more width, so it reads as a deliberate
@@ -281,10 +320,8 @@ input{font-family:inherit}
       #0a0c18;
     padding:0 24px;
   }
-  .phone{
-    max-width:560px;
-    box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 34px 90px rgba(0,0,0,.62);
-  }
+  :root{--col:560px}
+  .phone{box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 34px 90px rgba(0,0,0,.62)}
   /* Bigger viewing distance on a monitor — nudge the body copy up a step. */
   .lead{font-size:14.5px}
   .hl-text{font-size:14.5px}
@@ -293,7 +330,7 @@ input{font-family:inherit}
   .regions{flex-wrap:wrap;overflow:visible;padding-bottom:4px}
 }
 @media (min-width:1400px){
-  .phone{max-width:600px}
+  :root{--col:600px}
 }
 
 /* Only very old 320px phones: the title would take two lines there. */
@@ -317,6 +354,29 @@ input{font-family:inherit}
     <path d="M31 64 Q50 84 69 64" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
   </symbol>
 </svg>
+
+<div class="sos" id="sos" hidden>
+  <div class="sos-in">
+    <div class="sos-h">אני צריך עזרה 🆘</div>
+    <p class="sos-sub">קודם כל — תישארו במקום. אל תזוזו משם עד שמישהו מגיע.</p>
+
+    <div class="sos-loc">
+      <b id="sosState">מחפש איפה אתם…</b>
+      <div class="sos-coord" id="sosCoord"></div>
+      <div class="sos-meta" id="sosMeta"></div>
+    </div>
+
+    <div class="sos-acts" id="sosActs"></div>
+
+    <div class="sos-note" id="sosNote">
+      אם אין קליטה בכלל — <b>תראו את המסך הזה למבוגר שנמצא לידכם</b>. המספרים
+      למעלה אומרים לכל נהג מונית או שוטר בדיוק איפה אנחנו.
+    </div>
+
+    <button class="sos-close" data-act="sos-close">חזרה לאפליקציה</button>
+    <button class="sos-setup" data-act="sos-setup">⚙︎ הגדרת מספרי החירום (להורים)</button>
+  </div>
+</div>
 
 <div class="gate" id="gate">
   <div class="gate-card">
@@ -375,6 +435,7 @@ input{font-family:inherit}
 
     <nav class="nav" id="nav"></nav>
     <div id="burstHost"></div>
+    <button class="sos-fab" id="sosFab" data-act="sos" aria-label="כפתור חירום">עזרה</button>
   </div>
 </div>
 
@@ -392,28 +453,28 @@ const C = { pink:'#FF5A8C', amber:'#FFB443', mint:'#3EE08F', cyan:'#5CE1E6', vio
 
 const DAYS = [
   { n:1, date:"ד׳ 9.9", region:"הנוי", color:C.cyan, emoji:"✈️", title:"נחתנו בוייטנאם!",
-    hl:[["14:00","🛬","נחיתה בנוי באי, נהג פרטי אוסף את כל ה-11 שלנו"],["15:00","🏨","צ׳ק-אין במלון Classyc ברובע הקדום"],["18:00","🍜","סיבוב ראשון ברחובות ההומים של הנוי"]],
-    wow:"בהנוי חיים כמעט 9 מיליון אנשים — ויש בה יותר קטנועים מאנשים בכל ישראל.",
+    hl:[["19:00","🛬","נוחתים בנוי באי אחרי יום שלם באוויר. נהג פרטי מחכה בשם שלנו ואוסף את כל ה-11"],["20:30","🏨","צ׳ק-אין במלון אנטולה. מפילים תיקים, ומי שעוד ער — יוצא"],["21:30","🍜","ההצצה הראשונה להנוי בלילה: אורות, ריחות, ונהר של קטנועים שלא נגמר"]],
+    wow:"זמן טיסה נטו לוייטנאם הוא בערך עשר שעות. עם החניה בדרך זה יוצא כמעט יממה שלמה — תספרו כמה סרטים אתם מספיקים.",
     mission:"לספור כמה קטנועים עוברים ברחוב אחד בדקה. מי שניחש הכי קרוב — מנצח.",
     pics:["Old Quarter street scene, Hanoi (1) (38464672752).jpg","Old Quarter market, Hanoi, 20240123 1811 3411.jpg","Street seller of fingered citrons in Old Town of Hanoi, 20240204 1335 5772.jpg"], cap:"הנוי · הרובע הקדום", m:"Hanoi Old Quarter" },
-  { n:2, date:"ה׳ 10.9", region:"טו לה", color:C.mint, emoji:"🍃", title:"דרך התה אל עמק מואנג לו",
-    hl:[["08:30","🚐","יוצאים מהנוי — נסיעה בין הרים ומדרגות אורז"],["11:00","🫖","מטע תה: קוטפים עלים צעירים ומייבשים בשיטה המסורתית"],["16:00","🏡","עמק מואנג לו — הבית של שבט התאי, בתי עץ ובמבוק בני 700 שנה"]],
-    wow:"מואנג לו הוא שדה האורז השני בגודלו בכל צפון-מערב וייטנאם.",
-    mission:"לצלם עלה תה אחד ביד — ולהריח אותו אחרי הייבוש.",
+  { n:2, date:"ה׳ 10.9", region:"טו לה", color:C.mint, emoji:"🍃", title:"מהעיר אל ההרים",
+    hl:[["08:30","🚐","יוצאים מהנוי, והנסיעה עצמה היא חצי מהכיף: הבניינים נגמרים, ובמקומם נפתחים שדות אורז ירוקים עד קצה העין"],["11:00","🫖","עוצרים במטע תה אמיתי. קוטפים עלים בידיים, מריחים, ושותים תה שנקטף לפני חמש דקות"],["16:00","♨️","מגיעים למלון הספא בין ההרים — והערב כולו שייך לבריכות המים החמים"]],
+    wow:"שדות האורז כאן מחליפים צבע לפי העונה: ירוקים בקיץ, זהובים לפני הקציר. בספטמבר תתפסו אותם בדיוק באמצע ההתחלפות.",
+    mission:"לצלם את שדה האורז הכי יפה שתראו מחלון הרכב — בלי שהנהג יעצור.",
     pics:["Mu Cang Chai.jpg","Chế Cu Nha, Mù Cang Chải, Yên Bái, Vietnam - panoramio.jpg","SÁNG SỚM Ở MÙ CANG CHẢI - panoramio.jpg"], cap:"עמק האורז", m:"Muong Lo Valley Nghia Lo" },
-  { n:3, date:"ו׳ 11.9", region:"טו לה", color:C.violet, emoji:"🪂", title:"זיפליין ומעיינות חמים",
-    hl:[["10:00","🧗","אריס היל: זיפליין וגשרי חבלים גבוהים מעל העמק"],["14:00","♨️","מעיינות חמים טבעיים בריזורט — מים חמים ישר מהאדמה"],["17:00","🚶","סיור בכפרים הקטנים סביב טו לה"]],
-    wow:"המים במעיין מגיעים מעומק האדמה בטמפרטורה של יותר מ-40 מעלות. בלי דוד שמש.",
-    mission:"להיכנס למעיין החם ולהחזיק עשר שניות בלי לצווח.",
+  { n:3, date:"ו׳ 11.9", region:"טו לה", color:C.violet, emoji:"🪂", title:"אקסטרים בבוקר, מים חמים אחרי",
+    hl:[["09:00","🪂","פותחים את היום בגבהים: אומגה שחוצה את העמק באוויר, ופארק חבלים בין צמרות העצים. קסדה, אבזם, ונשימה עמוקה"],["13:00","♨️","מעיינות חמים טבעיים — מים שיוצאים רותחים ישר מתוך ההר, בלי דוד ובלי חשמל"],["17:00","🏘️","סיור בכפר מקומי: בתי עץ על עמודים, אוכל שמתבשל בחצר וילדים שמשחקים ברחוב. זה החלק שלא מופיע בתמונות"]],
+    wow:"המים במעיין יוצאים בחום של יותר מ-40 מעלות — חם יותר מהאמבטיה בבית. הם התחממו עמוק באדמה ליד סלעים לוהטים, ועלו עד לכאן.",
+    mission:"לרדת באומגה בלי לעצום עיניים. ואז לספר למי שכן עצם.",
     pics:["Khau Phạ nhìn từ trên cao.jpg","Chế Cu Nha, Mù Cang Chải, Yên Bái, Vietnam - panoramio (1).jpg","Mu Cang Chai.jpg"], cap:"מעיינות חמים", m:"Le Champ Tu Le Resort" },
   { n:4, date:"ש׳ 12.9", region:"סאפה", color:C.amber, emoji:"⛰️", title:"מעבר קאו פא ← סאפה",
-    hl:[["09:00","🛣️","עוצרים במעבר ההרים קאו פא — אחד הנופים המפורסמים בוייטנאם"],["12:00","👣","כפר לה פאן טאן של שבט המונג, שמגדל תירס בין הסלעים"],["17:00","🏨","ממשיכים לסאפה, עיר ההרים"]],
-    wow:"שבט המונג עוד מדבר בשפה שלו ולובש בגדים רקומים ביד — הם בחרו לא להתחבר לחיים המודרניים.",
-    mission:"למצוא רקמה בבגד מקומי ולזהות איזו חיה מסתתרת בדוגמה.",
+    hl:[["09:00","🛣️","עוצרים במעבר קאו פא, אחד מארבעת מעברי ההרים הגדולים של וייטנאם. עומדים על הקצה ורואים את כל העמק מתחת"],["12:00","👣","יום כפרי אמיתי בכפר לה פאן טאן: תירס שגדל בין הסלעים, חזירים שמסתובבים חופשי, ונשים שרוקמות בפתח הבית"],["17:00","🏨","ממשיכים לסאפה — עיר הרים שלפעמים יושבת ממש בתוך ענן"]],
+    wow:"שבט המונג צובע את הבגדים בצמח שנקרא אינדיגו. הידיים של מי שצובע נשארות כחולות במשך שבועות — תסתכלו על כפות הידיים.",
+    mission:"למצוא חיה אחת שמסתתרת בתוך רקמה של בגד מקומי.",
     pics:["Khau Phạ.jpg","Khau Phạ Pass, Vietnam (Unsplash).jpg","KHAU PHẠ MÙA NƯỚC ĐỔ - panoramio.jpg"], cap:"מעבר קאו פא", m:"Khau Pha Pass" },
   { n:5, date:"א׳ 13.9", region:"סאפה", color:C.cyan, emoji:"🌉", title:"מפל האהבה וגשר הזכוכית",
-    hl:[["09:00","🥾","טרק 30 דקות ביער עד מפל האהבה, בגובה 100 מטר"],["13:00","🪟","גשר הזכוכית רונג מיי — 2,000 מטר מעל פני הים, כולו שקוף"],["15:00","🎢","בתוספת תשלום: כבל אופניים, זיפליין או בנג׳י"]],
-    wow:"רצפת הגשר היא זכוכית — ורואים דרכה את העמק ישר מתחת לרגליים.",
+    hl:[["09:00","🥾","טרק קצר ביער עד מפל האהבה — מאה מטר של מים שנופלים, ורסס קר שמגיע עד אליכם"],["13:00","🪟","גשר הזכוכית רונג מיי: הרצפה שקופה לגמרי, ומתחתיה רק אוויר והעמק"],["15:00","🚞","רכבת ההרים הייחודית של מואנג הואה — קרונות שחוצים את המדרון ומשקיפים על כל עמק סאפה"]],
+    wow:"רצפת הגשר עשויה זכוכית בשכבות, חזקה מספיק כדי להחזיק המון אנשים — אבל העיניים שלכם לא יאמינו לזה בהתחלה.",
     mission:"לצעוד על הזכוכית עד האמצע ולהסתכל למטה. אמיצים בלבד.",
     pics:["Nhảy dù lượn từ đèo Khau Phạ ngắm bản Lìm mông.jpg","Rice terraces in Sa Pa 09.jpg","Road and paddy fields in Sa Pa, Vietnam, 20240126 1202 3586.jpg"], cap:"גשר הזכוכית", m:"Rong May Glass Bridge Sapa" },
   { n:6, date:"ב׳ 14.9", region:"סאפה", color:C.mint, emoji:"🐃", title:"טרק בעמק מואנג הואה",
@@ -1026,6 +1087,9 @@ document.addEventListener('click', e => {
   const act = el.dataset.act;
   if (act === 'music')     return toggleMusic();
   if (act === 'offline')   return void primePhotos();
+  if (act === 'sos')       return openSOS();
+  if (act === 'sos-close') return closeSOS();
+  if (act === 'sos-setup') return sosSetup();
   if (act === 'reset')     return reset();
   if (act === 'tab')       return goTab(el.dataset.id);
   if (act === 'hunt')      return toggleHunt(el.dataset.id);
@@ -1159,6 +1223,106 @@ async function initOffline() {
   if (!('caches' in window)) return;
   /* Offer the download only when photos are actually missing. */
   if ((await cachedCount()) < ALL_PHOTOS.length) $('#offer').hidden = false;
+}
+
+/* ══ emergency ══════════════════════════════════════════════════════
+   What this does: reads the phone's GPS and builds a ready-to-send
+   message with a map link, plus one-tap dialling.
+
+   What it does NOT do: it cannot report a position on its own. A static
+   site has no server to report to, so the child still has to press send
+   (or the parent has to answer). Treat it as a fast way to shout for
+   help, never as tracking. Numbers live in this phone's storage only —
+   they are never in the repository. */
+const ICE_KEY = 'vn-kids-ice';
+let sosWatch = null, lastFix = null;
+
+function iceContacts() {
+  try { return JSON.parse(localStorage.getItem(ICE_KEY)) || []; } catch (e) { return []; }
+}
+/* +972-50-123-4567 -> 972501234567, the form wa.me and tel: both accept */
+const cleanNum = n => String(n).replace(/[^\d+]/g, '').replace(/^\+/, '');
+
+function sosMessage() {
+  const t = new Date().toLocaleTimeString('he-IL', { hour:'2-digit', minute:'2-digit' });
+  if (!lastFix) return 'אני צריך עזרה! אני לא מצליח לשלוח מיקום. השעה ' + t;
+  const { lat, lon, acc } = lastFix;
+  return '🆘 אני צריך עזרה! אני כאן:\n'
+       + 'https://maps.google.com/?q=' + lat + ',' + lon + '\n'
+       + '(דיוק בערך ' + Math.round(acc) + ' מטר, השעה ' + t + ')';
+}
+
+function renderSosActions() {
+  const box = $('#sosActs');
+  const list = iceContacts();
+  if (!list.length) {
+    box.innerHTML = '<div class="sos-note">עוד לא הוגדרו מספרי חירום. '
+      + 'הורים — לחצו על ⚙︎ למטה והזינו מספר טלפון אחד לפחות.</div>';
+    return;
+  }
+  const msg = encodeURIComponent(sosMessage());
+  box.innerHTML = list.map(c => {
+    const n = cleanNum(c.phone);
+    return '<a class="sos-btn call" href="tel:+' + n + '">📞 להתקשר ל' + esc(c.name) + '</a>'
+         + '<a class="sos-btn msg" href="https://wa.me/' + n + '?text=' + msg + '" target="_blank" rel="noopener">💬 וואטסאפ ל' + esc(c.name) + ' עם המיקום</a>';
+  }).join('')
+  + '<a class="sos-btn" href="sms:+' + cleanNum(list[0].phone) + '?body=' + msg + '">✉️ SMS עם המיקום (עובד גם בלי אינטרנט)</a>';
+}
+
+function locate() {
+  const state = $('#sosState'), coord = $('#sosCoord'), meta = $('#sosMeta');
+  if (!navigator.geolocation) {
+    state.textContent = 'הטלפון הזה לא יודע למצוא מיקום';
+    renderSosActions();
+    return;
+  }
+  state.textContent = 'מחפש איפה אתם…';
+  sosWatch = navigator.geolocation.watchPosition(pos => {
+    lastFix = { lat:pos.coords.latitude.toFixed(5), lon:pos.coords.longitude.toFixed(5), acc:pos.coords.accuracy };
+    state.textContent = 'מצאתי אתכם ✓';
+    coord.textContent = lastFix.lat + ', ' + lastFix.lon;
+    meta.textContent = 'דיוק בערך ' + Math.round(lastFix.acc) + ' מטר · מתעדכן כל הזמן';
+    renderSosActions();
+  }, err => {
+    state.textContent = err.code === 1 ? 'המיקום חסום בהגדרות' : 'לא מצליח למצוא מיקום';
+    meta.textContent = err.code === 1
+      ? 'צריך לאשר "מיקום" לאתר הזה בהגדרות הדפדפן'
+      : 'אפשר עדיין להתקשר — הכפתורים למטה עובדים';
+    renderSosActions();
+  }, { enableHighAccuracy:true, timeout:15000, maximumAge:10000 });
+}
+
+function openSOS() {
+  $('#sos').hidden = false;
+  document.body.style.overflow = 'hidden';
+  renderSosActions();
+  locate();
+}
+
+function closeSOS() {
+  $('#sos').hidden = true;
+  document.body.style.overflow = '';
+  if (sosWatch !== null) { navigator.geolocation.clearWatch(sosWatch); sosWatch = null; }
+}
+
+function sosSetup() {
+  const cur = iceContacts();
+  const list = [];
+  for (let i = 0; i < 3; i++) {
+    const c = cur[i] || {};
+    const name = window.prompt('שם איש קשר ' + (i + 1) + ' (למשל: אבא). ריק = לדלג', c.name || '');
+    if (name === null) break;
+    if (!name.trim()) continue;
+    const phone = window.prompt('מספר טלפון של ' + name.trim() + ', בפורמט בינלאומי:\n+972501234567', c.phone || '+972');
+    if (phone === null) break;
+    if (!cleanNum(phone)) continue;
+    list.push({ name:name.trim(), phone:phone.trim() });
+  }
+  try { localStorage.setItem(ICE_KEY, JSON.stringify(list)); } catch (e) {}
+  renderSosActions();
+  window.alert(list.length
+    ? 'נשמרו ' + list.length + ' אנשי קשר. הם נשמרים בטלפון הזה בלבד.'
+    : 'לא נשמרו אנשי קשר.');
 }
 
 /* ══ boot ═══════════════════════════════════════════════════════════ */
