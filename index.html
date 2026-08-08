@@ -187,6 +187,13 @@ input{font-family:inherit}
 .act{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;border-radius:14px;font-size:13px;font-weight:700}
 .act--map{background:rgba(92,225,230,.14);border:1px solid rgba(92,225,230,.40);color:#B9F7F9}
 .act--next{background:rgba(255,90,140,.14);border:1px solid rgba(255,90,140,.40);color:#FFC2D4}
+.act--tube{display:flex;width:100%;margin-top:8px;min-height:46px;align-items:center;justify-content:center;gap:8px;
+  border-radius:14px;background:rgba(255,90,140,.13);border:1px solid rgba(255,90,140,.38);color:#FFC2D4;
+  font-size:13px;font-weight:700}
+.act--tube em{font-style:normal;font-size:10px;font-weight:600;color:#c98da0;background:rgba(0,0,0,.22);
+  padding:2px 7px;border-radius:99px}
+.tube{margin-top:9px;position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
+.tube iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .done-btn{width:100%;margin-top:9px;min-height:48px;border-radius:14px;font-family:var(--hand);font-size:17px;transition:all .2s var(--ease);background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
 .done-btn.done{background:rgba(62,224,143,.16);border:1px solid rgba(62,224,143,.5);color:#8df3bd}
 
@@ -771,6 +778,7 @@ const DAYS = [
     mission:"לספור כמה קטנועים עוברים ברחוב אחד בדקה. מי שניחש הכי קרוב — מנצח.",
     hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
     quest:"פורטרט של מישהו מהמשפחה בתוך הכאוס של הרובע הקדום — בלי שיסתכל למצלמה",
+    yt:"Hanoi Old Quarter night walk 4K",
     flights:[
       {code:"LY83",from:"TLV",to:"BKK",dep:"00:55",arr:"16:35",dur:"11:40",note:"אל על · תל אביב ← בנגקוק, יוצאים בלילה שבין שלישי לרביעי"},
       {code:"VN618",from:"BKK",to:"HAN",dep:"19:05",arr:"21:05",dur:"2:00",note:"מחליפים מטוס בבנגקוק וממשיכים להנוי"}],
@@ -781,6 +789,7 @@ const DAYS = [
     mission:"לצלם את שדה האורז הכי יפה שתראו מחלון הרכב — בלי שהנהג יעצור.",
     hotel:"לה שאמפ טו לה ריזורט", hotelEn:"Le Champ Tu Le Resort & Spa",
     quest:"צילום מחלון הרכב בנסיעה. האתגר: שיצא חד ולא מרוח",
+    yt:"Mu Cang Chai rice terraces drone",
     pics:["Mu Cang Chai.jpg","Chế Cu Nha, Mù Cang Chải, Yên Bái, Vietnam - panoramio.jpg","SÁNG SỚM Ở MÙ CANG CHẢI - panoramio.jpg"], cap:"עמק האורז", m:"Muong Lo Valley Nghia Lo" },
   { n:3, date:"ו׳ 11.9", region:"טו לה", color:C.violet, emoji:"🪂", title:"אקסטרים בבוקר, מים חמים אחרי",
     hl:[["09:00","🪂","פותחים את היום בגבהים: אומגה שחוצה את העמק באוויר, ופארק חבלים בין צמרות העצים. קסדה, אבזם, ונשימה עמוקה"],["13:00","♨️","מעיינות חמים טבעיים — מים שיוצאים רותחים ישר מתוך ההר, בלי דוד ובלי חשמל"],["17:00","🏘️","סיור בכפר מקומי: בתי עץ על עמודים, אוכל שמתבשל בחצר וילדים שמשחקים ברחוב. זה החלק שלא מופיע בתמונות"]],
@@ -788,6 +797,7 @@ const DAYS = [
     mission:"לרדת באומגה בלי לעצום עיניים. ואז לספר למי שכן עצם.",
     hotel:"לה שאמפ טו לה ריזורט", hotelEn:"Le Champ Tu Le Resort & Spa",
     quest:"רגע של אדרנלין — מישהו באמצע האומגה, באוויר",
+    yt:"Tu Le Vietnam hot spring resort",
     pics:["Khau Phạ nhìn từ trên cao.jpg","Chế Cu Nha, Mù Cang Chải, Yên Bái, Vietnam - panoramio (1).jpg","Mu Cang Chai.jpg"], cap:"מעיינות חמים", m:"Le Champ Tu Le Resort" },
   { n:4, date:"ש׳ 12.9", region:"סאפה", color:C.amber, emoji:"⛰️", title:"מעבר קאו פא ← סאפה",
     hl:[["09:00","🛣️","עוצרים במעבר קאו פא, אחד מארבעת מעברי ההרים הגדולים של וייטנאם. עומדים על הקצה ורואים את כל העמק מתחת"],["12:00","👣","יום כפרי אמיתי בכפר לה פאן טאן: תירס שגדל בין הסלעים, חזירים שמסתובבים חופשי, ונשים שרוקמות בפתח הבית"],["17:00","🏨","ממשיכים לסאפה — עיר הרים שלפעמים יושבת ממש בתוך ענן"]],
@@ -795,6 +805,7 @@ const DAYS = [
     mission:"למצוא חיה אחת שמסתתרת בתוך רקמה של בגד מקומי.",
     hotel:"מלון פיסטאצ׳יו · סאפה", hotelEn:"Pistachio Sapa Hotel",
     quest:"יד אחת בפריים: יד של מישהו מקומי, עובדת. בלי פנים",
+    yt:"Khau Pha Pass Vietnam drone",
     pics:["Khau Phạ.jpg","Khau Phạ Pass, Vietnam (Unsplash).jpg","KHAU PHẠ MÙA NƯỚC ĐỔ - panoramio.jpg"], cap:"מעבר קאו פא", m:"Khau Pha Pass" },
   { n:5, date:"א׳ 13.9", region:"סאפה", color:C.cyan, emoji:"🌉", title:"מפל האהבה וגשר הזכוכית",
     hl:[["09:00","🥾","טרק קצר ביער עד מפל האהבה — מאה מטר של מים שנופלים, ורסס קר שמגיע עד אליכם"],["13:00","🪟","גשר הזכוכית רונג מיי: הרצפה שקופה לגמרי, ומתחתיה רק אוויר והעמק"],["15:00","🚞","רכבת ההרים הייחודית של מואנג הואה — קרונות שחוצים את המדרון ומשקיפים על כל עמק סאפה"]],
@@ -802,6 +813,7 @@ const DAYS = [
     mission:"לצעוד על הזכוכית עד האמצע ולהסתכל למטה. אמיצים בלבד.",
     hotel:"מלון פיסטאצ׳יו · סאפה", hotelEn:"Pistachio Sapa Hotel",
     quest:"צילום דרך הזכוכית של הגשר, כלפי מטה. שיהיה מסחרר",
+    yt:"Rong May Glass Bridge Sapa",
     pics:["Nhảy dù lượn từ đèo Khau Phạ ngắm bản Lìm mông.jpg","Rice terraces in Sa Pa 09.jpg","Road and paddy fields in Sa Pa, Vietnam, 20240126 1202 3586.jpg"], cap:"גשר הזכוכית", m:"Rong May Glass Bridge Sapa" },
   { n:6, date:"ב׳ 14.9", region:"סאפה", color:C.mint, emoji:"🐃", title:"טרק בעמק מואנג הואה",
     hl:[["09:00","🌾","הליכה בין מדרגות אורז לכפר לאו צ׳אי"],["12:00","🏘️","טא ואן — הכפר של שבט הדזאי, בלב העמק"],["15:00","💦","קאט קאט, ובסוף מפל קאט קאט"]],
@@ -809,6 +821,7 @@ const DAYS = [
     mission:"לראות תאו מים אמיתי עובד בשדה — ולסמן אותו בציד המציאות.",
     hotel:"מלון פיסטאצ׳יו · סאפה", hotelEn:"Pistachio Sapa Hotel",
     quest:"שכבות: שדה אורז קדימה, הר מאחור, ערפל ביניהם",
+    yt:"Muong Hoa valley Sapa trekking",
     pics:["Water buffaloes in Lào Cai, Sa Pa, Vietnam, 20240125 1244 3437.jpg","Water wheel in Cat Cat village, Sa Pa, Vietnam, 20240126 1142 3546.jpg","Cát Cát Village 1.jpg"], cap:"עמק מואנג הואה", m:"Ta Van Village Sapa" },
   { n:7, date:"ג׳ 15.9", region:"הנוי", color:C.pink, emoji:"🎢", title:"רכבת הרים + אוכל רחוב",
     hl:[["09:00","🎿","אלפיין קוסטר: מחליקים במסלול ארוך בהר — ואתם שולטים בבלמים"],["12:00","🚐","נסיעה חזרה להנוי"],["18:00","☕","סיור אוכל רחוב: באן קואון, בון צ׳ה וקפה ביצה"]],
@@ -816,6 +829,7 @@ const DAYS = [
     mission:"לטעום מנה אחת שלא הכרתם — ולדרג אותה מ-1 עד 10.",
     hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
     quest:"האוכל הכי מוזר שהזמנתם, מצולם מלמעלה כמו בתפריט",
+    yt:"Hanoi street food tour egg coffee",
     pics:["Hanoi Street Food (95655835).jpeg","Street food preparation in Hanoi (49356318418).jpg","Street food - Hanoi (15657896380).jpg"], cap:"אוכל רחוב בהנוי", m:"Hanoi Old Quarter street food" },
   { n:8, date:"ד׳ 16.9", region:"הנוי", color:C.amber, emoji:"🛻", title:"ג׳יפים בסמטאות + פארק מים",
     hl:[["09:00","🚙","סיור ג׳יפ בסמטאות שרק מקומיים מכירים, ובית האופרה"],["12:00","🌊","אגם המערב — קוראים לו ׳מזגן העיר׳"],["15:00","🏄","ונציה הקטנה: פארק מים ומגלשות"]],
@@ -823,6 +837,7 @@ const DAYS = [
     mission:"לספור כמה מגלשות יש בפארק — ולנצח את כולם בירידה.",
     hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
     quest:"תנועה: קטנוע חולף מטושטש, והרקע חד",
+    yt:"West Lake Hanoi jeep tour",
     pics:["West Lake (Hanoi).jpg","Bicycle Tour, Tây Hồ, Hanoi (7060800725).jpg","Cycling around Tây Hồ District, Hanoi (6914731878).jpg"], cap:"פארק המים", m:"Hanoi Little Venice water park" },
   { n:9, date:"ה׳ 17.9", region:"הא לונג", color:C.cyan, emoji:"🚢", title:"מפליגים במפרץ הא לונג",
     hl:[["12:15","⛴️","עולים על ספינת Orchid — קבינה פרטית וארוחה תוך הפלגה"],["15:00","🕳️","מערת טרונג טראנג: 300 מטר של נטיפים בצורות מוזרות"],["17:30","🦑","שחייה במים הירוקים, ובלילה — דיג דיונונים מהסיפון"]],
@@ -830,6 +845,7 @@ const DAYS = [
     mission:"למצוא אי שנראה כמו חיה ולתת לו שם משפחתי.",
     hotel:"ספינת אורכיד קלאסיק", hotelEn:"Orchid Classic Cruise, Lan Ha Bay",
     quest:"שקיעה מהסיפון. בלי אף אחד בפריים",
+    yt:"Ha Long Bay Lan Ha cruise 4K",
     pics:["Halong Bay in Vietnam.jpg","Ha Long bay tourism 34.jpg","View of sea from Titov Island, Ha Long Bay, Vietnam, 20240128 1337 3732.jpg"], cap:"מפרץ הא לונג", m:"Lan Ha Bay Cat Ba" },
   { n:10, date:"ו׳ 18.9", region:"נין בין", color:C.mint, emoji:"🛶", title:"בוקר מפנק על הסיפון ← נין בין",
     hl:[["07:30","🥐","בראנץ׳ על הסיפון מול צוקי הגיר: מזנון פתוח, פירות טרופיים וביצים בהזמנה. בלי למהר לשום מקום"],["10:00","🕳️","סיור מודרך במערות קאט בא — אולמות ענק בתוך ההר, נטיפים מוארים ומעברים צרים"],["13:00","🚐","יורדים מהספינה ונוסעים לנין בין"]],
@@ -837,6 +853,7 @@ const DAYS = [
     mission:"למצוא בתוך המערה צורה שנראית כמו חיה — ולשכנע את כולם שאתם צודקים.",
     hotel:"אמרלדה טאם קוק ריזורט", hotelEn:"Emeralda Tam Coc Resort, Ninh Binh",
     quest:"השתקפות במים — סלע, סירה או שמיים",
+    yt:"Cat Ba island cave tour",
     pics:["Bai Chay beach, Ha Long, Vietnam, 20240129 0915 3958.jpg","Halong ensemble (colour corrected).jpg","Ninh Binh-Tam Coc 04 voyage1.jpg"], cap:"מערות קאט בא", m:"Emeralda Tam Coc Resort" },
   { n:11, date:"ש׳ 19.9", region:"נין בין", color:C.violet, emoji:"🧗", title:"טאם קוק ומערת מואה",
     hl:[["09:00","🚣","שיט בין הרי הגיר — החותרים המקומיים חותרים ברגליים!"],["12:00","🛕","מקדש ביץ׳ דונג בין בריכות לוטוס"],["15:00","🪜","מערת מואה: 500 מדרגות אבן לפסגה, ונוף על כל העמק"]],
@@ -844,6 +861,7 @@ const DAYS = [
     mission:"לטפס את כל 500 המדרגות ולצלם סלפי בפסגה.",
     hotel:"אמרלדה טאם קוק ריזורט", hotelEn:"Emeralda Tam Coc Resort, Ninh Binh",
     quest:"מלמעלה: הצילום מפסגת מערת מואה, שרואים את כל העמק",
+    yt:"Tam Coc Mua Cave Ninh Binh drone",
     pics:["Tam Cốc-Bích Động in Ninh Binh province.jpg","2024-03-30-Mua Cave Dragon Mountain-3758.jpg","Mua Cave, Ninh Binh, Vietnam, 20240202 0926 4964.jpg"], cap:"טאם קוק", m:"Mua Cave Ninh Binh" },
   { n:12, date:"א׳ 20.9", region:"נין בין", color:C.pink, emoji:"🏎️", title:"יום אקסטרים באגם",
     hl:[["09:00","🏁","גו-קארט בין עצי אורן"],["11:00","🪢","זיפליין, קייאק ורכבי ATV באגם דונג צ׳ואונג"],["16:00","🚐","בערב חוזרים להנוי"]],
@@ -851,6 +869,7 @@ const DAYS = [
     mission:"לנצח בגו-קארט מבוגר אחד. אחד מספיק.",
     hotel:"מלון מריטל · הנוי", hotelEn:"Meritel Hotel, Hanoi",
     quest:"רגע של תחרות — מישהו ממש רוצה לנצח",
+    yt:"Dong Chuong Lake Ninh Binh go kart",
     pics:["Go kart racing (6239255960).jpg","Go-kart.jpg","View of Ninh Binh atop limestone rocks near Mua Cave.jpg"], cap:"אגם דונג צ׳ואונג", m:"Dong Chuong Lake Ninh Binh" },
   { n:13, date:"ב׳ 21.9", region:"הנוי", color:C.amber, emoji:"🚂", title:"יום חופשי + שוק הלילה",
     hl:[["10:00","🛍️","חופש בהנוי: שווקים, סמטאות ובתי קפה למי שרוצה, בריכה במלון למי שלא. אין לוח זמנים"],["15:00","🚆","רחוב הרכבת: הרכבת עוברת בין הבתים במרחק חצי מטר מהשולחנות"],["19:30","🌃","שוק הלילה של הנוי — אלף דוכנים, אוכל רחוב, מוזיקה ואורות. הערב מתפצל: לנוער ולהורים כל אחד שלו"]],
@@ -858,6 +877,7 @@ const DAYS = [
     mission:"למצוא בשוק פריט אחד מתחת ל-50,000 דונג ששווה כל שקל.",
     hotel:"מלון מריטל · הנוי", hotelEn:"Meritel Hotel, Hanoi",
     quest:"הרכבת עוברת. פריים אחד, אין הזדמנות שנייה",
+    yt:"Hanoi Train Street",
     pics:["Old Quarter market, Hanoi, Vietnam, 20240204 1810 5887.jpg","Street Food vendors Soft crab Hanoi Vietnam.jpg","Old Quarter market, Hanoi, Vietnam, 20240123 0841 3046.jpg"], cap:"רחוב הרכבת", m:"Hanoi Train Street" },
   { n:14, date:"ג׳ 22.9", region:"הוי אן", color:C.cyan, emoji:"🛫", title:"טסים להוי אן ← פסטיבל האורות",
     hl:[["09:35","🛫","טיסה פנימית הנוי–דה נאנג, שעה ורבע באוויר. נוחתים ב-11:00 ונהג אוסף אותנו להוי אן"],["17:00","🏮","סיור מודרך בעיר העתיקה: בתים צהובים בני 400 שנה, גשר יפני ופנסי משי בכל פינה"],["20:00","🕯️","פסטיבל האורות על נהר הטו בון — משחררים פנס נר על המים ומבקשים משאלה"]],
@@ -865,6 +885,7 @@ const DAYS = [
     mission:"לשחרר פנס על הנהר ולא לספר לאף אחד מה ביקשתם.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"מסגרת בתוך מסגרת: לצלם דרך חלון, קשת או דלת",
+    yt:"Hoi An lantern festival night river",
     flights:[
       {code:"VN165",from:"HAN",to:"DAD",dep:"09:35",arr:"11:00",dur:"1:25",note:"טיסה פנימית הנוי ← דה נאנג"}],
     pics:["Hội An lantern festival (44810593224).jpg","Hội An lantern festival (45536262991).jpg","Hội An lantern festival (45485644722).jpg"], cap:"פסטיבל האורות", m:"Hoi An Ancient Town" },
@@ -874,6 +895,7 @@ const DAYS = [
     mission:"לרדת באלפיין קוסטר בלי לגעת בבלם פעם אחת. מי שנגע — מודה.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"הידיים של גשר הזהב מזווית שאף אחד לא מצלם ממנה",
+    yt:"Ba Na Hills Golden Bridge alpine coaster",
     pics:["The Golden Bridge, Ba Na Hills, Vietnam.jpg","Aerial view of the Golden Bridge, Ba Na Hills, Da Nang, Vietnam.jpg","Golden Bridge above the clouds Ba Na Hills Da Nang Vietnam.jpg"], cap:"בא נא הילס", m:"Golden Bridge Ba Na Hills Danang" },
   { n:16, date:"ה׳ 24.9", region:"הוי אן", color:C.mint, emoji:"👨‍🍳", title:"סירות סל וסדנת בישול",
     hl:[["08:30","🧺","שוק הוי אן — קונים חומרי גלם עם השף"],["09:45","🛢️","סירות סל עגולות ביער קוקוס המים — לומדים לחתור ולדוג סרטנים"],["10:30","🥞","סדנת בישול: דף אורז, חלב אורז ופנקייק באן שאו — ואוכלים"]],
@@ -881,6 +903,7 @@ const DAYS = [
     mission:"לגלגל ספרינג רול אחד לבד ולתת למישהו לטעום.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"תקריב של משהו שאתם מבשלים. קרוב מאוד",
+    yt:"Hoi An basket boat coconut village",
     pics:["Hội An, Ancient Town, 2020-01 CN-10.jpg","Tofu noodle soup (Phở chay) - Pho Hanoi Authentic 2024-12-01.jpg","Hội An, Ancient Town, 2020-01 CN-11.jpg"], cap:"סירות הסל", m:"Hoi An Market" },
   { n:17, date:"ו׳ 25.9", region:"הוי אן", color:C.violet, emoji:"🏮", title:"ראפטינג בבוקר, מופע אש בלילה",
     hl:[["09:00","🌊","ראפטינג ומגלשות הרים ביער הואה פו ת׳אן: מים קרים, סירה שמתהפכת ומסלול מגלשות ארוך"],["15:00","🏖️","מועדון חוף: מיטות שיזוף מול הים, מוזיקה ואוכל עד השקיעה"],["20:00","🔥","מופע אש חי על החוף עם די-ג׳יי — לפידים, אקרובטיקה וקצב"]],
@@ -888,6 +911,7 @@ const DAYS = [
     mission:"לצלם את מופע האש בחשיפה ארוכה — שהלהבה תצא קו ולא נקודה.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"אור נגד חושך: פנס דולק בערב, והכול סביבו כהה",
+    yt:"Hoa Phu Thanh rafting Da Nang",
     pics:["Hội An, Ancient Town, 2020-01 CN-01.jpg","Hội An, Ancient Town, 2020-01 CN-05.jpg","Hội An, Ancient Town, 2020-01 CN-06.jpg"], cap:"מופע האש על החוף", m:"Thu Bon River Hoi An" },
   { n:18, date:"ש׳ 26.9", region:"הנוי", color:C.cyan, emoji:"🧳", title:"קניות אחרונות וצ׳ק-ליסט אוכל",
     hl:[["09:00","🏊","היום האחרון בהוי אן שייך לכם: בריכה, שוק, או סיבוב אחרון בעיר העתיקה"],["18:05","🛫","טיסה דה נאנג–הנוי, שעה ורבע. נוחתים ב-19:30"],["21:00","🍜","מי שנשאר לו כוח — סיבוב לילה אחרון ברובע הקדום, לסגור מנות שעוד לא טעמנו"]],
@@ -895,6 +919,7 @@ const DAYS = [
     mission:"לסמן את הפריט האחרון בצ׳ק-ליסט האוכל. מי שסיים את כל העשרה — אלוף הטיול.",
     hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
     quest:"פורטרט אחרון של מישהו מהמשפחה — הכי אמיתי שיצא לכם",
+    yt:"Da Nang beach night fire show",
     flights:[
       {code:"VN180",from:"DAD",to:"HAN",dep:"18:05",arr:"19:30",dur:"1:25",note:"טיסה פנימית דה נאנג ← הנוי"}],
     pics:["Pho in rock bowl.jpg","Nam pho bowl.jpg","Old Quarter street scene, Hanoi (1) (38464672752).jpg"], cap:"קערת פו אחרונה", m:"Hoan Kiem Lake Hanoi" },
@@ -904,6 +929,7 @@ const DAYS = [
     mission:"לכתוב מילה אחת שמסכמת את כל הטיול.",
     hotel:"טסים הביתה הלילה", hotelEn:"",
     quest:"התמונה שמסכמת את כל הטיול. אחת בלבד",
+    yt:"Hanoi Old Quarter shopping market",
     flights:[
       {code:"VN619",from:"HAN",to:"BKK",dep:"16:05",arr:"18:05",dur:"2:00",note:"הנוי ← בנגקוק"},
       {code:"LY80",from:"BKK",to:"TLV",dep:"20:00",arr:"02:50",dur:"10:50",note:"אל על · בנגקוק ← תל אביב, נוחתים בבוקר יום שני"}],
@@ -1554,6 +1580,15 @@ function dayHTML(d) {
         '<a class="act act--map" href="' + esc(d.map) + '" target="_blank" rel="noopener">📍 איפה זה?</a>' +
         '<button class="act act--next" data-act="day-next" data-n="' + d.n + '">⏭ תמונה הבאה</button>' +
       '</div>' +
+      (d.ytId
+        ? '<div class="tube"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(d.ytId) +
+          '?rel=0&modestbranding=1" title="video" loading="lazy" allowfullscreen ' +
+          'referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'
+        : (d.yt
+            ? '<a class="act act--tube" href="https://www.youtube.com/results?search_query=' +
+              encodeURIComponent(d.yt) + '" target="_blank" rel="noopener">' +
+              '🎥 לראות סרטונים מהמקום<em>דורש אינטרנט</em></a>'
+            : '')) +
       '<button class="done-btn' + (isDone ? ' done' : '') + '" data-act="day-done" data-n="' + d.n + '">' +
         (isDone ? 'סומן כהושלם ✓' : 'סיימנו את היום הזה!') +
       '</button>' +
