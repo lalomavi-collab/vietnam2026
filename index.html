@@ -617,8 +617,14 @@ input{font-family:inherit}
 .su-next{width:100%;margin-top:18px;min-height:52px;border-radius:14px;font-family:var(--hand);font-size:19px;
   background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
 .su-next[disabled]{background:rgba(255,255,255,.07);color:#6b7392;cursor:not-allowed}
+.su-next.quiet{margin-top:10px;min-height:44px;font-size:16px;background:none;
+  border:1px solid rgba(255,255,255,.16);color:#8f9abd;box-shadow:none}
 .su-go{width:100%;margin-top:12px;min-height:50px;border-radius:14px;font-family:var(--hand);font-size:18px;
   background:rgba(92,225,230,.16);border:2px solid rgba(92,225,230,.45);color:#B9F7F9}
+.su-go.big{margin-top:4px;min-height:58px;font-size:20px;
+  background:linear-gradient(135deg,#7A5CFF,#FF5A8C);border-color:#fff;color:#fff;
+  box-shadow:0 8px 22px rgba(122,92,255,.35)}
+.su-bank{margin-top:13px;font-size:12px;line-height:1.5;color:#8f9abd;text-align:center}
 .su-dl{background:rgba(255,255,255,.05);border-radius:14px;padding:14px}
 .su-state{font-size:13px;color:#a9b4d4;text-align:center;font-weight:700}
 .su-dl .dl-bar{margin-bottom:9px}
@@ -2372,7 +2378,7 @@ document.addEventListener('click', e => {
   if (act === 'pick-me')   { setMe(el.dataset.n); paintSetup(); return; }
   if (act === 'pick-pic')  return $('#avatarFile').click();
   if (act === 'su-next')   { setupStep++; paintSetup(); return; }
-  if (act === 'su-save')   return void setupSave();
+  if (act === 'su-install') return void installApp();
   if (act === 'su-geo')    return setupGeo();
   if (act === 'su-done')   return closeSetup();
   if (act === 'import')    return $('#albumFile').click();
@@ -2465,6 +2471,19 @@ async function cachedCount() {
 }
 
 let priming = false;
+const bank = { done:0, total:0, running:false };
+
+/* The setup sheet, if it is open, watches the same numbers. */
+function bankLine() {
+  if (!('caches' in window)) return '';
+  if (photosBanked) return '\u2713 התמונות שמורות בטלפון \u2014 הכול יעבוד גם בלי רשת';
+  if (bank.running) return '\u23f3 שומר את התמונות ברקע\u2026 ' + bank.done + ' מתוך ' + bank.total;
+  return 'התמונות נשמרות ברקע לבד. לא צריך לעשות כלום.';
+}
+function paintBank() {
+  const el = $('#suState');
+  if (el) el.textContent = bankLine();
+}
 
 async function primePhotos() {
   const card = $('#offer'), title = $('#offerTitle'), sub = $('#offerSub');
@@ -2478,6 +2497,7 @@ async function primePhotos() {
   }
   if (priming) return;
   priming = true;
+  bank.running = true;
   go.hidden = true;
   bar.hidden = false;
   title.textContent = 'שומר את הטיול…';
@@ -2490,6 +2510,7 @@ async function primePhotos() {
   const tick = () => {
     fill.style.width = Math.round(done / total * 100) + '%';
     sub.textContent = 'שומר את התמונות בטלפון… ' + done + ' מתוך ' + total;
+    bank.done = done; bank.total = total; paintBank();
   };
   tick();
 
@@ -2508,6 +2529,9 @@ async function primePhotos() {
   };
   await Promise.all(Array.from({ length:6 }, worker));
   priming = false;
+  bank.running = false;
+  photosBanked = true;
+  paintBank();
   bar.hidden = true;
 
   if (failed) {
@@ -2540,6 +2564,7 @@ async function installApp() {
     const res = await installEvent.userChoice.catch(() => null);
     installEvent = null;
     if (res && res.outcome === 'accepted') $('#install').hidden = true;
+    if (!$('#setup').hidden) paintSetup();
     return;
   }
   $('#howto').hidden = false;
@@ -2564,8 +2589,13 @@ async function initOffline() {
     try { await navigator.serviceWorker.register('./sw.js'); } catch (e) {}
   }
   if (!('caches' in window)) return;
-  /* Offer the download only when photos are actually missing. */
-  if ((await cachedCount()) < ALL_PHOTOS.length) $('#offer').hidden = false;
+  if ((await cachedCount()) >= ALL_PHOTOS.length) { photosBanked = true; return; }
+  $('#offer').hidden = false;
+  /* A phone on a metered or crawling connection gets asked. Everyone
+     else just gets the photos — no button, no wall. */
+  const c = navigator.connection;
+  if (c && (c.saveData || /2g/.test(c.effectiveType || ''))) return;
+  void primePhotos();
 }
 
 /* ══ who am I ═══════════════════════════════════════════════════════
@@ -3035,7 +3065,7 @@ function closeSetup() {
 }
 
 function setupReady() {
-  return { me: !!myName(), photos: photosBanked, ice: iceContacts().length > 0 };
+  return { me: !!myName(), ice: iceContacts().length > 0 };
 }
 
 let photosBanked = false;
@@ -3065,14 +3095,17 @@ function paintSetup() {
         ? '<button class="su-next" data-act="su-done" ' + (r.me ? '' : 'disabled') + '>שמור</button>'
         : '<button class="su-next" data-act="su-next" ' + (r.me ? '' : 'disabled') + '>הבא ←</button>');
   } else if (setupStep === 1) {
-    box.innerHTML = '<h2>לשמור את הטיול</h2>' +
-      '<p>זה מוריד את כל התמונות לטלפון. בווייטנאם לרוב לא תהיה לכם רשת — בלי זה האפליקציה תהיה ריקה.<br><b>עשו את זה עכשיו, על Wi-Fi.</b></p>' +
-      '<div class="su-dl">' +
-        '<div class="dl-bar" id="suBar" hidden><i></i></div>' +
-        '<div class="su-state" id="suState">' + (photosBanked ? 'נשמר ✓' : 'עוד לא נשמר') + '</div>' +
-      '</div>' +
-      '<button class="su-go" data-act="su-save">' + (photosBanked ? '↻ לשמור שוב' : '⬇ להוריד עכשיו') + '</button>' +
-      '<button class="su-next" data-act="su-next" ' + (r.photos ? '' : 'disabled') + '>הבא ←</button>';
+    const installed = isStandalone();
+    box.innerHTML = '<h2>להוסיף למסך הבית</h2>' +
+      '<p>ככה זה נפתח כמו אפליקציה אמיתית — אייקון משלה, מסך מלא, בלי לחפש כל פעם את הקישור בוואטסאפ.</p>' +
+      (installed
+        ? '<div class="su-check ok"><b>✓ כבר מותקנת</b>' +
+          '<span>אתם פתוחים מתוך האייקון במסך הבית. מצוין.</span></div>'
+        : '<button class="su-go big" data-act="su-install">' +
+            (installEvent ? '⬇\u2002להתקין עכשיו · לחיצה אחת' : '📱\u2002להראות לי איך') + '</button>') +
+      '<div class="su-bank" id="suState">' + bankLine() + '</div>' +
+      '<button class="su-next' + (installed ? '' : ' quiet') + '" data-act="su-next">' +
+        (installed ? 'הבא ←' : 'אחר כך ←') + '</button>';
   } else {
     const ice = iceContacts();
     box.innerHTML = '<h2>כפתור החירום</h2>' +
@@ -3087,35 +3120,6 @@ function paintSetup() {
       '<button class="su-next" data-act="su-done">מוכנים, נכנסים!</button>';
   }
   $('#setupDots').innerHTML = dots;
-}
-
-async function setupSave() {
-  const bar = $('#suBar'), st = $('#suState');
-  if (!('caches' in window)) { photosBanked = true; paintSetup(); return; }
-  bar.hidden = false;
-  const fill = bar.querySelector('i');
-  const cache = await caches.open(PHOTO_CACHE);
-  const queue = ALL_PHOTOS.slice();
-  const total = queue.length;
-  let n = 0, failed = 0;
-  const tick = () => { fill.style.width = Math.round(n / total * 100) + '%';
-                       st.textContent = 'שומר… ' + n + ' מתוך ' + total; };
-  tick();
-  await Promise.all(Array.from({ length:6 }, async () => {
-    while (queue.length) {
-      const u = queue.shift();
-      try { if (!(await cache.match(u))) await cache.put(u, await fetch(u, { mode:'no-cors', cache:'no-store' })); }
-      catch (e) { failed++; }
-      n++; tick();
-    }
-  }));
-  /* Never trap someone behind a failed download — but say so plainly. */
-  photosBanked = true;
-  st.textContent = failed ? ('נשמרו ' + (total - failed) + ' מתוך ' + total + '. כדאי לנסות שוב ברשת טובה.')
-                          : 'הכול שמור בטלפון ✓';
-  bar.hidden = true;
-  $('#offer').hidden = true;
-  paintSetup();
 }
 
 function setupGeo() {
