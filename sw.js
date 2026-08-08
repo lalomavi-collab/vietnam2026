@@ -6,7 +6,7 @@
               precached; the ⬇ button in the app fills this cache on demand,
               and this worker serves whatever is already in it. */
 
-const VERSION = 'v12';
+const VERSION = 'v14';
 const SHELL = 'vn-shell-' + VERSION;
 const PHOTOS = 'vn-photos-v1';          // kept unversioned: photos never change
 

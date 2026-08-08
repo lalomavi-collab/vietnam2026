@@ -138,7 +138,8 @@ input{font-family:inherit}
 .reel-bar{position:absolute;bottom:8px;right:10px;left:10px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px;pointer-events:none}
 .reel-cap{font-family:var(--script);font-weight:700;font-size:17px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7);line-height:1.05}
 .dots{display:flex;gap:4px}
-.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.42)}
+.dots{max-width:52%;flex-wrap:wrap;justify-content:flex-end;gap:4px}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.42)}
 .dot.on{background:#fff}
 .reel-tape{position:absolute;top:-7px;width:62px;height:20px;background:rgba(255,246,214,.62);box-shadow:0 1px 4px rgba(0,0,0,.3)}
 .reel-tape.r{right:16px;transform:rotate(-3deg)}
@@ -415,6 +416,43 @@ input{font-family:inherit}
   body>*:not(.book){display:none !important}
 }
 
+/* ── first-run setup ──────────────────────────────────────────────────*/
+.setup[hidden]{display:none}
+.setup{position:fixed;inset:0;z-index:210;overflow-y:auto;padding:20px 16px 30px;
+  background:radial-gradient(120% 45% at 80% 0%,rgba(255,90,140,.26),transparent 62%),
+             radial-gradient(120% 45% at 10% 100%,rgba(122,92,255,.26),transparent 62%),
+             linear-gradient(178deg,#151c36,#0f1428 60%,#161029)}
+.su-card{max-width:430px;margin:0 auto}
+.su-dots{display:flex;gap:7px;justify-content:center;margin-bottom:16px}
+.su-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.18)}
+.su-dot.done{background:var(--mint)}
+.su-dot.on{background:var(--amber);transform:scale(1.25)}
+#setupBody h2{font-family:var(--hand);font-size:29px;color:#fff;margin:0 0 6px;font-weight:400;text-align:center}
+#setupBody p{margin:0 0 16px;font-size:13px;line-height:1.65;color:#a9b4d4;text-align:center;text-wrap:pretty}
+#setupBody p b{color:#FFD79A}
+.su-fam{font-size:11px;font-weight:900;letter-spacing:1px;color:#8a94bb;margin:12px 0 6px}
+.su-people{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.su-p{padding:9px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.1);
+  color:#c3ccea;text-align:right;transition:all .18s var(--ease)}
+.su-p b{display:block;font-size:13.5px;font-weight:700}
+.su-p span{display:block;font-size:10.5px;color:#8a94bb;margin-top:1px}
+.su-p.on{background:var(--paper);border-color:#fff;color:var(--ink)}
+.su-p.on span{color:#6b7382}
+.su-next{width:100%;margin-top:18px;min-height:52px;border-radius:14px;font-family:var(--hand);font-size:19px;
+  background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
+.su-next[disabled]{background:rgba(255,255,255,.07);color:#6b7392;cursor:not-allowed}
+.su-go{width:100%;margin-top:12px;min-height:50px;border-radius:14px;font-family:var(--hand);font-size:18px;
+  background:rgba(92,225,230,.16);border:2px solid rgba(92,225,230,.45);color:#B9F7F9}
+.su-dl{background:rgba(255,255,255,.05);border-radius:14px;padding:14px}
+.su-state{font-size:13px;color:#a9b4d4;text-align:center;font-weight:700}
+.su-dl .dl-bar{margin-bottom:9px}
+.su-check{background:rgba(255,255,255,.05);border-radius:13px;padding:11px 13px;margin-bottom:9px;
+  border-inline-start:4px solid rgba(255,255,255,.2)}
+.su-check.ok{border-inline-start-color:var(--mint)}
+.su-check.bad{border-inline-start-color:#FF6B85}
+.su-check b{display:block;font-size:13.5px;color:#fff}
+.su-check span{display:block;font-size:11.5px;color:#a9b4d4;margin-top:2px;line-height:1.5}
+
 /* ── emergency ────────────────────────────────────────────────────────
    Deliberately loud and always on screen. A child in trouble should not
    have to find the right tab. */
@@ -525,6 +563,13 @@ input{font-family:inherit}
   <div class="book-body" id="bookBody"></div>
 </div>
 
+<div class="setup" id="setup" hidden>
+  <div class="su-card">
+    <div class="su-dots" id="setupDots"></div>
+    <div id="setupBody"></div>
+  </div>
+</div>
+
 <div class="sos" id="sos" hidden>
   <div class="sos-in">
     <div class="sos-h">אני צריך עזרה 🆘</div>
@@ -568,7 +613,18 @@ input{font-family:inherit}
 </div>
 <script>
 /* Runs before paint, so a phone that already unlocked never flashes the gate. */
-(function(){ try { if (localStorage.getItem('vn-kids-pass') === '1') document.getElementById('gate').hidden = true; } catch (e) {} })();
+(function(){
+  try {
+    var ok = localStorage.getItem('vn-kids-pass') === '1'
+          || document.cookie.indexOf('vnpass=1') !== -1;
+    if (ok) {
+      document.getElementById('gate').hidden = true;
+      /* Re-stamp both stores on every visit so neither expires quietly. */
+      try { localStorage.setItem('vn-kids-pass','1'); } catch (e) {}
+      document.cookie = 'vnpass=1; max-age=31536000; path=/; samesite=lax';
+    }
+  } catch (e) {}
+})();
 </script>
 
 <div class="app">
@@ -782,7 +838,116 @@ const DAYS = [
       {code:"VN619",from:"HAN",to:"BKK",dep:"16:05",arr:"18:05",dur:"2:00",note:"הנוי ← בנגקוק"},
       {code:"LY80",from:"BKK",to:"TLV",dep:"20:00",arr:"02:50",dur:"10:50",note:"אל על · בנגקוק ← תל אביב, נוחתים בבוקר יום שני"}],
     pics:["Nội Bài International Airport May 2026.jpg","Halong Bay in Vietnam.jpg","Rice terraces in Sa Pa 02.jpg"], cap:"להתראות וייטנאם", m:"Noi Bai International Airport" }
-].map(d => ({ ...d, highlights: d.hl.map(([time, icon, text]) => ({ time, icon, text })), map: gm(d.m), urls: d.pics.map(commons) }));
+].map(d => ({ ...d, highlights: d.hl.map(([time, icon, text]) => ({ time, icon, text })), map: gm(d.m),
+    baseUrls: d.pics.map(commons), urls: d.pics.map(commons) }));
+
+/* Commons categories to pull extra photos from, per day. Curated
+   categories rather than free-text search: search returns whatever
+   matches a word, categories are hand-filed by subject. A category that
+   does not exist simply returns nothing and the day keeps its three
+   verified photos, so a wrong guess here degrades instead of breaking. */
+const PHOTO_CATS = {
+  1:  ["Old Quarter, Hanoi", "Hanoi"],
+  2:  ["Mù Cang Chải District", "Tea plantations in Vietnam"],
+  3:  ["Hot springs of Vietnam", "Yên Bái Province"],
+  4:  ["Khau Pha Pass", "Hmong people of Vietnam"],
+  5:  ["Waterfalls of Vietnam", "Sa Pa"],
+  6:  ["Cát Cát", "Muong Hoa Valley"],
+  7:  ["Street food in Vietnam", "Vietnamese coffee"],
+  8:  ["West Lake (Hanoi)", "Trúc Bạch Lake"],
+  9:  ["Hạ Long Bay", "Lan Ha Bay"],
+  10: ["Cát Bà Island", "Caves of Vietnam"],
+  11: ["Tam Cốc-Bích Động", "Hang Múa"],
+  12: ["Ninh Bình Province"],
+  13: ["Hanoi Train Street", "Hoàn Kiếm Lake"],
+  14: ["Lanterns in Hội An", "Hội An Ancient Town"],
+  15: ["Bà Nà Hills", "Golden Bridge (Đà Nẵng)"],
+  16: ["Hội An Market", "Vietnamese cuisine"],
+  17: ["Beaches of Đà Nẵng", "Đà Nẵng"],
+  18: ["Phở", "Hanoi Old Quarter"],
+  19: ["Noi Bai International Airport"]
+};
+/* The eleven on this trip. Picking from a list rather than typing means
+   the two Mayas stay apart in the shared booklet, and the vibe switch can
+   start on the right side for each person. */
+const PEOPLE = [
+  { fam:'משפחת ללום', list:[
+      { n:'אבי ללום',     r:'הורה', kid:false },
+      { n:'תהילי ללום',   r:'הורה', kid:false },
+      { n:'אדם ללום',     r:'בן 16.5', kid:true },
+      { n:'ארי ללום',     r:'בן 15',   kid:true },
+      { n:'אמי ללום',     r:'בת 12',   kid:true } ] },
+  { fam:'משפחת סמו', list:[
+      { n:'בן סמו',       r:'הורה', kid:false },
+      { n:'גיא סמו',      r:'בן 17', kid:true },
+      { n:'מאיה סמו',     r:'בת 15', kid:true } ] },
+  { fam:'משפחת שמעוני', list:[
+      { n:'לילך שמעוני',  r:'הורה', kid:false },
+      { n:'עמית שמעוני',  r:'ילד/ה', kid:true },
+      { n:'מאיה שמעוני',  r:'ילד/ה', kid:true } ] }
+];
+const ALL_PEOPLE = PEOPLE.flatMap(f => f.list);
+const SETUP_KEY = 'vn-kids-setup';
+
+const EXTRA_KEY = 'vn-extra-pics';
+const EXTRA_PER_DAY = 5;
+
+function catURL(cat) {
+  return 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*'
+       + '&generator=categorymembers&gcmtype=file&gcmlimit=25'
+       + '&gcmtitle=' + encodeURIComponent('Category:' + cat)
+       + '&prop=imageinfo&iiprop=url&iiurlwidth=800';
+}
+
+/* Runs once, then lives in localStorage. The app is perfectly usable
+   before it finishes and unaffected if it never does. */
+async function loadExtraPhotos() {
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem(EXTRA_KEY)); } catch (e) {}
+  if (cached && cached.__v === 1) { applyExtras(cached); return; }
+  if (navigator.onLine === false) return;
+
+  const out = { __v: 1 };
+  for (const [day, cats] of Object.entries(PHOTO_CATS)) {
+    const urls = [];
+    for (const cat of cats) {
+      if (urls.length >= EXTRA_PER_DAY) break;
+      try {
+        const res = await fetch(catURL(cat), { mode:'cors' });
+        if (!res.ok) continue;
+        const j = await res.json();
+        const pages = (j && j.query && j.query.pages) || {};
+        for (const pg of Object.values(pages)) {
+          const ii = pg.imageinfo && pg.imageinfo[0];
+          if (!ii || !ii.thumburl) continue;
+          if (!/\.(jpe?g|png)$/i.test(pg.title || '')) continue;   // skip svg/tif/video
+          if (!urls.includes(ii.thumburl)) urls.push(ii.thumburl);
+          if (urls.length >= EXTRA_PER_DAY) break;
+        }
+      } catch (e) { /* offline, blocked, or no such category — fine */ }
+    }
+    if (urls.length) out[day] = urls;
+  }
+  try { localStorage.setItem(EXTRA_KEY, JSON.stringify(out)); } catch (e) {}
+  applyExtras(out);
+}
+
+function applyExtras(map) {
+  let grew = false;
+  DAYS.forEach(d => {
+    const extra = map[d.n];
+    if (!Array.isArray(extra) || !extra.length) return;
+    const merged = d.baseUrls.concat(extra.filter(u => !d.baseUrls.includes(u)));
+    if (merged.length > d.urls.length) { d.urls = merged; grew = true; }
+  });
+  if (!grew) return;
+  ALL_PHOTOS.length = 0;
+  new Set(DAYS.flatMap(d => d.urls)).forEach(u => ALL_PHOTOS.push(u));
+  if (state.tab === 'days') {
+    $('#daysList').innerHTML = DAYS.map(dayHTML).join('');
+    if (state.open) syncReel(state.open);
+  }
+}
 
 const HUNT = [
   { id:'buffalo', emoji:'🐃', label:'תאו מים', hint:'שדות האורז בסאפה או טאם קוק' },
@@ -1516,6 +1681,11 @@ document.addEventListener('click', e => {
   if (act === 'story-del') return delStory(+el.dataset.n, +el.dataset.i);
   if (act === 'install')   return void installApp();
   if (act === 'export')    return void exportAlbum();
+  if (act === 'pick-me')   { setMe(el.dataset.n); paintSetup(); return; }
+  if (act === 'su-next')   { setupStep++; paintSetup(); return; }
+  if (act === 'su-save')   return void setupSave();
+  if (act === 'su-geo')    return setupGeo();
+  if (act === 'su-done')   return closeSetup();
   if (act === 'import')    return $('#albumFile').click();
   if (act === 'movie')     return openMovie();
   if (act === 'movie-x')   return closeMovie();
@@ -1576,7 +1746,9 @@ function initGate() {
     const typed = input.value.replace(/\s+/g, '').toUpperCase();
     if (typed === FAMILY_CODE.toUpperCase()) {
       try { localStorage.setItem(PASS_KEY, '1'); } catch (e) {}
+      document.cookie = 'vnpass=1; max-age=31536000; path=/; samesite=lax';
       gate.hidden = true;
+      if (!setupDone()) openSetup(0);
       return;
     }
     err.textContent = 'הקוד לא נכון. תשאלו את אמא או אבא 🙂';
@@ -1590,7 +1762,7 @@ function initGate() {
 
 /* ══ offline ════════════════════════════════════════════════════════ */
 const PHOTO_CACHE = 'vn-photos-v1';
-const ALL_PHOTOS = [...new Set(DAYS.flatMap(d => d.urls))];
+const ALL_PHOTOS = [...new Set(DAYS.flatMap(d => d.urls))];   // grows once extras land
 
 async function cachedCount() {
   if (!('caches' in window)) return 0;
@@ -1702,20 +1874,21 @@ const ME_KEY = 'vn-kids-me', STORY_KEY = 'vn-kids-stories';
 function myName() {
   try { return localStorage.getItem(ME_KEY) || ''; } catch (e) { return ''; }
 }
+function setMe(name) {
+  try { localStorage.setItem(ME_KEY, name); } catch (e) {}
+  const who = ALL_PEOPLE.find(x => x.n === name);
+  if (who) { state.vibe = who.kid ? 'teen' : 'parent'; persist(); paintVibe(); }
+}
 function askName(force) {
-  let n = myName();
-  if (n && !force) return n;
-  n = (window.prompt('איך קוראים לך? השם יופיע ליד התמונות והסיפורים שלך בחוברת.', n || '') || '').trim();
-  if (n) { try { localStorage.setItem(ME_KEY, n.slice(0, 18)); } catch (e) {} }
-  return myName();
+  if (force) openSetup(0);
+  return myName() || 'אנונימי';
 }
 
 function stories() {
   try { return JSON.parse(localStorage.getItem(STORY_KEY)) || {}; } catch (e) { return {}; }
 }
 function addStory(day) {
-  const who = askName();
-  if (!who) return;
+  const who = myName() || 'אנונימי';
   const txt = (window.prompt('מה קרה היום? כתוב את הסיפור שלך — הוא ייכנס לחוברת.', '') || '').trim();
   if (!txt) return;
   const all = stories();
@@ -1872,7 +2045,6 @@ async function onShotPicked(e) {
   const file = e.target.files && e.target.files[0];
   if (!file) return;
   const day = +e.target.dataset.day || 1;
-  askName();
   const d = DAYS.find(x => x.n === day);
   const caption = window.prompt('מה לכתוב על התמונה?\n(אפשר להשאיר ריק)',
     d ? d.cap : '') || '';
@@ -2051,6 +2223,119 @@ function openBooklet() {
 function closeBooklet() {
   $('#book').hidden = true;
   document.body.style.overflow = '';
+}
+
+/* ══ first-run setup ════════════════════════════════════════════════
+   Three things have to be true before this app is any use in Vietnam:
+   we know who is holding the phone, the photos are on it, and the
+   emergency button has someone to call. So it is a gate, not a hint. */
+let setupStep = 0;
+
+function setupDone() {
+  try { return localStorage.getItem(SETUP_KEY) === 'ok'; } catch (e) { return false; }
+}
+
+function openSetup(step) {
+  setupStep = step || 0;
+  $('#setup').hidden = false;
+  document.body.style.overflow = 'hidden';
+  paintSetup();
+}
+
+function closeSetup() {
+  try { localStorage.setItem(SETUP_KEY, 'ok'); } catch (e) {}
+  $('#setup').hidden = true;
+  document.body.style.overflow = '';
+  renderMain();
+}
+
+function setupReady() {
+  return { me: !!myName(), photos: photosBanked, ice: iceContacts().length > 0 };
+}
+
+let photosBanked = false;
+
+function paintSetup() {
+  const box = $('#setupBody');
+  const r = setupReady();
+  const dots = [0,1,2].map(i =>
+    '<span class="su-dot' + (i === setupStep ? ' on' : '') + (i < setupStep ? ' done' : '') + '"></span>').join('');
+
+  if (setupStep === 0) {
+    box.innerHTML = '<h2>מי אתם?</h2>' +
+      '<p>בחרו את השם שלכם. הוא יופיע ליד התמונות והסיפורים שלכם בחוברת המשותפת.</p>' +
+      PEOPLE.map(f => '<div class="su-fam">' + esc(f.fam) + '</div>' +
+        '<div class="su-people">' + f.list.map(x =>
+          '<button class="su-p' + (myName() === x.n ? ' on' : '') + '" data-act="pick-me" data-n="' + esc(x.n) + '">' +
+            '<b>' + esc(x.n) + '</b><span>' + esc(x.r) + '</span></button>').join('') + '</div>').join('') +
+      (setupDone()
+        ? '<button class="su-next" data-act="su-done" ' + (r.me ? '' : 'disabled') + '>שמור</button>'
+        : '<button class="su-next" data-act="su-next" ' + (r.me ? '' : 'disabled') + '>הבא ←</button>');
+  } else if (setupStep === 1) {
+    box.innerHTML = '<h2>לשמור את הטיול</h2>' +
+      '<p>זה מוריד את כל התמונות לטלפון. בווייטנאם לרוב לא תהיה לכם רשת — בלי זה האפליקציה תהיה ריקה.<br><b>עשו את זה עכשיו, על Wi-Fi.</b></p>' +
+      '<div class="su-dl">' +
+        '<div class="dl-bar" id="suBar" hidden><i></i></div>' +
+        '<div class="su-state" id="suState">' + (photosBanked ? 'נשמר ✓' : 'עוד לא נשמר') + '</div>' +
+      '</div>' +
+      '<button class="su-go" data-act="su-save">' + (photosBanked ? '↻ לשמור שוב' : '⬇ להוריד עכשיו') + '</button>' +
+      '<button class="su-next" data-act="su-next" ' + (r.photos ? '' : 'disabled') + '>הבא ←</button>';
+  } else {
+    const ice = iceContacts();
+    box.innerHTML = '<h2>כפתור החירום</h2>' +
+      '<p>הכפתור האדום 🆘 שלמעלה מוצא אתכם ומתקשר הביתה. בואו נוודא שהוא מוכן.</p>' +
+      '<div class="su-check' + (ice.length ? ' ok' : ' bad') + '">' +
+        '<b>' + (ice.length ? '✓ מספרי חירום נטענו' : '✗ אין מספרי חירום') + '</b>' +
+        '<span>' + (ice.length ? ice.map(c => esc(c.name)).join(' · ')
+                               : 'פתחו את לינק החירום שההורים שלחו בוואטסאפ, ואז חזרו לכאן') + '</span>' +
+      '</div>' +
+      '<div class="su-check" id="suGeo"><b>מיקום — עוד לא נבדק</b><span>לחצו כדי לאשר גישה למיקום</span></div>' +
+      '<button class="su-go" data-act="su-geo">📍 לבדוק מיקום</button>' +
+      '<button class="su-next" data-act="su-done">מוכנים, נכנסים!</button>';
+  }
+  $('#setupDots').innerHTML = dots;
+}
+
+async function setupSave() {
+  const bar = $('#suBar'), st = $('#suState');
+  if (!('caches' in window)) { photosBanked = true; paintSetup(); return; }
+  bar.hidden = false;
+  const fill = bar.querySelector('i');
+  const cache = await caches.open(PHOTO_CACHE);
+  const queue = ALL_PHOTOS.slice();
+  const total = queue.length;
+  let n = 0, failed = 0;
+  const tick = () => { fill.style.width = Math.round(n / total * 100) + '%';
+                       st.textContent = 'שומר… ' + n + ' מתוך ' + total; };
+  tick();
+  await Promise.all(Array.from({ length:6 }, async () => {
+    while (queue.length) {
+      const u = queue.shift();
+      try { if (!(await cache.match(u))) await cache.put(u, await fetch(u, { mode:'no-cors', cache:'no-store' })); }
+      catch (e) { failed++; }
+      n++; tick();
+    }
+  }));
+  /* Never trap someone behind a failed download — but say so plainly. */
+  photosBanked = true;
+  st.textContent = failed ? ('נשמרו ' + (total - failed) + ' מתוך ' + total + '. כדאי לנסות שוב ברשת טובה.')
+                          : 'הכול שמור בטלפון ✓';
+  bar.hidden = true;
+  $('#offer').hidden = true;
+  paintSetup();
+}
+
+function setupGeo() {
+  const el = $('#suGeo');
+  if (!navigator.geolocation) { el.className = 'su-check bad';
+    el.innerHTML = '<b>✗ אין גישה למיקום</b><span>הטלפון הזה לא תומך</span>'; return; }
+  el.innerHTML = '<b>מחפש…</b><span>אשרו את בקשת המיקום</span>';
+  navigator.geolocation.getCurrentPosition(
+    pos => { el.className = 'su-check ok';
+      el.innerHTML = '<b>✓ המיקום עובד</b><span>דיוק כ-' + Math.round(pos.coords.accuracy) + ' מטר</span>'; },
+    () => { el.className = 'su-check bad';
+      el.innerHTML = '<b>✗ המיקום חסום</b><span>אשרו "מיקום" לאתר הזה בהגדרות הדפדפן</span>'; },
+    { enableHighAccuracy:true, timeout:12000 });
 }
 
 /* ══ emergency ══════════════════════════════════════════════════════
@@ -2235,6 +2520,12 @@ DAYS.slice(0, 3).forEach(d => preload(d.urls));
 setInterval(() => { if (state.open) advance(state.open); }, 3600);
 initOffline();
 initInstall();
+void loadExtraPhotos();
+(async () => {
+  photosBanked = ('caches' in window) && (await cachedCount()) >= ALL_PHOTOS.length;
+  /* Already through the gate on a previous visit but never set up. */
+  if ($('#gate').hidden && !setupDone()) openSetup(0);
+})();
 void refreshShots(true);
 })();
 </script>
