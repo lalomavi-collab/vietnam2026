@@ -306,6 +306,44 @@ input{font-family:inherit}
 .vibe-b.on{background:var(--paper);color:var(--ink);border-color:#fff;box-shadow:0 5px 14px rgba(0,0,0,.35);transform:translateY(-1px)}
 .hl-vibe{background:rgba(255,180,67,.16);border-radius:8px;padding:6px 7px;margin:-2px -7px}
 
+/* ── personal mission ─────────────────────────────────────────────────*/
+.mine{display:block;width:100%;text-align:right;margin-top:11px;padding:12px 13px;border-radius:3px;
+  background:#DFF3E4;box-shadow:0 6px 16px rgba(0,0,0,.3);transform:rotate(.9deg);
+  border-inline-start:5px solid var(--mint)}
+.mine.on{background:#CFEEDA;outline:2px solid var(--mint);outline-offset:-2px}
+.mine-k{display:block;font-size:9.5px;font-weight:800;letter-spacing:1.1px;color:#0a3d22}
+.mine-v{display:block;font-family:var(--script);font-weight:700;font-size:18px;color:#0d3b23;line-height:1.25;margin-top:3px}
+.mine-tick{display:inline-block;margin-top:7px;font-size:11px;font-weight:800;color:#0a3d22;
+  background:rgba(255,255,255,.7);padding:3px 10px;border-radius:99px}
+.mine.on .mine-tick{background:var(--mint)}
+
+/* ── the competition ──────────────────────────────────────────────────*/
+.podium{margin-bottom:13px;background:var(--paper);border-radius:4px;padding:12px;box-shadow:0 8px 22px rgba(0,0,0,.4)}
+.pod-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.pod-h b{font-family:var(--hand);font-size:21px;color:var(--ink);font-weight:400}
+.pod-h span{font-size:11px;font-weight:700;color:#8a6a10}
+.pod-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;align-items:end}
+.pod-p{border-radius:10px;padding:9px 5px 8px;text-align:center;background:rgba(31,78,121,.07);
+  border:2px solid transparent}
+.pod-p.me{border-color:var(--stamp)}
+.pod-1{background:linear-gradient(160deg,#FFE7A8,#FFC24D);order:2}
+.pod-2{background:linear-gradient(160deg,#EDEFF3,#CBD2DC);order:1}
+.pod-3{background:linear-gradient(160deg,#F4D9C0,#DFAE86);order:3}
+.pod-m{font-size:23px;line-height:1}
+.pod-n{font-size:11.5px;font-weight:800;color:#26303f;margin-top:3px;line-height:1.2}
+.pod-s{font-family:var(--script);font-weight:700;font-size:22px;color:var(--ink);line-height:1;margin-top:2px}
+.pod-prize{font-size:9.5px;font-weight:800;color:#7a5a08;margin-top:3px}
+.pod-rest{margin-top:9px}
+.pod-row{display:flex;align-items:center;gap:9px;padding:5px 4px;border-top:1px dashed rgba(31,78,121,.18)}
+.pod-row.me{background:rgba(193,68,14,.07);border-radius:6px}
+.pod-row span{width:19px;height:19px;border-radius:50%;background:rgba(31,78,121,.14);color:var(--ink);
+  font-size:10.5px;font-weight:800;display:grid;place-items:center}
+.pod-row b{flex:1;font-size:12.5px;color:#26303f}
+.pod-row i{font-family:var(--mono);font-style:normal;font-size:12px;font-weight:700;color:var(--stamp)}
+.pod-note{margin-top:10px;font-size:11.5px;line-height:1.55;color:#5c6470}
+.pod-note b{color:var(--stamp)}
+.pod-note.warn{margin-top:6px;color:#8a6a10}
+
 /* ── trivia ───────────────────────────────────────────────────────────*/
 .tv-wrap{margin-top:20px}
 .tv-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;background:var(--paper);
@@ -1044,6 +1082,58 @@ const TRIVIA = [
 const TRIVIA_MAX = TRIVIA.reduce((t, s) => t + s.qs.reduce((x, q) => x + q.p, 0), 0);
 const qid = (si, qi) => si + '-' + qi;
 
+/* Forty-one personal missions. Forty-one is prime, and each person is
+   handed pool[(day * 7 + their index) % 41] — so on any given day the
+   seven of them get seven different missions, and nobody repeats one
+   across the nineteen days. */
+const MISSIONS = [
+ 'לצלם זר מוחלט שמחייך אליכם — אחרי שביקשתם רשות',
+ 'להזמין משהו בווייטנאמית בלי להצביע על התפריט',
+ 'למצוא את הדבר הכי מוזר שנמכר היום ברחוב ולתעד',
+ 'ללמד מישהו מהמשפחה מילה אחת בווייטנאמית',
+ 'לצלם תמונה אחת בלי אף אדם בפריים',
+ 'לגלות איך אומרים "כמה זה עולה" ולהשתמש בזה באמת',
+ 'למצוא חתול או כלב רחוב ולתת לו שם',
+ 'לצלם את אותו מקום פעמיים — פעם רחוק ופעם קרוב מאוד',
+ 'לשאול מקומי מה המנה האהובה עליו, ולהזמין אותה',
+ 'לספור כמה אנשים על האופנוע הכי עמוס שראיתם היום',
+ 'למצוא שלט בעברית, באנגלית שבורה או משהו שגורם לצחוק',
+ 'לצלם את הצבע הכי חזק שראיתם היום',
+ 'לוותר על הטלפון לשעה שלמה ואז לספר מה שמתם לב אליו',
+ 'למצוא משהו שנראה בדיוק כמו בישראל — ולהסביר מה בכל זאת שונה',
+ 'לצלם צילום מלמעלה של מה שאתם אוכלים',
+ 'לשאול מישהו מהמשפחה מה הרגע הכי טוב שלו היום ולרשום',
+ 'למצוא את המקום הכי שקט שיש בסביבה',
+ 'להתמקח על מחיר ולהצליח להוריד אותו',
+ 'לצלם צל מעניין — לא את מה שמטיל אותו',
+ 'לטעום משהו שנראה לכם דוחה. פעם אחת',
+ 'למצוא שלושה דברים באותו צבע ולצלם אותם יחד',
+ 'לגלות מה השעה עכשיו בישראל בלי לבדוק בטלפון',
+ 'לצלם דיוקן של מישהו מהמשפחה שהוא לא ידע שצולם',
+ 'לספור כמה כובעים קוניים ראיתם היום',
+ 'למצוא ולצלם מספר — שלט, מחיר, לוחית רישוי — שנראה לכם מיוחד',
+ 'להגיד תודה בווייטנאמית לחמישה אנשים שונים היום',
+ 'לצלם את הרגליים שלכם במקום שלא הייתם בו אתמול',
+ 'למצוא מוזיקה שמתנגנת ברחוב ולזהות כלי אחד',
+ 'לצייר או לרשום משהו שראיתם, בלי לצלם אותו',
+ 'לגלות כמה עולה בקבוק מים ולזכור את המספר',
+ 'לצלם משהו שמזכיר לכם מישהו מהבית',
+ 'למצוא את החיה הכי לא צפויה ברחוב',
+ 'לשבת חמש דקות במקום אחד ולספור כמה שפות שמעתם',
+ 'לצלם תמונה שמסבירה למה חם כאן',
+ 'למצוא דלת יפה ולצלם רק אותה',
+ 'לבקש מהמשפחה לנחש כמה עלתה הארוחה — ולגלות מי הכי קרוב',
+ 'לצלם את השמיים היום. רק אותם',
+ 'למצוא משהו שנשבר, התקלף או התיישן יפה',
+ 'להיות הראשונים שמוכנים בבוקר. פעם אחת בטיול',
+ 'לצלם את הידיים של מישהו שעובד',
+ 'לכתוב משפט אחד על היום הזה שתרצו לזכור בעוד עשר שנים'
+];
+const kidIndex = name => Math.max(0, ALL_PEOPLE.findIndex(x => x.n === name));
+function myMission(day) {
+  return MISSIONS[(day * 7 + kidIndex(myName())) % MISSIONS.length];
+}
+
 const FOODS = [
   { id:'pho',    emoji:'🍜', name:'פו',            vi:'Phở',            note:'מרק נודלס אורז. הארוחה הלאומית' },
   { id:'banhmi', emoji:'🥖', name:'באן מי',        vi:'Bánh mì',        note:'בגט צרפתי במילוי וייטנאמי' },
@@ -1113,7 +1203,7 @@ const RESULTS = [
 ];
 
 /* ══ state ══════════════════════════════════════════════════════════ */
-const state = { tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, vibe:'teen', vnd:'50000', slide:{}, music:false, speaking:null };
+const state = { tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, missions:[], vibe:'teen', vnd:'50000', slide:{}, music:false, speaking:null };
 
 function load() {
   try {
@@ -1125,6 +1215,7 @@ function load() {
     state.said  = s.said  || [];
     state.eaten = s.eaten || [];
     state.answers = s.answers || {};
+    state.missions = s.missions || [];
     state.vibe  = s.vibe  || 'teen';
     state.tab   = s.tab   || 'days';
     state.open  = s.open ?? 1;
@@ -1133,7 +1224,7 @@ function load() {
 function persist() {
   try {
     localStorage.setItem(KEY, JSON.stringify({
-      found:state.found, done:state.done, said:state.said, eaten:state.eaten, answers:state.answers,
+      found:state.found, done:state.done, said:state.said, eaten:state.eaten, answers:state.answers, missions:state.missions,
       vibe:state.vibe, tab:state.tab, open:state.open
     }));
   } catch (e) {}
@@ -1285,6 +1376,15 @@ function toggleFood(id) {
   if (card) { card.classList.toggle('on', !has); card.setAttribute('aria-pressed', String(!has)); }
   const n = $('#foodCount'); if (n) n.textContent = eaten.length + '/' + FOODS.length;
   if (!has && !badged) celebrate(it.emoji, 'טעמתם! ' + it.name);
+}
+
+function toggleMission(n) {
+  const has = state.missions.includes(n);
+  const missions = has ? state.missions.filter(x => x !== n) : [...state.missions, n];
+  const badged = applyChange({ missions });
+  $('#daysList').innerHTML = DAYS.map(dayHTML).join('');
+  if (state.open) syncReel(state.open);
+  if (!has && !badged) celebrate('🎯', '+3 נקודות');
 }
 
 function triviaScore() {
@@ -1444,6 +1544,11 @@ function dayHTML(d) {
         '<div class="mission-k">המשימה הסודית של היום</div>' +
         '<div class="mission-v">' + esc(d.mission) + '</div>' +
       '</div>' +
+      (myName() ? '<button class="mine' + (state.missions.includes(d.n) ? ' on' : '') + '" data-act="mission" data-n="' + d.n + '">' +
+        '<span class="mine-k">המשימה האישית של ' + esc(myName()) + ' · 3 נק׳</span>' +
+        '<span class="mine-v">' + esc(myMission(d.n)) + '</span>' +
+        '<span class="mine-tick">' + (state.missions.includes(d.n) ? '✓ בוצע' : 'לסמן כבוצע') + '</span>' +
+      '</button>' : '') +
 
       '<div class="day-actions">' +
         '<a class="act act--map" href="' + esc(d.map) + '" target="_blank" rel="noopener">📍 איפה זה?</a>' +
@@ -1579,6 +1684,7 @@ function albumHTML() {
       '<div class="alb-stat"><b>' + daysShot + '/19</b><span>ימים מצולמים</span></div>' +
       '<div class="alb-stat"><b>' + shots.length + '</b><span>תמונות</span></div>' +
     '</div>' +
+    podiumHTML() +
     '<button class="cover-set" data-act="cover">' + (coverURL
         ? '🖼️ תמונת השער של הטיול · להחליף' : '🖼️ להוסיף תמונה קבוצתית לשער') + '</button>' +
     '<button class="who" data-act="who">' + (myName()
@@ -1818,6 +1924,7 @@ document.addEventListener('click', e => {
   if (act === 'vibe')      return setVibe(el.dataset.v);
   if (act === 'food')      return toggleFood(el.dataset.id);
   if (act === 'answer')    return answerQ(+el.dataset.s, +el.dataset.q, +el.dataset.o);
+  if (act === 'mission')   return toggleMission(+el.dataset.n);
   if (act === 'shoot')     return shoot(+el.dataset.n);
   if (act === 'shot-del')  return void delShot(el.dataset.id);
   if (act === 'who')       { askName(true); renderMain(); return; }
@@ -2241,7 +2348,7 @@ async function exportAlbum() {
   const busy = $('#shotBusy'); busy.hidden = false;
   busy.querySelector('.busy-in').textContent = 'אורז את האלבום…';
   try {
-    const payload = { v:1, who: myName() || 'אנונימי', stories: st, shots: [] };
+    const payload = { v:1, who: myName() || 'אנונימי', score: myScore(), stories: st, shots: [] };
     for (const sh of all) {
       payload.shots.push({ id:sh.id, day:sh.day, caption:sh.caption || '',
                            by: sh.by || payload.who, w:sh.w, h:sh.h,
@@ -2289,6 +2396,11 @@ async function importAlbum(file) {
       }
     }
     try { localStorage.setItem(STORY_KEY, JSON.stringify(mine)); } catch (e) {}
+    if (payload.score && payload.who) {
+      const sc = otherScores();
+      sc[payload.who] = payload.score;
+      try { localStorage.setItem(SCORE_KEY, JSON.stringify(sc)); } catch (e) {}
+    }
     await refreshShots(true);
     window.alert('צורף האלבום של ' + (payload.who || '?') + ':\n'
       + added + ' תמונות חדשות, ' + addedStories + ' סיפורים'
@@ -2296,6 +2408,61 @@ async function importAlbum(file) {
   } catch (e) {
     window.alert('הקובץ לא נראה כמו אלבום של האפליקציה.');
   } finally { busy.hidden = true; busy.querySelector('.busy-in').textContent = 'שומר את התמונה…'; }
+}
+
+/* One number per person, so the podium compares like with like. Weights
+   favour doing over ticking: a story is worth more than a checkbox. */
+const SCORE_KEY = 'vn-kids-scores';
+
+function myScore() {
+  const mine = shots.filter(x => (x.by || myName()) === myName()).length;
+  const myStories = Object.values(stories()).flat().filter(x => x.by === myName()).length;
+  return {
+    trivia:   triviaScore().pts,
+    photos:   mine * 2,
+    stories:  myStories * 3,
+    missions: state.missions.length * 3,
+    hunt:     state.found.length,
+    foods:    state.eaten.length,
+    days:     state.done.length * 2
+  };
+}
+const scoreTotal = o => Object.values(o).reduce((a, b) => a + b, 0);
+
+function otherScores() {
+  try { return JSON.parse(localStorage.getItem(SCORE_KEY)) || {}; } catch (e) { return {}; }
+}
+
+/* Everyone we know about: me live, plus whoever's album has been merged. */
+function standings() {
+  const rows = [];
+  if (myName()) rows.push({ who: myName(), pts: scoreTotal(myScore()), me: true });
+  for (const [who, sc] of Object.entries(otherScores())) {
+    if (who === myName()) continue;
+    rows.push({ who, pts: scoreTotal(sc), me: false });
+  }
+  return rows.sort((a, b) => b.pts - a.pts);
+}
+
+function podiumHTML() {
+  const rows = standings();
+  if (!rows.length) return '';
+  const medal = ['🥇','🥈','🥉'];
+  return '<div class="podium">' +
+    '<div class="pod-h"><b>התחרות</b><span>' + rows.length + ' משתתפים</span></div>' +
+    '<div class="pod-top">' + rows.slice(0, 3).map((r, i) =>
+      '<div class="pod-p pod-' + (i + 1) + (r.me ? ' me' : '') + '">' +
+        '<div class="pod-m">' + medal[i] + '</div>' +
+        '<div class="pod-n">' + esc(r.who) + '</div>' +
+        '<div class="pod-s">' + r.pts + '</div>' +
+        '<div class="pod-prize">🎁 פרס</div>' +
+      '</div>').join('') + '</div>' +
+    (rows.length > 3 ? '<div class="pod-rest">' + rows.slice(3).map((r, i) =>
+      '<div class="pod-row' + (r.me ? ' me' : '') + '"><span>' + (i + 4) + '</span>' +
+      '<b>' + esc(r.who) + '</b><i>' + r.pts + '</i></div>').join('') + '</div>' : '') +
+    '<div class="pod-note">שלושת המקומות הראשונים מקבלים פרס בסוף הטיול. <b>מה הפרס — לא מגלים.</b></div>' +
+    (rows.length < 2 ? '<div class="pod-note warn">רואים רק אתכם. כדי שהתחרות תעבוד, כל אחד שולח את האלבום שלו וכולם מצרפים.</div>' : '') +
+  '</div>';
 }
 
 /* Once albums are pooled, this is the leaderboard — no server needed. */
