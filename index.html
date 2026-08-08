@@ -514,6 +514,23 @@ input{font-family:inherit}
 .su-p span{display:block;font-size:10.5px;color:#8a94bb;margin-top:1px}
 .su-p.on{background:var(--paper);border-color:#fff;color:var(--ink)}
 .su-p.on span{color:#6b7382}
+.su-pic{display:flex;align-items:center;gap:11px;margin-top:16px;padding:11px;border-radius:14px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)}
+.su-ava{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none;border:2px solid rgba(255,255,255,.6)}
+.su-pic-t{flex:1;min-width:0}
+.su-pic-t b{display:block;font-size:13px;color:#fff}
+.su-pic-t span{display:block;font-size:11px;color:#a9b4d4;margin-top:1px;line-height:1.4}
+.su-pic-b{flex:none;min-height:38px;padding:0 13px;border-radius:11px;background:var(--paper);color:var(--ink);
+  font-size:12.5px;font-weight:700}
+.ava-none{display:grid;place-items:center;background:linear-gradient(140deg,#FF5A8C,#FFB443);
+  color:#fff;font-weight:800}
+.pod-ava{width:34px;height:34px;border-radius:50%;object-fit:cover;margin:3px auto 0;display:block;
+  border:2px solid rgba(255,255,255,.85);font-size:14px}
+.story-ava{width:22px;height:22px;border-radius:50%;object-fit:cover;float:inline-start;
+  margin-inline-end:7px;font-size:10px}
+.gate-tip{font-size:11.5px;line-height:1.6;color:#ffd79a;background:rgba(255,180,67,.12);
+  border:1px solid rgba(255,180,67,.3);border-radius:12px;padding:9px 11px;margin:-8px 0 18px;text-align:right}
+.gate-tip b{color:#fff}
 .su-next{width:100%;margin-top:18px;min-height:52px;border-radius:14px;font-family:var(--hand);font-size:19px;
   background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
 .su-next[disabled]{background:rgba(255,255,255,.07);color:#6b7392;cursor:not-allowed}
@@ -679,6 +696,7 @@ input{font-family:inherit}
     </div>
     <div class="gate-note"><span>וייטנאם 2026</span></div>
     <p class="gate-sub">האפליקציה הזאת היא רק של מי שנוסע איתנו.<br>תקישו את הקוד המשפחתי כדי להיכנס.</p>
+    <p class="gate-tip">📱 <b>באייפון:</b> כדאי קודם להוסיף למסך הבית (שיתוף ← הוסף למסך הבית) ורק אז להיכנס — אחרת תצטרכו להזין את הקוד פעמיים.</p>
     <form class="gate-form" id="gateForm">
       <label class="gate-label" for="code">הקוד המשפחתי</label>
       <input class="gate-input" id="code" type="text" inputmode="text" autocomplete="off"
@@ -755,6 +773,7 @@ input{font-family:inherit}
     <div id="burstHost"></div>
     <input type="file" id="shotFile" accept="image/*" capture="environment" hidden>
     <input type="file" id="albumFile" accept="application/json,.json" hidden>
+    <input type="file" id="avatarFile" accept="image/*" hidden>
     <div class="busy" id="shotBusy" hidden><div class="busy-in">שומר את התמונה…</div></div>
   </div>
 </div>
@@ -984,6 +1003,41 @@ const PEOPLE = [
 ];
 const ALL_PEOPLE = PEOPLE.flatMap(f => f.list);
 const SETUP_KEY = 'vn-kids-setup';
+/* A face next to the name. Squared and shrunk to 256px, which lands
+   around 20 KB — small enough to live in localStorage and to ride along
+   in the album export without bloating it. */
+const AVATAR_KEY = 'vn-kids-avatar', AVATARS_KEY = 'vn-kids-avatars';
+
+function myAvatar() {
+  try { return localStorage.getItem(AVATAR_KEY) || ''; } catch (e) { return ''; }
+}
+function avatarOf(name) {
+  if (name === myName()) return myAvatar();
+  try { return (JSON.parse(localStorage.getItem(AVATARS_KEY)) || {})[name] || ''; }
+  catch (e) { return ''; }
+}
+function avatarTag(name, cls) {
+  const src = avatarOf(name);
+  return src
+    ? '<img class="' + cls + '" src="' + src + '" alt="">'
+    : '<span class="' + cls + ' ava-none">' + esc((name || '?').slice(0, 1)) + '</span>';
+}
+
+async function pickAvatar(file) {
+  const url = URL.createObjectURL(file);
+  const img = await loadImage(url);
+  const S = 256;
+  const c = document.createElement('canvas');
+  c.width = c.height = S;
+  const x = c.getContext('2d');
+  const side = Math.min(img.width, img.height);        // centre-crop to a square
+  x.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, S, S);
+  URL.revokeObjectURL(url);
+  const data = c.toDataURL('image/jpeg', 0.8);
+  try { localStorage.setItem(AVATAR_KEY, data); } catch (e) {}
+  paintSetup();
+  if (state.tab === 'album') renderMain();
+}
 
 const EXTRA_KEY = 'vn-extra-pics';
 const EXTRA_PER_DAY = 5;
@@ -1739,7 +1793,7 @@ function albumHTML() {
             : '')
       : '<div class="alb-empty">עוד לא צילמתם כלום. תתחילו מיום 1 👇</div>') +
     '<div class="pool">' +
-      '<button class="pool-b" data-act="export">📤 לשלוח את האלבום שלי</button>' +
+      '<button class="pool-b" data-act="export">📤 לשלוח את האלבום והניקוד שלי</button>' +
       '<button class="pool-b" data-act="import">📥 לצרף אלבום שקיבלתי</button>' +
     '</div>' +
     '<div class="quests">' +
@@ -1755,7 +1809,8 @@ function albumHTML() {
                 '<button class="shot-x" data-act="shot-del" data-id="' + sh.id + '">✕</button></div>').join('') + '</div>'
             : '') +
           (allStories[d.n] || []).map((st, i) =>
-            '<div class="story"><span class="story-by">' + esc(st.by) + '</span>' +
+            '<div class="story">' + avatarTag(st.by, 'story-ava') +
+            '<span class="story-by">' + esc(st.by) + '</span>' +
             '<p>' + esc(st.text) + '</p>' +
             '<button class="story-x" data-act="story-del" data-n="' + d.n + '" data-i="' + i + '">✕</button></div>').join('') +
           '<div class="quest-btns">' +
@@ -1968,6 +2023,7 @@ document.addEventListener('click', e => {
   if (act === 'install')   return void installApp();
   if (act === 'export')    return void exportAlbum();
   if (act === 'pick-me')   { setMe(el.dataset.n); paintSetup(); return; }
+  if (act === 'pick-pic')  return $('#avatarFile').click();
   if (act === 'su-next')   { setupStep++; paintSetup(); return; }
   if (act === 'su-save')   return void setupSave();
   if (act === 'su-geo')    return setupGeo();
@@ -1999,6 +2055,11 @@ document.addEventListener('click', e => {
 
 document.addEventListener('change', e => {
   if (e.target.id === 'shotFile') void onShotPicked(e);
+  if (e.target.id === 'avatarFile') {
+    const f = e.target.files && e.target.files[0];
+    if (f) void pickAvatar(f);
+    e.target.value = '';
+  }
   if (e.target.id === 'albumFile') {
     const f = e.target.files && e.target.files[0];
     if (f) void importAlbum(f);
@@ -2379,11 +2440,13 @@ const dataURLToBlob = async u => (await fetch(u)).blob();
 async function exportAlbum() {
   const all = await shotsAll();
   const st = stories();
-  if (!all.length && !Object.keys(st).length) { window.alert('אין עדיין מה לייצא.'); return; }
+  /* A score and a face are worth sharing even before the first photo —
+     otherwise a player simply never appears on anyone else's podium. */
+  if (!myName()) { window.alert('קודם בחרו שם באלבום.'); return; }
   const busy = $('#shotBusy'); busy.hidden = false;
   busy.querySelector('.busy-in').textContent = 'אורז את האלבום…';
   try {
-    const payload = { v:1, who: myName() || 'אנונימי', score: myScore(), stories: st, shots: [] };
+    const payload = { v:1, who: myName() || 'אנונימי', score: myScore(), avatar: myAvatar(), stories: st, shots: [] };
     for (const sh of all) {
       payload.shots.push({ id:sh.id, day:sh.day, caption:sh.caption || '',
                            by: sh.by || payload.who, w:sh.w, h:sh.h,
@@ -2431,6 +2494,12 @@ async function importAlbum(file) {
       }
     }
     try { localStorage.setItem(STORY_KEY, JSON.stringify(mine)); } catch (e) {}
+    if (payload.avatar && payload.who) {
+      let map = {};
+      try { map = JSON.parse(localStorage.getItem(AVATARS_KEY)) || {}; } catch (e) {}
+      map[payload.who] = payload.avatar;
+      try { localStorage.setItem(AVATARS_KEY, JSON.stringify(map)); } catch (e) {}
+    }
     if (payload.score && payload.who) {
       const sc = otherScores();
       sc[payload.who] = payload.score;
@@ -2488,6 +2557,7 @@ function podiumHTML() {
     '<div class="pod-top">' + rows.slice(0, 3).map((r, i) =>
       '<div class="pod-p pod-' + (i + 1) + (r.me ? ' me' : '') + '">' +
         '<div class="pod-m">' + medal[i] + '</div>' +
+        avatarTag(r.who, 'pod-ava') +
         '<div class="pod-n">' + esc(r.who) + '</div>' +
         '<div class="pod-s">' + r.pts + '</div>' +
         '<div class="pod-prize">🎁 פרס</div>' +
@@ -2628,6 +2698,14 @@ function paintSetup() {
         '<div class="su-people">' + f.list.map(x =>
           '<button class="su-p' + (myName() === x.n ? ' on' : '') + '" data-act="pick-me" data-n="' + esc(x.n) + '">' +
             '<b>' + esc(x.n) + '</b><span>' + esc(x.r) + '</span></button>').join('') + '</div>').join('') +
+      (r.me
+        ? '<div class="su-pic">' +
+            avatarTag(myName(), 'su-ava') +
+            '<div class="su-pic-t"><b>' + (myAvatar() ? 'התמונה שלך' : 'תמונה שלך') + '</b>' +
+            '<span>' + (myAvatar() ? 'תופיע ליד השם שלך בתחרות ובחוברת' : 'לא חובה, אבל הרבה יותר כיף בתחרות') + '</span></div>' +
+            '<button class="su-pic-b" data-act="pick-pic">' + (myAvatar() ? 'להחליף' : '📷 להוסיף') + '</button>' +
+          '</div>'
+        : '') +
       (setupDone()
         ? '<button class="su-next" data-act="su-done" ' + (r.me ? '' : 'disabled') + '>שמור</button>'
         : '<button class="su-next" data-act="su-next" ' + (r.me ? '' : 'disabled') + '>הבא ←</button>');
