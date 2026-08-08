@@ -170,7 +170,8 @@ input{font-family:inherit}
 .hl-time{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--red);flex:none;padding-top:3px;min-width:34px;direction:ltr}
 .hl-icon{font-size:19px;line-height:1.1;flex:none}
 .hl-text{font-family:'Heebo',sans-serif;font-size:13.5px;line-height:1.5;color:#26303f;text-wrap:pretty}
-.stay{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(31,78,121,.32)}
+.stay{display:block;margin-top:12px;padding-top:10px;border-top:1px dashed rgba(31,78,121,.32);color:inherit}
+.stay u{text-decoration:none;color:var(--stamp);font-weight:700}
 .stay-k{display:block;font-size:9.5px;font-weight:800;letter-spacing:1.2px;color:#8a6a10}
 .stay b{display:block;font-family:var(--script);font-weight:700;font-size:17px;color:var(--ink);line-height:1.15;margin-top:2px}
 .stay i{display:block;font-family:var(--mono);font-size:10.5px;font-style:normal;color:#6b7382;direction:ltr;margin-top:2px}
@@ -263,6 +264,13 @@ input{font-family:inherit}
              radial-gradient(120% 45% at 10% 100%,rgba(122,92,255,.30),transparent 62%),
              linear-gradient(178deg,#151c36,#0f1428 60%,#161029)}
 .gate-card{width:100%;max-width:330px;text-align:center}
+.gate-cover[hidden]{display:none}
+.gate-cover{width:100%;height:150px;border-radius:6px;background-size:cover;background-position:center;
+  margin-bottom:14px;box-shadow:0 10px 28px rgba(0,0,0,.5);border:4px solid var(--paper);transform:rotate(-1.2deg)}
+.cover-set{width:100%;margin-bottom:9px;min-height:42px;border-radius:12px;background:rgba(255,255,255,.05);
+  border:1px dashed rgba(255,255,255,.22);color:#a8b3d3;font-size:12.5px}
+.bk-hero{width:100%;max-width:520px;display:block;margin:0 auto 18px;border-radius:4px;
+  box-shadow:0 6px 20px rgba(0,0,0,.22)}
 .gate-logo{width:78px;height:78px;margin:0 auto 18px;border-radius:26px;background:linear-gradient(135deg,#FF5A8C,#FFB443);display:grid;place-items:center;transform:rotate(-5deg);box-shadow:0 10px 30px rgba(255,90,140,.4);color:var(--paper)}
 .gate-logo svg{width:62%;display:block}
 .gate-note{background:var(--paper);padding:8px 20px 11px;border-radius:3px;transform:rotate(-1.5deg);box-shadow:0 8px 24px rgba(0,0,0,.5);display:inline-block;margin-bottom:8px}
@@ -297,6 +305,29 @@ input{font-family:inherit}
   background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.10);color:#8b97bd;transition:all .2s var(--ease)}
 .vibe-b.on{background:var(--paper);color:var(--ink);border-color:#fff;box-shadow:0 5px 14px rgba(0,0,0,.35);transform:translateY(-1px)}
 .hl-vibe{background:rgba(255,180,67,.16);border-radius:8px;padding:6px 7px;margin:-2px -7px}
+
+/* ── trivia ───────────────────────────────────────────────────────────*/
+.tv-wrap{margin-top:20px}
+.tv-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;background:var(--paper);
+  border-radius:3px;padding:8px 13px;transform:rotate(.8deg);box-shadow:0 6px 16px rgba(0,0,0,.38)}
+.tv-head b{font-family:var(--hand);font-size:21px;color:var(--ink);font-weight:400}
+.tv-head span{font-family:var(--script);font-weight:700;font-size:18px;color:var(--stamp);direction:ltr}
+.tv-set{margin-top:11px;background:var(--paper);border-radius:3px;padding:11px 12px 12px;box-shadow:0 6px 16px rgba(0,0,0,.36)}
+.tv-set-h{display:flex;align-items:baseline;justify-content:space-between;font-family:var(--hand);font-size:18px;
+  color:var(--ink);padding-bottom:7px;border-bottom:1px dashed rgba(31,78,121,.28)}
+.tv-set-h i{font-family:var(--mono);font-style:normal;font-size:11px;color:#8a6a10}
+.tv-q{margin-top:11px}
+.tv-qt{font-size:13.5px;line-height:1.5;color:#26303f;margin-bottom:6px;text-wrap:pretty}
+.tv-qt em{display:inline-block;font-style:normal;font-size:10px;font-weight:800;color:#8a6a10;
+  background:rgba(255,180,67,.28);padding:1px 6px;border-radius:4px;margin-inline-start:6px;vertical-align:2px}
+.tv-a{display:block;width:100%;text-align:right;padding:8px 11px;margin-bottom:5px;border-radius:9px;
+  background:rgba(31,78,121,.06);border:1.5px solid rgba(31,78,121,.16);color:#26303f;font-size:12.5px;line-height:1.4}
+.tv-a:disabled{opacity:.55}
+.tv-a.ok{background:rgba(62,224,143,.22);border-color:var(--mint);color:#0a3d22;font-weight:700;opacity:1}
+.tv-a.no{background:rgba(214,69,69,.15);border-color:#D64545;color:#7a1d1d;opacity:1}
+.tv-bonus{margin-top:12px;padding:11px 13px;border-radius:13px;background:rgba(255,180,67,.12);
+  border:1px solid rgba(255,180,67,.32);font-size:12.5px;line-height:1.6;color:#FFD79A}
+.tv-bonus b{color:#fff}
 
 /* ── foodie checklist ─────────────────────────────────────────────────*/
 .foods-wrap{margin-top:20px}
@@ -597,6 +628,7 @@ input{font-family:inherit}
 
 <div class="gate" id="gate">
   <div class="gate-card">
+    <div class="gate-cover" id="gateCover" hidden></div>
     <div class="gate-logo">
       <svg viewBox="0 0 100 78" aria-hidden="true"><use href="#mk-flat"/></svg>
     </div>
@@ -964,6 +996,54 @@ const HUNT = [
   { id:'chick', emoji:'🐓', label:'תרנגול ברחוב', hint:'כל כפר' }
 ];
 
+/* Thirty questions, in the five sets the family wrote them in. Points
+   follow their scheme: recall is worth 1, a question that needs reasoning
+   is worth 2, and the "look around you" set is worth 3 because it can
+   only be answered by someone who was actually paying attention. */
+const TRIVIA = [
+ { set:'היכרות עם וייטנאם', icon:'🇻🇳', qs:[
+   { q:'מהי עיר הבירה של וייטנאם?', a:['הו צ׳י מין סיטי','הנוי','דה נאנג','הואה'], c:1, p:1 },
+   { q:'באיזה מטבע משתמשים בוייטנאם?', a:['יואן','דונג','באט','רינגיט'], c:1, p:1 },
+   { q:'איזה מהבאים הוא המאכל המזוהה ביותר עם וייטנאם?', a:['פיצה','פו','סושי','טאקו'], c:1, p:1 },
+   { q:'למה המספרים על שטרות וייטנאמיים נראים "מטורפים" למטיילים?', a:['כי המטבע מחולק לאלפי יחידות','כי השטרות מזויפים','כי משתמשים בשיטת מספרים שונה','כי המחירים גבוהים במיוחד'], c:0, p:2 },
+   { q:'איזה צבע מופיע בדגל וייטנאם?', a:['כחול','אדום','ירוק','סגול'], c:1, p:1 } ]},
+
+ { set:'הנוי', icon:'🛵', qs:[
+   { q:'מהו אגם הואן קיים המפורסם בהנוי?', a:['אגם טבעי במרכז העיר','מאגר מים מלאכותי','חלק מנהר','אגם בתוך ארמון'], c:0, p:1 },
+   { q:'בהנוי יש כמות עצומה של אופנועים. מה הסיבה המרכזית?', a:['אופנועים זולים ונוחים יותר בעיר צפופה','אסור להשתמש במכוניות','אין תחבורה ציבורית בכלל','זו מסורת דתית'], c:0, p:2 },
+   { q:'מהו הרובע הקדום בהנוי?', a:['אזור עתיק עם רחובות צרים וחנויות','רובע מגורים חדש','אזור מחוץ לעיר','שוק לילה בלבד'], c:0, p:1 },
+   { q:'אתם חוצים כביש בהנוי ומגיעים עשרות אופנועים. מה הדרך הבטוחה?', a:['לרוץ במהירות','לעצור באמצע הכביש','ללכת בקצב קבוע וצפוי','לחכות שהכביש יתרוקן'], c:2, p:2 },
+   { q:'למה ברחובות מסוימים בהנוי כל החנויות מוכרות אותו מוצר?', a:['מסורת מסחרית עתיקה של חלוקה לפי מקצועות','החוק מחייב חנויות זהות','רק חברה אחת רשאית למכור ברחוב','תופעה חדשה בגלל תיירים'], c:0, p:2 },
+   { q:'מה מתאר הכי טוב את הקפה הווייטנאמי המסורתי?', a:['קפה חלש עם הרבה חלב','קפה חזק שמוגש לעיתים עם חלב מרוכז ממותק','קפה ללא קפאין','קפה שמכינים מתה'], c:1, p:1 },
+   { q:'ראיתם אדם יושב על שרפרף פלסטיק נמוך ואוכל ארוחה שלמה ברחוב. מה הסיכוי שאתם בהנוי?', a:['נמוך מאוד','בינוני','גבוה מאוד','בלתי אפשרי'], c:2, p:1 } ]},
+
+ { set:'סאפה והצפון', icon:'⛰️', qs:[
+   { q:'מה הופך את סאפה לשונה מהותית מהנוי?', a:['סאפה נמצאת באזור הררי בגובה רב','סאפה במדבר','סאפה על אי','סאפה מתחת לפני הים'], c:0, p:1 },
+   { q:'מהן המדרגות שרואים על מדרונות ההרים בסאפה?', a:['מסלולי אופניים','שדות אורז מדורגים','כבישים עתיקים','בריכות שחייה'], c:1, p:1 },
+   { q:'למה חקלאים בונים שדות אורז מדורגים על ההר?', a:['כדי לאפשר גידול אורז בשטח הררי ולנהל את המים','כדי שהנוף יהיה יפה','כדי למנוע מתיירים להגיע','כי אורז חייב לגדול בגובה'], c:0, p:2 },
+   { q:'איזה אקלים צפוי בסאפה לעומת הנוי?', a:['קריר יותר, בגלל הגובה','חם יותר תמיד','זהה לחלוטין','מדברי'], c:0, p:1 },
+   { q:'מה המשמעות של המונח "קבוצה אתנית"?', a:['אנשים בעלי תרבות, מסורת או מוצא משותפים','אנשים מאותו מקצוע','אנשים מאותו גיל','אנשים שגרים באותו מלון'], c:0, p:1 },
+   { q:'איזו פעילות חקלאית היא החשובה ביותר באזור הטרסות?', a:['גידול אורז','גידול זיתים','גידול קפה בלבד','גידול תמרים'], c:0, p:1 },
+   { q:'ראיתם לבוש צבעוני ומסורתי ברחובות סאפה. זו בהכרח תחפושת לתיירים?', a:['כן','לא בהכרח — חלק מהקהילות עדיין לובשות לבוש מסורתי','כן, אבל רק בסופי שבוע','רק ילדים לובשים אותו'], c:1, p:2 },
+   { q:'למה סאפה הפכה ליעד תיירותי כל כך פופולרי?', a:['שילוב של נוף הררי, טרסות אורז ותרבויות מקומיות','פארקי שעשועים','חופי ים','קניוני ענק'], c:0, p:2 } ]},
+
+ { set:'אוכל ותרבות', icon:'🍜', qs:[
+   { q:'מה ההבדל העיקרי בין פו לבאן מי?', a:['פו הוא מרק אטריות, באן מי הוא כריך','שניהם מרקים','שניהם קינוחים','פו קינוח ובאן מי מרק'], c:0, p:1 },
+   { q:'איזה מרכיב נפוץ מאוד במטבח הווייטנאמי?', a:['עשבי תיבול טריים','חמאת בוטנים בלבד','גבינה צהובה','שמנת מתוקה'], c:0, p:1 },
+   { q:'מנה עם הרבה עשבי תיבול, ירקות ואטריות — מה זה מלמד על המטבח?', a:['שהוא משלב טעמים ומרקמים טריים','שכל האוכל חריף מאוד','שהוא מבוסס על מוצרי חלב','שהוא כמעט ללא ירקות'], c:0, p:2 },
+   { q:'מהו באן מי?', a:['כריך וייטנאמי','מרק','קינוח אורז','משקה'], c:0, p:1 },
+   { q:'איזה טעם תמצאו ברוטב הדגים הווייטנאמי?', a:['מלוח ואומאמי','מתוק בלבד','חמוץ בלבד','מר מאוד'], c:0, p:1 },
+   { q:'למה אוכל רחוב הוא חלק כל כך משמעותי מהתרבות הווייטנאמית?', a:['כי הוא נגיש, מהיר וזול, והוא חלק מחיי היום־יום','כי אסור לבשל בבית','כי אין מסעדות בווייטנאם','כי רק תיירים אוכלים במסעדות'], c:0, p:2 } ]},
+
+ { set:'שימו לב למה שאתם רואים', icon:'👀', qs:[
+   { q:'ראיתם משפחה שלמה על אופנוע אחד. מה הכי מפתיע תיירים מערביים?', a:['כמה אנשים נוסעים על אותו אופנוע','שהאופנוע נוסע על כביש','שהמשפחה יחד','שיש קסדות'], c:0, p:3 },
+   { q:'קיבלתם חשבון של 250,000 דונג. בלי לחשב, מה אפשר להסיק?', a:['זה בהכרח סכום עצום','צריך להכיר את שער המטבע לפני שמחליטים אם זה יקר','מדובר ב-250 דולר','מדובר ב-25 דולר בדיוק'], c:1, p:3 },
+   { q:'מה ההבדל הבולט ביותר בין חיים בהנוי לחיים בכפר בסאפה?', a:['צפיפות ואורח חיים','השפה הווייטנאמית','ששניהם באותה מדינה','שימוש במטבע'], c:0, p:3 },
+   { q:'בונוס לסיום: אחרי כמה ימים בווייטנאם, מה הכי נכון לומר?', a:['וייטנאם היא בעיקר הנוי','וייטנאם היא בעיקר סאפה','וייטנאם היא מדינה עם מגוון עצום של נופים, תרבויות ואורחות חיים','וייטנאם דומה בכל מקום'], c:2, p:5 } ]}
+];
+const TRIVIA_MAX = TRIVIA.reduce((t, s) => t + s.qs.reduce((x, q) => x + q.p, 0), 0);
+const qid = (si, qi) => si + '-' + qi;
+
 const FOODS = [
   { id:'pho',    emoji:'🍜', name:'פו',            vi:'Phở',            note:'מרק נודלס אורז. הארוחה הלאומית' },
   { id:'banhmi', emoji:'🥖', name:'באן מי',        vi:'Bánh mì',        note:'בגט צרפתי במילוי וייטנאמי' },
@@ -1006,7 +1086,7 @@ const REGIONS = [
 ];
 
 const TABS = [
-  { id:'days', icon:'📅', label:'יומן' }, { id:'hunt', icon:'🔎', label:'ציד' },
+  { id:'days', icon:'📅', label:'יומן' }, { id:'hunt', icon:'🎮', label:'משחקים' },
   { id:'talk', icon:'🗣️', label:'מילים' }, { id:'badges', icon:'🏆', label:'הישגים' },
   { id:'money', icon:'🍦', label:'גלידות' },
   { id:'album', icon:'📸', label:'האלבום' }
@@ -1033,7 +1113,7 @@ const RESULTS = [
 ];
 
 /* ══ state ══════════════════════════════════════════════════════════ */
-const state = { tab:'days', open:1, found:[], done:[], said:[], eaten:[], vibe:'teen', vnd:'50000', slide:{}, music:false, speaking:null };
+const state = { tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, vibe:'teen', vnd:'50000', slide:{}, music:false, speaking:null };
 
 function load() {
   try {
@@ -1044,6 +1124,7 @@ function load() {
     state.done  = s.done  || [];
     state.said  = s.said  || [];
     state.eaten = s.eaten || [];
+    state.answers = s.answers || {};
     state.vibe  = s.vibe  || 'teen';
     state.tab   = s.tab   || 'days';
     state.open  = s.open ?? 1;
@@ -1052,7 +1133,7 @@ function load() {
 function persist() {
   try {
     localStorage.setItem(KEY, JSON.stringify({
-      found:state.found, done:state.done, said:state.said, eaten:state.eaten,
+      found:state.found, done:state.done, said:state.said, eaten:state.eaten, answers:state.answers,
       vibe:state.vibe, tab:state.tab, open:state.open
     }));
   } catch (e) {}
@@ -1206,6 +1287,61 @@ function toggleFood(id) {
   if (!has && !badged) celebrate(it.emoji, 'טעמתם! ' + it.name);
 }
 
+function triviaScore() {
+  let pts = 0, right = 0, done = 0;
+  TRIVIA.forEach((set, si) => set.qs.forEach((q, qi) => {
+    const a = state.answers[qid(si, qi)];
+    if (a === undefined) return;
+    done++;
+    if (a === q.c) { pts += q.p; right++; }
+  }));
+  return { pts, right, done, total: TRIVIA.reduce((t, s) => t + s.qs.length, 0) };
+}
+
+function answerQ(si, qi, pick) {
+  const key = qid(si, qi);
+  if (state.answers[key] !== undefined) return;      // one shot per question
+  const q = TRIVIA[si].qs[qi];
+  state.answers = { ...state.answers, [key]: pick };
+  applyChange({ answers: state.answers });
+  renderMain();
+  if (pick === q.c) celebrate('✅', '+' + q.p + (q.p === 1 ? ' נקודה' : ' נקודות'));
+}
+
+function triviaHTML() {
+  const sc = triviaScore();
+  return '<div class="tv-wrap">' +
+    '<div class="tv-head"><b>טריוויה וייטנאם</b>' +
+      '<span>' + sc.pts + '/' + TRIVIA_MAX + ' נק׳</span></div>' +
+    '<p class="foods-sub">שאלה נענית פעם אחת בלבד — אז תחשבו. שאלות "שימו לב" שוות 3 נקודות, כי אפשר לענות עליהן רק אם באמת הסתכלתם סביב.</p>' +
+    TRIVIA.map((set, si) => {
+      const answered = set.qs.filter((_, qi) => state.answers[qid(si, qi)] !== undefined).length;
+      return '<div class="tv-set">' +
+        '<div class="tv-set-h">' + esc(set.icon) + ' ' + esc(set.set) +
+          '<i>' + answered + '/' + set.qs.length + '</i></div>' +
+        set.qs.map((q, qi) => {
+          const key = qid(si, qi);
+          const given = state.answers[key];
+          const shown = given !== undefined;
+          return '<div class="tv-q' + (shown ? (given === q.c ? ' right' : ' wrong') : '') + '">' +
+            '<div class="tv-qt">' + esc(q.q) +
+              (q.p > 1 ? '<em>' + q.p + ' נק׳</em>' : '') + '</div>' +
+            q.a.map((opt, oi) => {
+              let cls = 'tv-a';
+              if (shown && oi === q.c) cls += ' ok';
+              else if (shown && oi === given) cls += ' no';
+              return '<button class="' + cls + '"' + (shown ? ' disabled' : '') +
+                ' data-act="answer" data-s="' + si + '" data-q="' + qi + '" data-o="' + oi + '">' +
+                esc(opt) + '</button>';
+            }).join('') +
+          '</div>';
+        }).join('') +
+      '</div>';
+    }).join('') +
+    '<div class="tv-bonus">🎁 <b>בונוס יומי:</b> ההורים ממציאים כל ערב שאלה על משהו שראיתם באותו יום — 5 נקודות למי שעונה נכון.</div>' +
+  '</div>';
+}
+
 function foodsHTML() {
   return '<div class="foods-wrap">' +
     '<div class="foods-h"><b>צ׳ק-ליסט הטעימות</b><span id="foodCount">' +
@@ -1295,9 +1431,13 @@ function dayHTML(d) {
           ).join('') +
         '</div>' +
         '<div class="wow">' + esc(d.wow) + '</div>' +
-        (d.hotel ? '<div class="stay"><span class="stay-k">🛏 איפה ישנים הלילה</span>'
+        (d.hotel ? (d.hotelEn
+          ? '<a class="stay" href="https://www.google.com/search?q=' + encodeURIComponent(d.hotelEn) + '" target="_blank" rel="noopener">'
+          : '<div class="stay">')
+          + '<span class="stay-k">🛏 איפה ישנים הלילה</span>'
           + '<b>' + esc(d.hotel) + '</b>'
-          + (d.hotelEn ? '<i>' + esc(d.hotelEn) + '</i>' : '') + '</div>' : '') +
+          + (d.hotelEn ? '<i>' + esc(d.hotelEn) + ' <u>תמונות ואתר ↗</u></i>' : '')
+          + (d.hotelEn ? '</a>' : '</div>') : '') +
       '</div>' +
 
       '<div class="mission">' +
@@ -1334,7 +1474,7 @@ function daysHTML() {
 
 function huntHTML() {
   return '<div class="page">' +
-    headHTML('ציד המציאות 🔎', C.pink) +
+    headHTML('משחקים ואתגרים 🎮', C.pink) +
     '<p class="lead">רואים משהו מהרשימה? לוחצים על הכרטיס והוא נדלק. מי שאוסף הכי הרבה — מנצח.</p>' +
     '<div class="grid2">' +
       HUNT.map((it, i) => {
@@ -1348,6 +1488,7 @@ function huntHTML() {
                '</button>';
       }).join('') +
     '</div>' +
+    triviaHTML() +
     foodsHTML() +
   '</div>';
 }
@@ -1438,6 +1579,8 @@ function albumHTML() {
       '<div class="alb-stat"><b>' + daysShot + '/19</b><span>ימים מצולמים</span></div>' +
       '<div class="alb-stat"><b>' + shots.length + '</b><span>תמונות</span></div>' +
     '</div>' +
+    '<button class="cover-set" data-act="cover">' + (coverURL
+        ? '🖼️ תמונת השער של הטיול · להחליף' : '🖼️ להוסיף תמונה קבוצתית לשער') + '</button>' +
     '<button class="who" data-act="who">' + (myName()
         ? '✍️ מצלם/ת בשם <b>' + esc(myName()) + '</b> · להחליף'
         : '✍️ מי אתם? לחצו כדי להזדהות') + '</button>' +
@@ -1674,6 +1817,7 @@ document.addEventListener('click', e => {
   if (act === 'sos-share') return void shareIce();
   if (act === 'vibe')      return setVibe(el.dataset.v);
   if (act === 'food')      return toggleFood(el.dataset.id);
+  if (act === 'answer')    return answerQ(+el.dataset.s, +el.dataset.q, +el.dataset.o);
   if (act === 'shoot')     return shoot(+el.dataset.n);
   if (act === 'shot-del')  return void delShot(el.dataset.id);
   if (act === 'who')       { askName(true); renderMain(); return; }
@@ -1687,6 +1831,7 @@ document.addEventListener('click', e => {
   if (act === 'su-geo')    return setupGeo();
   if (act === 'su-done')   return closeSetup();
   if (act === 'import')    return $('#albumFile').click();
+  if (act === 'cover')     { const i = $('#shotFile'); i.value=''; i.dataset.day = '0'; i.click(); return; }
   if (act === 'movie')     return openMovie();
   if (act === 'movie-x')   return closeMovie();
   if (act === 'booklet')   return openBooklet();
@@ -2028,12 +2173,24 @@ function dropShotURL(id) {
   if (shotUrls.has(id)) { URL.revokeObjectURL(shotUrls.get(id)); shotUrls.delete(id); }
 }
 
+let coverURL = '';
 async function refreshShots(rerender) {
   try { shots = await shotsAll(); } catch (e) { shots = []; }
+  /* Day 0 is the group portrait: it belongs on the gate and the book
+     cover, never in the day-by-day album. */
+  const cover = shots.find(x => x.day === 0);
+  coverURL = cover ? shotURL(cover) : '';
+  shots = shots.filter(x => x.day !== 0);
+  paintCover();
   if (rerender && state.tab === 'album') renderMain();
 }
 
 /* One hidden input, retargeted per day. */
+function paintCover() {
+  const g = $('#gateCover');
+  if (g) { g.style.backgroundImage = coverURL ? cssUrl(coverURL) : ''; g.hidden = !coverURL; }
+}
+
 function shoot(day) {
   const inp = $('#shotFile');
   inp.value = '';
@@ -2044,7 +2201,7 @@ function shoot(day) {
 async function onShotPicked(e) {
   const file = e.target.files && e.target.files[0];
   if (!file) return;
-  const day = +e.target.dataset.day || 1;
+  const day = +e.target.dataset.day;
   const d = DAYS.find(x => x.n === day);
   const caption = window.prompt('מה לכתוב על התמונה?\n(אפשר להשאיר ריק)',
     d ? d.cap : '') || '';
@@ -2196,6 +2353,7 @@ function openBooklet() {
   shots.forEach(sh => (byDay[sh.day] = byDay[sh.day] || []).push(sh));
   $('#bookBody').innerHTML =
     '<div class="bk-cover">' +
+      (coverURL ? '<img class="bk-hero" src="' + coverURL + '" alt="">' : '') +
       '<div class="bk-hat"><svg viewBox="0 0 100 78"><use href="#mk-flat"/></svg></div>' +
       '<h1>וייטנאם 2026</h1>' +
       '<p>19 ימים · 9–27 בספטמבר · 11 מגלי ארצות</p>' +
