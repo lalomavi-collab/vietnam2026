@@ -153,6 +153,10 @@ input{font-family:inherit}
 .hl-time{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--red);flex:none;padding-top:3px;min-width:34px;direction:ltr}
 .hl-icon{font-size:19px;line-height:1.1;flex:none}
 .hl-text{font-family:'Heebo',sans-serif;font-size:13.5px;line-height:1.5;color:#26303f;text-wrap:pretty}
+.stay{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(31,78,121,.32)}
+.stay-k{display:block;font-size:9.5px;font-weight:800;letter-spacing:1.2px;color:#8a6a10}
+.stay b{display:block;font-family:var(--script);font-weight:700;font-size:20px;color:var(--ink);line-height:1.15;margin-top:2px}
+.stay i{display:block;font-family:var(--mono);font-size:10.5px;font-style:normal;color:#6b7382;direction:ltr;margin-top:2px}
 .wow{margin-top:13px;padding-top:11px;border-top:1px dashed rgba(214,69,69,.45);font-family:var(--script);font-weight:600;font-size:19px;color:var(--ink);line-height:1.25}
 
 /* sticky note */
@@ -222,11 +226,12 @@ input{font-family:inherit}
 .tip b{color:#fff}
 
 /* ── bottom nav ───────────────────────────────────────────────────── */
-.nav{position:sticky;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px 8px 12px;background:linear-gradient(180deg,rgba(15,20,40,.70),rgba(13,16,32,.99));backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.08)}
-.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:56px;border-radius:14px;transition:all .2s var(--ease);background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.09);color:#8b97bd}
+.nav{position:sticky;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(6,1fr);gap:3px;padding:8px 6px 12px;background:linear-gradient(180deg,rgba(15,20,40,.70),rgba(13,16,32,.99));backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.08)}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;border-radius:14px;transition:all .2s var(--ease);background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.09);color:#8b97bd}
 .tab.on{background:var(--paper);color:var(--ink);border:2px solid #fff;transform:rotate(-2deg) translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.4);font-weight:800}
-.tab-icon{font-size:21px;line-height:1}
-.tab-label{font-size:10.5px;font-weight:800;line-height:1}
+.tab-icon{font-size:19px;line-height:1}
+.tab-label{font-size:9.5px;font-weight:800;line-height:1;white-space:nowrap}
+@media (min-width:400px){.tab-label{font-size:10.5px}}
 
 /* ── celebration burst ────────────────────────────────────────────── */
 .burst{position:absolute;inset:0;z-index:60;pointer-events:none;display:grid;place-items:center}
@@ -269,14 +274,86 @@ input{font-family:inherit}
 .dl-bar{flex-basis:100%;height:7px;border-radius:99px;background:rgba(31,78,121,.14);overflow:hidden}
 .dl-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5CE1E6,#3EE08F);transition:width .3s ease}
 
+/* ── album ────────────────────────────────────────────────────────────*/
+.alb-top{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px}
+.alb-stat{background:var(--paper);border-radius:3px;padding:10px;text-align:center;box-shadow:0 6px 16px rgba(0,0,0,.38);transform:rotate(-1deg)}
+.alb-stat:last-child{transform:rotate(1deg)}
+.alb-stat b{display:block;font-family:var(--script);font-weight:700;font-size:27px;color:var(--ink);line-height:1;direction:ltr}
+.alb-stat span{display:block;font-size:11px;color:#5c6470;margin-top:3px}
+.alb-cta{display:flex;gap:9px;margin-bottom:13px}
+.alb-go{flex:1;min-height:52px;border-radius:15px;font-family:var(--hand);font-size:20px;border:2px solid rgba(255,255,255,.9);color:#2b0714}
+.alb-go.is-movie{background:linear-gradient(135deg,#FF5A8C,#FFB443)}
+.alb-go.is-book{background:linear-gradient(135deg,#8FE9EC,#5CE1E6)}
+.alb-empty{background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.2);border-radius:14px;padding:14px;text-align:center;font-size:13px;color:#93a0c4;margin-bottom:13px}
+.quests{display:flex;flex-direction:column;gap:11px}
+.quest{background:var(--paper);border-radius:3px;padding:13px;box-shadow:0 6px 16px rgba(0,0,0,.38);
+  background-image:repeating-linear-gradient(180deg,transparent 0,transparent 26px,rgba(31,78,121,.09) 26px,rgba(31,78,121,.09) 27px)}
+.quest.done{outline:3px solid var(--mint);outline-offset:-3px}
+.quest-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.quest-n{font-family:var(--script);font-weight:700;font-size:20px;color:var(--ink);direction:ltr}
+.quest-d{font-size:10.5px;font-weight:700;color:#8a6a10}
+.quest-t{font-size:13.5px;line-height:1.5;color:#26303f;margin-top:4px;text-wrap:pretty}
+.quest-shots{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.shot{position:relative;width:78px;height:78px;border-radius:2px;overflow:hidden;background:#dfd8c4;box-shadow:0 3px 9px rgba(0,0,0,.3)}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot-x{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;font-size:12px;line-height:1}
+.quest-add{width:calc(100% - 58px);margin-top:10px;margin-inline-end:58px;min-height:44px;border-radius:12px;background:rgba(31,78,121,.09);border:2px dashed rgba(31,78,121,.32);color:var(--ink);font-family:var(--hand);font-size:18px}
+.quest.done .quest-add{background:rgba(62,224,143,.14);border-color:rgba(31,78,121,.22)}
+
+.busy[hidden]{display:none}
+.busy{position:fixed;inset:0;z-index:240;display:grid;place-items:center;background:rgba(6,8,18,.72)}
+.busy-in{background:var(--paper);border-radius:4px;padding:16px 22px;font-family:var(--script);font-weight:700;font-size:22px;color:var(--ink)}
+
+/* ── the movie ────────────────────────────────────────────────────────*/
+.movie[hidden]{display:none}
+.movie{position:fixed;inset:0;z-index:230;background:#05060d;overflow:hidden}
+.movie-img{position:absolute;inset:0;background-size:cover;background-position:center}
+.movie-shade{position:absolute;inset:auto 0 0 0;height:46%;background:linear-gradient(to top,rgba(4,6,14,.9),transparent);pointer-events:none}
+.movie-txt{position:absolute;bottom:34px;right:22px;left:22px;text-align:right;pointer-events:none}
+.movie-day{font-family:var(--mono);font-size:12px;color:#FFB443;letter-spacing:1px;direction:ltr;text-align:right}
+.movie-cap{font-family:var(--hand);font-size:32px;color:#fff;line-height:1.2;margin-top:5px;text-shadow:0 3px 16px rgba(0,0,0,.8)}
+.movie-track{position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.16)}
+.movie-track i{display:block;height:100%;background:linear-gradient(90deg,#FF5A8C,#FFB443);transition:width .5s linear}
+.movie-x{position:absolute;top:14px;left:14px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;font-size:17px}
+
+/* ── the booklet ──────────────────────────────────────────────────────*/
+.book[hidden]{display:none}
+.book{position:fixed;inset:0;z-index:235;background:#f3efe3;overflow-y:auto}
+.book-bar{position:sticky;top:0;z-index:2;display:flex;gap:9px;padding:11px 14px;background:rgba(31,78,121,.96);backdrop-filter:blur(8px)}
+.book-btn{flex:1;min-height:44px;border-radius:12px;background:var(--paper);color:var(--ink);font-family:var(--hand);font-size:18px}
+.book-btn.ghost{flex:0 0 100px;background:rgba(255,255,255,.16);color:#fff}
+.book-body{max-width:760px;margin:0 auto;padding:22px 18px 60px;color:#26303f}
+.bk-cover{text-align:center;padding:34px 0 30px;border-bottom:2px solid rgba(31,78,121,.2);margin-bottom:26px}
+.bk-hat{width:82px;margin:0 auto 12px;color:#C1440E}
+.bk-hat svg{width:100%;display:block}
+.bk-cover h1{font-family:var(--hand);font-size:52px;color:var(--ink);margin:0;line-height:1.1}
+.bk-cover p{margin:6px 0 0;font-size:14px;color:#5c6470}
+.bk-cover .bk-sub{font-family:var(--script);font-weight:700;font-size:20px;color:var(--stamp);margin-top:8px}
+.bk-day{margin-bottom:34px;break-inside:avoid}
+.bk-day h2{font-family:var(--hand);font-size:30px;color:var(--ink);margin:0 0 2px;line-height:1.15}
+.bk-meta{font-size:11.5px;font-weight:700;color:#8a6a10;margin-bottom:10px}
+.bk-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bk-grid figure{margin:0;background:#fff;padding:8px 8px 6px;box-shadow:0 4px 14px rgba(0,0,0,.16);break-inside:avoid}
+.bk-grid img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover}
+.bk-grid figcaption{font-family:var(--script);font-weight:700;font-size:17px;color:var(--ink);text-align:center;padding-top:5px;line-height:1.15}
+.bk-wow{font-family:var(--script);font-weight:600;font-size:19px;color:var(--ink);margin:12px 0 0;padding-top:9px;border-top:1px dashed rgba(214,69,69,.4)}
+@media print{
+  .book-bar{display:none}
+  .book{position:static;background:#fff;overflow:visible}
+  .book-body{max-width:none;padding:0}
+  .bk-cover{page-break-after:always}
+  .bk-day{page-break-inside:avoid}
+  body>*:not(.book){display:none !important}
+}
+
 /* ── emergency ────────────────────────────────────────────────────────
    Deliberately loud and always on screen. A child in trouble should not
    have to find the right tab. */
 @keyframes sosPulse{0%,100%{box-shadow:0 6px 20px rgba(214,25,52,.5),0 0 0 0 rgba(214,25,52,.55)}
                     70%{box-shadow:0 6px 20px rgba(214,25,52,.5),0 0 0 16px rgba(214,25,52,0)}}
-.sos-fab{position:fixed;bottom:78px;left:max(14px,calc(50% - var(--col)/2 + 14px));z-index:120;width:62px;height:62px;border-radius:50%;
+.sos-fab{position:fixed;bottom:92px;left:max(9px,calc(50% - var(--col)/2 + 9px));z-index:120;width:52px;height:52px;border-radius:50%;
   background:linear-gradient(150deg,#FF3B5C,#D61934);color:#fff;font-family:var(--hand);font-size:21px;
-  display:grid;place-items:center;border:3px solid rgba(255,255,255,.92);animation:sosPulse 2.6s ease-out infinite}
+  display:grid;place-items:center;border:3px solid rgba(255,255,255,.92);animation:sosPulse 2.6s ease-out infinite;font-size:17px}
 .sos-fab:active{transform:scale(.94)}
 
 .sos[hidden]{display:none}
@@ -289,6 +366,10 @@ input{font-family:inherit}
 .sos-loc b{display:block;font-family:var(--script);font-weight:700;font-size:22px;color:var(--ink);line-height:1.1}
 .sos-coord{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--stamp);direction:ltr;margin-top:6px;word-break:break-all}
 .sos-meta{font-size:11.5px;color:#5c6470;margin-top:5px}
+.sos-stay[hidden]{display:none}
+.sos-stay{margin-top:10px;background:var(--paper);border-radius:4px;padding:11px 13px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.sos-stay span{display:block;font-size:10px;font-weight:800;letter-spacing:1.1px;color:#8a6a10}
+.sos-stay b{display:block;font-family:var(--mono);font-size:15px;color:var(--ink);direction:ltr;margin-top:4px;line-height:1.3}
 .sos-acts{display:flex;flex-direction:column;gap:9px;margin-top:14px}
 .sos-btn{display:flex;align-items:center;justify-content:center;gap:9px;min-height:58px;border-radius:16px;
   font-family:var(--hand);font-size:22px;border:2px solid rgba(255,255,255,.9);color:#2b0714;
@@ -355,6 +436,25 @@ input{font-family:inherit}
   </symbol>
 </svg>
 
+<div class="movie" id="movie" hidden>
+  <div class="movie-img" id="movieImg"></div>
+  <div class="movie-shade"></div>
+  <div class="movie-txt">
+    <div class="movie-day" id="movieDay"></div>
+    <div class="movie-cap" id="movieCap"></div>
+  </div>
+  <div class="movie-track"><i id="movieBar"></i></div>
+  <button class="movie-x" data-act="movie-x" aria-label="לסגור">✕</button>
+</div>
+
+<div class="book" id="book" hidden>
+  <div class="book-bar">
+    <button class="book-btn" data-act="book-print">🖨 לשמור כ-PDF</button>
+    <button class="book-btn ghost" data-act="book-x">סגירה</button>
+  </div>
+  <div class="book-body" id="bookBody"></div>
+</div>
+
 <div class="sos" id="sos" hidden>
   <div class="sos-in">
     <div class="sos-h">אני צריך עזרה 🆘</div>
@@ -366,6 +466,7 @@ input{font-family:inherit}
       <div class="sos-meta" id="sosMeta"></div>
     </div>
 
+    <div class="sos-stay" id="sosStay" hidden></div>
     <div class="sos-acts" id="sosActs"></div>
 
     <div class="sos-note" id="sosNote">
@@ -437,6 +538,8 @@ input{font-family:inherit}
     <nav class="nav" id="nav"></nav>
     <div id="burstHost"></div>
     <button class="sos-fab" id="sosFab" data-act="sos" aria-label="כפתור חירום">עזרה</button>
+    <input type="file" id="shotFile" accept="image/*" capture="environment" hidden>
+    <div class="busy" id="shotBusy" hidden><div class="busy-in">שומר את התמונה…</div></div>
   </div>
 </div>
 
@@ -457,96 +560,134 @@ const DAYS = [
     hl:[["19:00","🛬","נוחתים בנוי באי אחרי יום שלם באוויר. נהג פרטי מחכה בשם שלנו ואוסף את כל ה-11"],["20:30","🏨","צ׳ק-אין במלון אנטולה. מפילים תיקים, ומי שעוד ער — יוצא"],["21:30","🍜","ההצצה הראשונה להנוי בלילה: אורות, ריחות, ונהר של קטנועים שלא נגמר"]],
     wow:"זמן טיסה נטו לוייטנאם הוא בערך עשר שעות. עם החניה בדרך זה יוצא כמעט יממה שלמה — תספרו כמה סרטים אתם מספיקים.",
     mission:"לספור כמה קטנועים עוברים ברחוב אחד בדקה. מי שניחש הכי קרוב — מנצח.",
+    hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
+    quest:"פורטרט של מישהו מהמשפחה בתוך הכאוס של הרובע הקדום — בלי שיסתכל למצלמה",
     pics:["Old Quarter street scene, Hanoi (1) (38464672752).jpg","Old Quarter market, Hanoi, 20240123 1811 3411.jpg","Street seller of fingered citrons in Old Town of Hanoi, 20240204 1335 5772.jpg"], cap:"הנוי · הרובע הקדום", m:"Hanoi Old Quarter" },
   { n:2, date:"ה׳ 10.9", region:"טו לה", color:C.mint, emoji:"🍃", title:"מהעיר אל ההרים",
     hl:[["08:30","🚐","יוצאים מהנוי, והנסיעה עצמה היא חצי מהכיף: הבניינים נגמרים, ובמקומם נפתחים שדות אורז ירוקים עד קצה העין"],["11:00","🫖","עוצרים במטע תה אמיתי. קוטפים עלים בידיים, מריחים, ושותים תה שנקטף לפני חמש דקות"],["16:00","♨️","מגיעים למלון הספא בין ההרים — והערב כולו שייך לבריכות המים החמים"]],
     wow:"שדות האורז כאן מחליפים צבע לפי העונה: ירוקים בקיץ, זהובים לפני הקציר. בספטמבר תתפסו אותם בדיוק באמצע ההתחלפות.",
     mission:"לצלם את שדה האורז הכי יפה שתראו מחלון הרכב — בלי שהנהג יעצור.",
+    hotel:"לה שאמפ טו לה ריזורט", hotelEn:"Le Champ Tu Le Resort & Spa",
+    quest:"צילום מחלון הרכב בנסיעה. האתגר: שיצא חד ולא מרוח",
     pics:["Mu Cang Chai.jpg","Chế Cu Nha, Mù Cang Chải, Yên Bái, Vietnam - panoramio.jpg","SÁNG SỚM Ở MÙ CANG CHẢI - panoramio.jpg"], cap:"עמק האורז", m:"Muong Lo Valley Nghia Lo" },
   { n:3, date:"ו׳ 11.9", region:"טו לה", color:C.violet, emoji:"🪂", title:"אקסטרים בבוקר, מים חמים אחרי",
     hl:[["09:00","🪂","פותחים את היום בגבהים: אומגה שחוצה את העמק באוויר, ופארק חבלים בין צמרות העצים. קסדה, אבזם, ונשימה עמוקה"],["13:00","♨️","מעיינות חמים טבעיים — מים שיוצאים רותחים ישר מתוך ההר, בלי דוד ובלי חשמל"],["17:00","🏘️","סיור בכפר מקומי: בתי עץ על עמודים, אוכל שמתבשל בחצר וילדים שמשחקים ברחוב. זה החלק שלא מופיע בתמונות"]],
     wow:"המים במעיין יוצאים בחום של יותר מ-40 מעלות — חם יותר מהאמבטיה בבית. הם התחממו עמוק באדמה ליד סלעים לוהטים, ועלו עד לכאן.",
     mission:"לרדת באומגה בלי לעצום עיניים. ואז לספר למי שכן עצם.",
+    hotel:"לה שאמפ טו לה ריזורט", hotelEn:"Le Champ Tu Le Resort & Spa",
+    quest:"רגע של אדרנלין — מישהו באמצע האומגה, באוויר",
     pics:["Khau Phạ nhìn từ trên cao.jpg","Chế Cu Nha, Mù Cang Chải, Yên Bái, Vietnam - panoramio (1).jpg","Mu Cang Chai.jpg"], cap:"מעיינות חמים", m:"Le Champ Tu Le Resort" },
   { n:4, date:"ש׳ 12.9", region:"סאפה", color:C.amber, emoji:"⛰️", title:"מעבר קאו פא ← סאפה",
     hl:[["09:00","🛣️","עוצרים במעבר קאו פא, אחד מארבעת מעברי ההרים הגדולים של וייטנאם. עומדים על הקצה ורואים את כל העמק מתחת"],["12:00","👣","יום כפרי אמיתי בכפר לה פאן טאן: תירס שגדל בין הסלעים, חזירים שמסתובבים חופשי, ונשים שרוקמות בפתח הבית"],["17:00","🏨","ממשיכים לסאפה — עיר הרים שלפעמים יושבת ממש בתוך ענן"]],
     wow:"שבט המונג צובע את הבגדים בצמח שנקרא אינדיגו. הידיים של מי שצובע נשארות כחולות במשך שבועות — תסתכלו על כפות הידיים.",
     mission:"למצוא חיה אחת שמסתתרת בתוך רקמה של בגד מקומי.",
+    hotel:"מלון פיסטאצ׳יו · סאפה", hotelEn:"Pistachio Sapa Hotel",
+    quest:"יד אחת בפריים: יד של מישהו מקומי, עובדת. בלי פנים",
     pics:["Khau Phạ.jpg","Khau Phạ Pass, Vietnam (Unsplash).jpg","KHAU PHẠ MÙA NƯỚC ĐỔ - panoramio.jpg"], cap:"מעבר קאו פא", m:"Khau Pha Pass" },
   { n:5, date:"א׳ 13.9", region:"סאפה", color:C.cyan, emoji:"🌉", title:"מפל האהבה וגשר הזכוכית",
     hl:[["09:00","🥾","טרק קצר ביער עד מפל האהבה — מאה מטר של מים שנופלים, ורסס קר שמגיע עד אליכם"],["13:00","🪟","גשר הזכוכית רונג מיי: הרצפה שקופה לגמרי, ומתחתיה רק אוויר והעמק"],["15:00","🚞","רכבת ההרים הייחודית של מואנג הואה — קרונות שחוצים את המדרון ומשקיפים על כל עמק סאפה"]],
     wow:"רצפת הגשר עשויה זכוכית בשכבות, חזקה מספיק כדי להחזיק המון אנשים — אבל העיניים שלכם לא יאמינו לזה בהתחלה.",
     mission:"לצעוד על הזכוכית עד האמצע ולהסתכל למטה. אמיצים בלבד.",
+    hotel:"מלון פיסטאצ׳יו · סאפה", hotelEn:"Pistachio Sapa Hotel",
+    quest:"צילום דרך הזכוכית של הגשר, כלפי מטה. שיהיה מסחרר",
     pics:["Nhảy dù lượn từ đèo Khau Phạ ngắm bản Lìm mông.jpg","Rice terraces in Sa Pa 09.jpg","Road and paddy fields in Sa Pa, Vietnam, 20240126 1202 3586.jpg"], cap:"גשר הזכוכית", m:"Rong May Glass Bridge Sapa" },
   { n:6, date:"ב׳ 14.9", region:"סאפה", color:C.mint, emoji:"🐃", title:"טרק בעמק מואנג הואה",
     hl:[["09:00","🌾","הליכה בין מדרגות אורז לכפר לאו צ׳אי"],["12:00","🏘️","טא ואן — הכפר של שבט הדזאי, בלב העמק"],["15:00","💦","קאט קאט, ובסוף מפל קאט קאט"]],
     wow:"מדרגות האורז נחצבו במדרון לפני מאות שנים — כל מדרגה מחזיקה מים כמו בריכה קטנה.",
     mission:"לראות תאו מים אמיתי עובד בשדה — ולסמן אותו בציד המציאות.",
+    hotel:"מלון פיסטאצ׳יו · סאפה", hotelEn:"Pistachio Sapa Hotel",
+    quest:"שכבות: שדה אורז קדימה, הר מאחור, ערפל ביניהם",
     pics:["Water buffaloes in Lào Cai, Sa Pa, Vietnam, 20240125 1244 3437.jpg","Water wheel in Cat Cat village, Sa Pa, Vietnam, 20240126 1142 3546.jpg","Cát Cát Village 1.jpg"], cap:"עמק מואנג הואה", m:"Ta Van Village Sapa" },
   { n:7, date:"ג׳ 15.9", region:"הנוי", color:C.pink, emoji:"🎢", title:"רכבת הרים + אוכל רחוב",
     hl:[["09:00","🎿","אלפיין קוסטר: מחליקים במסלול ארוך בהר — ואתם שולטים בבלמים"],["12:00","🚐","נסיעה חזרה להנוי"],["18:00","☕","סיור אוכל רחוב: באן קואון, בון צ׳ה וקפה ביצה"]],
     wow:"קפה ביצה הוא קפה עם חלמון מוקצף מעליו. נראה מוזר, טועם כמו קרם קרמל חם.",
     mission:"לטעום מנה אחת שלא הכרתם — ולדרג אותה מ-1 עד 10.",
+    hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
+    quest:"האוכל הכי מוזר שהזמנתם, מצולם מלמעלה כמו בתפריט",
     pics:["Hanoi Street Food (95655835).jpeg","Street food preparation in Hanoi (49356318418).jpg","Street food - Hanoi (15657896380).jpg"], cap:"אוכל רחוב בהנוי", m:"Hanoi Old Quarter street food" },
   { n:8, date:"ד׳ 16.9", region:"הנוי", color:C.amber, emoji:"🛻", title:"ג׳יפים בסמטאות + פארק מים",
     hl:[["09:00","🚙","סיור ג׳יפ בסמטאות שרק מקומיים מכירים, ובית האופרה"],["12:00","🌊","אגם המערב — קוראים לו ׳מזגן העיר׳"],["15:00","🏄","ונציה הקטנה: פארק מים ומגלשות"]],
     wow:"הנוי נקראת ׳פריז הקטנה׳ — הצרפתים בנו בה שדרות ובתים כמו בפריז לפני יותר מ-100 שנה.",
     mission:"לספור כמה מגלשות יש בפארק — ולנצח את כולם בירידה.",
+    hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
+    quest:"תנועה: קטנוע חולף מטושטש, והרקע חד",
     pics:["West Lake (Hanoi).jpg","Bicycle Tour, Tây Hồ, Hanoi (7060800725).jpg","Cycling around Tây Hồ District, Hanoi (6914731878).jpg"], cap:"פארק המים", m:"Hanoi Little Venice water park" },
   { n:9, date:"ה׳ 17.9", region:"הא לונג", color:C.cyan, emoji:"🚢", title:"מפליגים במפרץ הא לונג",
     hl:[["12:15","⛴️","עולים על ספינת Orchid — קבינה פרטית וארוחה תוך הפלגה"],["15:00","🕳️","מערת טרונג טראנג: 300 מטר של נטיפים בצורות מוזרות"],["17:30","🦑","שחייה במים הירוקים, ובלילה — דיג דיונונים מהסיפון"]],
     wow:"מפרץ הא לונג נבחר לאחד משבעת פלאי הטבע החדשים. יש בו כמעט אלפיים איים.",
     mission:"למצוא אי שנראה כמו חיה ולתת לו שם משפחתי.",
+    hotel:"ספינת אורכיד קלאסיק", hotelEn:"Orchid Classic Cruise, Lan Ha Bay",
+    quest:"שקיעה מהסיפון. בלי אף אחד בפריים",
     pics:["Halong Bay in Vietnam.jpg","Ha Long bay tourism 34.jpg","View of sea from Titov Island, Ha Long Bay, Vietnam, 20240128 1337 3732.jpg"], cap:"מפרץ הא לונג", m:"Lan Ha Bay Cat Ba" },
   { n:10, date:"ו׳ 18.9", region:"נין בין", color:C.mint, emoji:"🛶", title:"קייאקים בזריחה ← נין בין",
     hl:[["06:30","🧘","טאי צ׳י על גג הספינה מול הזריחה"],["07:30","🛶","קייאקים באזור ׳או אק׳ בין הצוקים"],["12:00","🚐","יורדים מהספינה ונוסעים לנין בין"]],
     wow:"׳או אק׳ פירושו בריכת הצפרדעים. מגיעים לשם רק בקייאק — סירה גדולה לא נכנסת.",
     mission:"לחתור לבד חמישים חתירות בלי לעצור.",
+    hotel:"אמרלדה טאם קוק ריזורט", hotelEn:"Emeralda Tam Coc Resort, Ninh Binh",
+    quest:"השתקפות במים — סלע, סירה או שמיים",
     pics:["Bai Chay beach, Ha Long, Vietnam, 20240129 0915 3958.jpg","Halong ensemble (colour corrected).jpg","Ninh Binh-Tam Coc 04 voyage1.jpg"], cap:"קייאקים באו אק", m:"Emeralda Tam Coc Resort" },
   { n:11, date:"ש׳ 19.9", region:"נין בין", color:C.violet, emoji:"🧗", title:"טאם קוק ומערת מואה",
     hl:[["09:00","🚣","שיט בין הרי הגיר — החותרים המקומיים חותרים ברגליים!"],["12:00","🛕","מקדש ביץ׳ דונג בין בריכות לוטוס"],["15:00","🪜","מערת מואה: 500 מדרגות אבן לפסגה, ונוף על כל העמק"]],
     wow:"׳טאם קוק׳ פירושו שלוש מערות — הסירה עוברת בתוך שלוש מערות מים אמיתיות.",
     mission:"לטפס את כל 500 המדרגות ולצלם סלפי בפסגה.",
+    hotel:"אמרלדה טאם קוק ריזורט", hotelEn:"Emeralda Tam Coc Resort, Ninh Binh",
+    quest:"מלמעלה: הצילום מפסגת מערת מואה, שרואים את כל העמק",
     pics:["Tam Cốc-Bích Động in Ninh Binh province.jpg","2024-03-30-Mua Cave Dragon Mountain-3758.jpg","Mua Cave, Ninh Binh, Vietnam, 20240202 0926 4964.jpg"], cap:"טאם קוק", m:"Mua Cave Ninh Binh" },
   { n:12, date:"א׳ 20.9", region:"נין בין", color:C.pink, emoji:"🏎️", title:"יום אקסטרים באגם",
     hl:[["09:00","🏁","גו-קארט בין עצי אורן"],["11:00","🪢","זיפליין, קייאק ורכבי ATV באגם דונג צ׳ואונג"],["16:00","🚐","בערב חוזרים להנוי"]],
     wow:"האגם הוא אגם מים מתוקים טבעי מוקף יער אורנים — נוף שנראה יותר אירופה מאסיה.",
     mission:"לנצח בגו-קארט מבוגר אחד. אחד מספיק.",
+    hotel:"מלון קלאסיק · הנוי", hotelEn:"Classyc Hotel, Hanoi",
+    quest:"רגע של תחרות — מישהו ממש רוצה לנצח",
     pics:["Go kart racing (6239255960).jpg","Go-kart.jpg","View of Ninh Binh atop limestone rocks near Mua Cave.jpg"], cap:"אגם דונג צ׳ואונג", m:"Dong Chuong Lake Ninh Binh" },
   { n:13, date:"ב׳ 21.9", region:"הנוי", color:C.amber, emoji:"🚂", title:"יום חופשי — רחוב הרכבת",
     hl:[["10:00","🚆","Train Street: רכבת עוברת בין הבתים במרחק חצי מטר מהשולחנות"],["15:00","🐢","אגם הואן קיים ומקדש האי"],["19:00","🎁","שוק הלילה — הזמן לקנות מזכרות"]],
     wow:"הרכבת ברחוב הזה עוברת פעמיים ביום, וכולם מזיזים כיסאות שנייה לפני שהיא מגיעה.",
     mission:"לעמוד מאחורי הקו ולצלם את הרכבת עוברת. בלי לזוז מהקיר.",
+    hotel:"מלון קלאסיק · הנוי", hotelEn:"Classyc Hotel, Hanoi",
+    quest:"הרכבת עוברת. פריים אחד, אין הזדמנות שנייה",
     pics:["Old Quarter market, Hanoi, Vietnam, 20240204 1810 5887.jpg","Street Food vendors Soft crab Hanoi Vietnam.jpg","Old Quarter market, Hanoi, Vietnam, 20240123 0841 3046.jpg"], cap:"רחוב הרכבת", m:"Hanoi Train Street" },
   { n:14, date:"ג׳ 22.9", region:"הוי אן", color:C.cyan, emoji:"🛫", title:"טסים לדה נאנג ← הוי אן",
     hl:[["11:00","🛫","טיסה פנימית הנוי–דה נאנג"],["14:00","🚗","נהג אוסף אותנו לעיר הפנסים הוי אן"],["16:00","🏊","מלון Bel Marina עם בריכה — ארבעה לילות"]],
     wow:"הוי אן היתה נמל סחר בין-לאומי לפני 400 שנה. הבתים הצהובים בה נשמרו בדיוק כמו שהיו.",
     mission:"למצוא את הפנס הכי מוזר בעיר ולצלם אותו.",
+    hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
+    quest:"מסגרת בתוך מסגרת: לצלם דרך חלון, קשת או דלת",
     pics:["Hội An, Ancient Town, 2020-01 CN-01.jpg","Hội An, Ancient Town, 2020-01 CN-05.jpg","Hội An, Ancient Town, 2020-01 CN-06.jpg"], cap:"הוי אן · עיר הפנסים", m:"Hoi An Ancient Town" },
   { n:15, date:"ד׳ 23.9", region:"הוי אן", color:C.amber, emoji:"🤲", title:"בא נא הילס וגשר הזהב",
     hl:[["09:00","🚡","רכבל שובר שיאי עולם: 5,771 מטר אורך ו-1,368 מטר הפרש גובה"],["11:00","🌸","גן הפרחים ורכבת ההר המשופעת"],["13:00","🌉","גשר הזהב — שתי ידי ענק מחזיקות שביל בגובה 1,400 מטר"]],
     wow:"הידיים נראות כמו אבן עתיקה, אבל הן עשויות רשת פלדה וסיבי זכוכית — ונבנו ב-2018.",
     mission:"להצטלם כאילו הידיים מחזיקות אתכם.",
+    hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
+    quest:"הידיים של גשר הזהב מזווית שאף אחד לא מצלם ממנה",
     pics:["The Golden Bridge, Ba Na Hills, Vietnam.jpg","Aerial view of the Golden Bridge, Ba Na Hills, Da Nang, Vietnam.jpg","Golden Bridge above the clouds Ba Na Hills Da Nang Vietnam.jpg"], cap:"גשר הזהב", m:"Golden Bridge Ba Na Hills Danang" },
   { n:16, date:"ה׳ 24.9", region:"הוי אן", color:C.mint, emoji:"👨‍🍳", title:"סירות סל וסדנת בישול",
     hl:[["08:30","🧺","שוק הוי אן — קונים חומרי גלם עם השף"],["09:45","🛢️","סירות סל עגולות ביער קוקוס המים — לומדים לחתור ולדוג סרטנים"],["10:30","🥞","סדנת בישול: דף אורז, חלב אורז ופנקייק באן שאו — ואוכלים"]],
     wow:"סירת הסל היא סירה עגולה מבמבוק. המקומיים מסובבים אותה במקום כמו סביבון.",
     mission:"לגלגל ספרינג רול אחד לבד ולתת למישהו לטעום.",
+    hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
+    quest:"תקריב של משהו שאתם מבשלים. קרוב מאוד",
     pics:["Hội An, Ancient Town, 2020-01 CN-10.jpg","Tofu noodle soup (Phở chay) - Pho Hanoi Authentic 2024-12-01.jpg","Hội An, Ancient Town, 2020-01 CN-11.jpg"], cap:"סירות הסל", m:"Hoi An Market" },
   { n:17, date:"ו׳ 25.9", region:"הוי אן", color:C.violet, emoji:"🏮", title:"יום חופשי בהוי אן",
     hl:[["10:00","🏮","סדנת פנסים: בונים פנס במו ידיים ולוקחים הביתה"],["13:00","🚣","אופציה להרפתקה: ראפטינג ומגלשות ביער הואה פו ת׳אן"],["19:00","🕯️","משחררים פנס נר על הנהר טו בון ומבקשים משאלה"]],
     wow:"פעמיים בחודש, בירח מלא, מכבים בהוי אן את כל תאורת הרחוב ומדליקים רק פנסים.",
     mission:"לשחרר פנס על הנהר ולא לספר לאף אחד מה ביקשתם.",
+    hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
+    quest:"אור נגד חושך: פנס דולק בערב, והכול סביבו כהה",
     pics:["Hội An lantern festival (44810593224).jpg","Hội An lantern festival (45536262991).jpg","Hội An lantern festival (45485644722).jpg"], cap:"פנסים על הנהר", m:"Thu Bon River Hoi An" },
   { n:18, date:"ש׳ 26.9", region:"הנוי", color:C.cyan, emoji:"🧳", title:"טיסה חזרה להנוי",
     hl:[["08:00","🌅","בוקר אחרון בהוי אן — מי שמזדרז מספיק לרדת לבריכה"],["12:00","🛫","טיסה דה נאנג–הנוי"],["19:00","🍲","לילה אחרון: פו מהדוכן שממול"]],
     wow:"פו הוא מרק נודלס אורז. בצפון מגישים אותו פשוט, בדרום — עם ערמת עשבים.",
     mission:"לדרג את שלושת הרגעים הכי טובים בטיול, לפי הסדר.",
+    hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
+    quest:"פורטרט אחרון של מישהו מהמשפחה — הכי אמיתי שיצא לכם",
     pics:["Pho in rock bowl.jpg","Nam pho bowl.jpg","Old Quarter street scene, Hanoi (1) (38464672752).jpg"], cap:"קערת פו אחרונה", m:"Hoan Kiem Lake Hanoi" },
   { n:19, date:"א׳ 27.9", region:"הנוי", color:C.pink, emoji:"🏆", title:"קניות אחרונות והביתה",
     hl:[["10:00","🛍️","מפנים את החדר ב-12:00 — עד אז מזכרות אחרונות"],["12:00","🚗","נהג אוסף לשדה התעופה"],["14:00","🏆","בודקים מי אלוף הציד של הטיול"]],
     wow:"עברתם כ-1,400 קילומטר בתוך וייטנאם — יותר מאורך ישראל שבע פעמים.",
     mission:"לכתוב מילה אחת שמסכמת את כל הטיול.",
+    hotel:"טסים הביתה הלילה", hotelEn:"",
+    quest:"התמונה שמסכמת את כל הטיול. אחת בלבד",
     pics:["Nội Bài International Airport May 2026.jpg","Halong Bay in Vietnam.jpg","Rice terraces in Sa Pa 02.jpg"], cap:"להתראות וייטנאם", m:"Noi Bai International Airport" }
 ].map(d => ({ ...d, highlights: d.hl.map(([time, icon, text]) => ({ time, icon, text })), map: gm(d.m), urls: d.pics.map(commons) }));
 
@@ -586,7 +727,8 @@ const REGIONS = [
 const TABS = [
   { id:'days', icon:'📅', label:'יומן' }, { id:'hunt', icon:'🔎', label:'ציד' },
   { id:'talk', icon:'🗣️', label:'מילים' }, { id:'badges', icon:'🏆', label:'הישגים' },
-  { id:'money', icon:'🍦', label:'גלידות' }
+  { id:'money', icon:'🍦', label:'גלידות' },
+  { id:'album', icon:'📸', label:'האלבום' }
 ];
 
 const BADGES = [
@@ -778,6 +920,9 @@ function dayHTML(d) {
           ).join('') +
         '</div>' +
         '<div class="wow">' + esc(d.wow) + '</div>' +
+        (d.hotel ? '<div class="stay"><span class="stay-k">🛏 איפה ישנים הלילה</span>'
+          + '<b>' + esc(d.hotel) + '</b>'
+          + (d.hotelEn ? '<i>' + esc(d.hotelEn) + '</i>' : '') + '</div>' : '') +
       '</div>' +
 
       '<div class="mission">' +
@@ -905,7 +1050,43 @@ function moneyHTML() {
   '</div>';
 }
 
-const VIEWS = { days:daysHTML, hunt:huntHTML, talk:talkHTML, badges:badgesHTML, money:moneyHTML };
+function albumHTML() {
+  const mineOf = n => shots.filter(s => s.day === n);
+  const daysShot = new Set(shots.map(s => s.day)).size;
+  return '<div class="page">' +
+    headHTML('אתגר הצילום 📸', C.pink) +
+    '<p class="lead">כל יום מחכה לכם משימת צילום אחת. מצלמים, כותבים על התמונה, ובסוף הטיול הכול הופך לסרט ולחוברת.</p>' +
+    '<div class="alb-top">' +
+      '<div class="alb-stat"><b>' + daysShot + '/19</b><span>ימים מצולמים</span></div>' +
+      '<div class="alb-stat"><b>' + shots.length + '</b><span>תמונות</span></div>' +
+    '</div>' +
+    (shots.length
+      ? '<div class="alb-cta">'
+        + '<button class="alb-go is-movie" data-act="movie">🎬 להריץ את הסרט</button>'
+        + '<button class="alb-go is-book" data-act="booklet">📖 החוברת</button>'
+        + '</div>'
+      : '<div class="alb-empty">עוד לא צילמתם כלום. תתחילו מיום 1 👇</div>') +
+    '<div class="quests">' +
+      DAYS.map(d => {
+        const mine = mineOf(d.n);
+        return '<div class="quest' + (mine.length ? ' done' : '') + '">' +
+          '<div class="quest-h"><span class="quest-n">DAY ' + d.n + '</span>' +
+            '<span class="quest-d">' + esc(d.date) + ' · ' + esc(d.region) + '</span></div>' +
+          '<div class="quest-t">' + esc(d.quest) + '</div>' +
+          (mine.length
+            ? '<div class="quest-shots">' + mine.map(sh =>
+                '<div class="shot"><img src="' + shotURL(sh) + '" alt="">' +
+                '<button class="shot-x" data-act="shot-del" data-id="' + sh.id + '">✕</button></div>').join('') + '</div>'
+            : '') +
+          '<button class="quest-add" data-act="shoot" data-n="' + d.n + '">' +
+            (mine.length ? '➕ עוד תמונה' : '📷 לצלם') + '</button>' +
+        '</div>';
+      }).join('') +
+    '</div>' +
+  '</div>';
+}
+
+const VIEWS = { days:daysHTML, hunt:huntHTML, talk:talkHTML, badges:badgesHTML, money:moneyHTML, album:albumHTML };
 
 /* ══ render ═════════════════════════════════════════════════════════ */
 function renderNav() {
@@ -1092,6 +1273,13 @@ document.addEventListener('click', e => {
   if (act === 'sos-close') return closeSOS();
   if (act === 'sos-setup') return sosSetup();
   if (act === 'sos-share') return void shareIce();
+  if (act === 'shoot')     return shoot(+el.dataset.n);
+  if (act === 'shot-del')  return void delShot(el.dataset.id);
+  if (act === 'movie')     return openMovie();
+  if (act === 'movie-x')   return closeMovie();
+  if (act === 'booklet')   return openBooklet();
+  if (act === 'book-x')    return closeBooklet();
+  if (act === 'book-print') return window.print();
   if (act === 'reset')     return reset();
   if (act === 'tab')       return goTab(el.dataset.id);
   if (act === 'hunt')      return toggleHunt(el.dataset.id);
@@ -1108,6 +1296,10 @@ document.addEventListener('click', e => {
       if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 80, behavior:'smooth' });
     }, 80);
   }
+});
+
+document.addEventListener('change', e => {
+  if (e.target.id === 'shotFile') void onShotPicked(e);
 });
 
 document.addEventListener('input', e => {
@@ -1227,6 +1419,234 @@ async function initOffline() {
   if ((await cachedCount()) < ALL_PHOTOS.length) $('#offer').hidden = false;
 }
 
+/* ══ photo album ════════════════════════════════════════════════════
+   Photos are real camera files, far too big for localStorage, so they
+   live in IndexedDB. Each is downscaled and the caption is burned into
+   the pixels on import — that way the album, the movie and the booklet
+   all read from one finished image instead of re-compositing text. */
+const DB_NAME = 'vn-photos-db', STORE = 'shots';
+let dbP = null;
+
+function db() {
+  if (dbP) return dbP;
+  dbP = new Promise((res, rej) => {
+    const r = indexedDB.open(DB_NAME, 1);
+    r.onupgradeneeded = () => {
+      const d = r.result;
+      if (!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE, { keyPath:'id' });
+    };
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+  return dbP;
+}
+
+async function shotsPut(rec) {
+  const d = await db();
+  return new Promise((res, rej) => {
+    const tx = d.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).put(rec);
+    tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+  });
+}
+async function shotsAll() {
+  const d = await db();
+  return new Promise((res, rej) => {
+    const out = [];
+    const tx = d.transaction(STORE, 'readonly');
+    tx.objectStore(STORE).openCursor().onsuccess = e => {
+      const c = e.target.result;
+      if (c) { out.push(c.value); c.continue(); }
+      else res(out.sort((a, b) => a.day - b.day || a.id.localeCompare(b.id)));
+    };
+    tx.onerror = () => rej(tx.error);
+  });
+}
+async function shotsDel(id) {
+  const d = await db();
+  return new Promise(res => {
+    const tx = d.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).delete(id);
+    tx.oncomplete = res;
+  });
+}
+
+/* Camera files are 3-5 MB each. Nineteen days of those would blow the
+   origin's quota, so everything is capped at 1600px / JPEG 0.82. */
+function loadImage(src) {
+  return new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i); i.onerror = rej;
+    i.src = src;
+  });
+}
+
+async function processShot(file, caption, day) {
+  const url = URL.createObjectURL(file);
+  const img = await loadImage(url);
+  const MAX = 1600;
+  const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+  const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const x = c.getContext('2d');
+  x.drawImage(img, 0, 0, w, h);
+  URL.revokeObjectURL(url);
+
+  if (caption) {
+    const pad = Math.round(w * 0.045);
+    const size = Math.max(22, Math.round(w * 0.052));
+    x.font = '700 ' + size + "px 'Gveret Levin', cursive";
+    x.direction = 'rtl';
+    x.textAlign = 'right';
+    x.textBaseline = 'bottom';
+    /* Wrap by hand — canvas has no line breaking. */
+    const words = caption.split(/\s+/);
+    const maxW = w - pad * 2;
+    const lines = [];
+    let line = '';
+    for (const word of words) {
+      const t = line ? line + ' ' + word : word;
+      if (x.measureText(t).width > maxW && line) { lines.push(line); line = word; }
+      else line = t;
+    }
+    if (line) lines.push(line);
+    const lh = Math.round(size * 1.22);
+    const boxH = lines.length * lh + pad;
+    const g = x.createLinearGradient(0, h - boxH - pad, 0, h);
+    g.addColorStop(0, 'rgba(6,8,18,0)'); g.addColorStop(1, 'rgba(6,8,18,.82)');
+    x.fillStyle = g;
+    x.fillRect(0, h - boxH - pad, w, boxH + pad);
+    x.fillStyle = '#fff';
+    x.shadowColor = 'rgba(0,0,0,.65)'; x.shadowBlur = Math.round(size * 0.3);
+    lines.forEach((ln, i) => x.fillText(ln, w - pad, h - pad - (lines.length - 1 - i) * lh));
+    x.shadowBlur = 0;
+  }
+
+  const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.82));
+  return { id: String(day).padStart(2,'0') + '-' + Math.random().toString(36).slice(2,9),
+           day, caption: caption || '', blob, w, h };
+}
+
+/* Object URLs are cached per shot and revoked when a shot is deleted —
+   minting a fresh one on every render would leak a blob per repaint. */
+let shots = [];
+const shotUrls = new Map();
+function shotURL(sh) {
+  if (!shotUrls.has(sh.id)) shotUrls.set(sh.id, URL.createObjectURL(sh.blob));
+  return shotUrls.get(sh.id);
+}
+function dropShotURL(id) {
+  if (shotUrls.has(id)) { URL.revokeObjectURL(shotUrls.get(id)); shotUrls.delete(id); }
+}
+
+async function refreshShots(rerender) {
+  try { shots = await shotsAll(); } catch (e) { shots = []; }
+  if (rerender && state.tab === 'album') renderMain();
+}
+
+/* One hidden input, retargeted per day. */
+function shoot(day) {
+  const inp = $('#shotFile');
+  inp.value = '';
+  inp.dataset.day = day;
+  inp.click();
+}
+
+async function onShotPicked(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const day = +e.target.dataset.day || 1;
+  const d = DAYS.find(x => x.n === day);
+  const caption = window.prompt('מה לכתוב על התמונה?\n(אפשר להשאיר ריק)',
+    d ? d.cap : '') || '';
+  const busy = $('#shotBusy'); busy.hidden = false;
+  try {
+    const rec = await processShot(file, caption.trim(), day);
+    await shotsPut(rec);
+    await refreshShots(true);
+    celebrate('📸', 'נשמר ביום ' + day);
+  } catch (err) {
+    window.alert('לא הצלחתי לשמור את התמונה. אולי אין מספיק מקום בטלפון.');
+  } finally { busy.hidden = true; e.target.value = ''; }
+}
+
+async function delShot(id) {
+  if (!window.confirm('למחוק את התמונה?')) return;
+  await shotsDel(id);
+  dropShotURL(id);
+  await refreshShots(true);
+}
+
+/* ══ the movie ══════════════════════════════════════════════════════
+   Not an exported file — a full-screen player. Real MP4 encoding in the
+   browser is unreliable on iOS, so this plays the album with the same
+   Ken Burns drift the day reels use, and can be screen-recorded. */
+let movieTimer = null, movieIdx = 0;
+
+function openMovie() {
+  if (!shots.length) return;
+  movieIdx = 0;
+  $('#movie').hidden = false;
+  document.body.style.overflow = 'hidden';
+  paintMovie();
+  movieTimer = setInterval(() => { movieIdx = (movieIdx + 1) % shots.length; paintMovie(); }, 3800);
+  if (!state.music) toggleMusic();
+}
+
+function paintMovie() {
+  const sh = shots[movieIdx];
+  const d = DAYS.find(x => x.n === sh.day);
+  $('#movieImg').style.backgroundImage = cssUrl(shotURL(sh));
+  $('#movieImg').style.animation = 'none';
+  void $('#movieImg').offsetWidth;
+  $('#movieImg').style.animation = 'kb 8s ease-in-out infinite alternate';
+  $('#movieCap').textContent = sh.caption || (d ? d.title : '');
+  $('#movieDay').textContent = 'DAY ' + sh.day + (d ? ' · ' + d.date : '');
+  $('#movieBar').style.width = ((movieIdx + 1) / shots.length * 100) + '%';
+}
+
+function closeMovie() {
+  clearInterval(movieTimer); movieTimer = null;
+  $('#movie').hidden = true;
+  document.body.style.overflow = '';
+  if (state.music) toggleMusic();
+}
+
+/* ══ the booklet ════════════════════════════════════════════════════
+   A print stylesheet turns this into a PDF through the browser's own
+   "save as PDF" — no library, and it works offline. */
+function openBooklet() {
+  if (!shots.length) return;
+  const byDay = {};
+  shots.forEach(sh => (byDay[sh.day] = byDay[sh.day] || []).push(sh));
+  $('#bookBody').innerHTML =
+    '<div class="bk-cover">' +
+      '<div class="bk-hat"><svg viewBox="0 0 100 78"><use href="#mk-flat"/></svg></div>' +
+      '<h1>וייטנאם 2026</h1>' +
+      '<p>19 ימים · 9–27 בספטמבר · 11 מגלי ארצות</p>' +
+      '<p class="bk-sub">' + shots.length + ' תמונות · ' + Object.keys(byDay).length + ' ימים</p>' +
+    '</div>' +
+    DAYS.filter(d => byDay[d.n]).map(d =>
+      '<section class="bk-day">' +
+        '<h2>DAY ' + d.n + ' — ' + esc(d.title) + '</h2>' +
+        '<div class="bk-meta">' + esc(d.date) + ' · ' + esc(d.region) +
+          (d.hotel ? ' · ' + esc(d.hotel) : '') + '</div>' +
+        '<div class="bk-grid">' + byDay[d.n].map(sh =>
+          '<figure><img src="' + shotURL(sh) + '" alt="">' +
+          (sh.caption ? '<figcaption>' + esc(sh.caption) + '</figcaption>' : '') +
+          '</figure>').join('') + '</div>' +
+        '<p class="bk-wow">' + esc(d.wow) + '</p>' +
+      '</section>').join('');
+  $('#book').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBooklet() {
+  $('#book').hidden = true;
+  document.body.style.overflow = '';
+}
+
 /* ══ emergency ══════════════════════════════════════════════════════
    What this does: reads the phone's GPS and builds a ready-to-send
    message with a map link, plus one-tap dialling.
@@ -1338,7 +1758,18 @@ function locate() {
   }, { enableHighAccuracy:true, timeout:15000, maximumAge:10000 });
 }
 
+/* Tonight's hotel, in Latin script — something a child can hold up to a
+   taxi driver or a police officer who reads no Hebrew. */
+function sosStay() {
+  const el = $('#sosStay');
+  const d = DAYS.find(x => x.n === state.open) || DAYS.find(x => x.n === 1);
+  if (!d || !d.hotelEn) { el.hidden = true; return; }
+  el.hidden = false;
+  el.innerHTML = '<span>🛏 אני מתארח כאן</span><b>' + esc(d.hotelEn) + '</b>';
+}
+
 function openSOS() {
+  sosStay();
   $('#sos').hidden = false;
   document.body.style.overflow = 'hidden';
   renderSosActions();
@@ -1382,6 +1813,7 @@ syncStats();
 DAYS.slice(0, 3).forEach(d => preload(d.urls));
 setInterval(() => { if (state.open) advance(state.open); }, 3600);
 initOffline();
+void refreshShots(true);
 })();
 </script>
 </body>
