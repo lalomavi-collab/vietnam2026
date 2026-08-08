@@ -351,6 +351,25 @@ input{font-family:inherit}
 .pod-note b{color:var(--stamp)}
 .pod-note.warn{margin-top:6px;color:#8a6a10}
 
+/* ── game time ────────────────────────────────────────────────────────*/
+.gt-next{margin-top:11px;padding:10px 13px;border-radius:13px;background:rgba(92,225,230,.12);
+  border:1px solid rgba(92,225,230,.32);font-size:12.5px;line-height:1.5;color:#B9F7F9}
+.gt-next b{color:#fff}
+.gt-cal{width:100%;margin-top:8px;min-height:44px;border-radius:12px;background:rgba(255,255,255,.05);
+  border:1px dashed rgba(255,255,255,.22);color:#a8b3d3;font-size:12.5px}
+.gametime[hidden]{display:none}
+.gametime{position:fixed;inset:0;z-index:245;display:grid;place-items:center;padding:22px;
+  background:rgba(6,8,18,.86);backdrop-filter:blur(6px)}
+.gt-card{width:100%;max-width:340px;background:var(--paper);border-radius:6px;padding:22px 18px 18px;
+  text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.6);transform:rotate(-1deg)}
+.gt-emoji{font-size:54px;line-height:1}
+.gt-card h2{font-family:var(--hand);font-size:29px;color:var(--ink);margin:6px 0 4px;font-weight:400}
+.gt-card p{font-size:13px;color:#5c6470;margin:0 0 16px;line-height:1.5}
+.gt-b{width:100%;min-height:50px;border-radius:13px;margin-bottom:8px;font-family:var(--hand);font-size:18px;
+  background:rgba(31,78,121,.09);border:2px solid rgba(31,78,121,.2);color:var(--ink)}
+.gt-b.main{background:linear-gradient(135deg,#7A5CFF,#FF5A8C);border-color:#fff;color:#fff}
+.gt-skip{width:100%;min-height:38px;border-radius:10px;background:none;color:#8a94ab;font-size:12.5px}
+
 /* ── speed round ──────────────────────────────────────────────────────*/
 .qz-start{display:block;width:100%;margin-top:11px;padding:13px;border-radius:15px;text-align:right;
   background:linear-gradient(135deg,#7A5CFF,#FF5A8C);border:2px solid rgba(255,255,255,.85);
@@ -696,6 +715,17 @@ input{font-family:inherit}
     <button class="book-btn ghost" data-act="book-x">סגירה</button>
   </div>
   <div class="book-body" id="bookBody"></div>
+</div>
+
+<div class="gametime" id="gametime" hidden>
+  <div class="gt-card">
+    <div class="gt-emoji">🎮</div>
+    <h2>הגיע הזמן למשחק!</h2>
+    <p id="gtWhy"></p>
+    <button class="gt-b main" data-act="gt-quiz">⚡ סבב מהיר · 10 שאלות</button>
+    <button class="gt-b" data-act="gt-trivia">🎯 טריוויה וציד המציאות</button>
+    <button class="gt-skip" data-act="gt-close">אחר כך</button>
+  </div>
 </div>
 
 <div class="quiz" id="quiz" hidden>
@@ -1506,6 +1536,90 @@ function toggleFood(id) {
   if (!has && !badged) celebrate(it.emoji, 'טעמתם! ' + it.name);
 }
 
+/* ══ game time ══════════════════════════════════════════════════════
+   The dead hours of the trip, taken from the itinerary itself: the long
+   drives between valleys and the flights. Open the app inside one of
+   these and it says so. */
+const GAME_WINDOWS = [
+  { d:1,  a:'01:30', b:'15:30', why:'11 שעות טיסה לבנגקוק' },
+  { d:1,  a:'19:15', b:'20:50', why:'הקפיצה האחרונה להנוי' },
+  { d:2,  a:'09:30', b:'15:30', why:'הנסיעה מהנוי אל ההרים' },
+  { d:4,  a:'10:00', b:'16:30', why:'הדרך מטו לה לסאפה' },
+  { d:7,  a:'12:30', b:'17:00', why:'הנסיעה חזרה להנוי' },
+  { d:9,  a:'08:00', b:'12:00', why:'הדרך אל מפרץ הא לונג' },
+  { d:10, a:'13:15', b:'16:30', why:'מהספינה לנין בין' },
+  { d:12, a:'16:30', b:'19:00', why:'הנסיעה האחרונה להנוי' },
+  { d:14, a:'09:45', b:'11:00', why:'הטיסה לדה נאנג' },
+  { d:18, a:'18:15', b:'19:30', why:'הטיסה חזרה להנוי' },
+  { d:19, a:'13:15', b:'16:00', why:'הדרך לשדה התעופה' }
+];
+const GAME_SEEN = 'vn-game-seen';
+
+const hhmm = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+
+function currentWindow() {
+  const t = tripToday();
+  if (!t.inTrip) return null;
+  const now = new Date();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  return GAME_WINDOWS.find(w => w.d === t.n && mins >= hhmm(w.a) && mins <= hhmm(w.b)) || null;
+}
+
+function nextWindow() {
+  const t = tripToday();
+  const now = new Date();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  if (t.inTrip) {
+    const later = GAME_WINDOWS.find(w => w.d === t.n && hhmm(w.a) > mins);
+    if (later) return { ...later, today: true };
+  }
+  const from = t.inTrip ? t.n + 1 : 1;
+  return GAME_WINDOWS.find(w => w.d >= from) || null;
+}
+
+function maybeOfferGame() {
+  const w = currentWindow();
+  if (!w) return;
+  const key = 'd' + w.d + '-' + w.a;
+  try { if (localStorage.getItem(GAME_SEEN) === key) return; } catch (e) {}
+  $('#gtWhy').textContent = w.why;
+  $('#gametime').hidden = false;
+  try { localStorage.setItem(GAME_SEEN, key); } catch (e) {}
+}
+
+function closeGameTime() { $('#gametime').hidden = true; }
+
+/* One .ics the phone imports once, so the reminder comes from iOS or
+   Android itself. A web page cannot ring a phone it is not running in —
+   push would need a server, and the calendar already does this job. */
+function gameCalendar() {
+  const pad = n => String(n).padStart(2, '0');
+  const stamp = (day, t) => '2026' + pad(TRIP_MONTH + 1) + pad(8 + day) + 'T' + t.replace(':', '') + '00';
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//vietnam2026//HE', 'CALSCALE:GREGORIAN'];
+  GAME_WINDOWS.forEach((w, i) => lines.push(
+    'BEGIN:VEVENT',
+    'UID:vn2026-game-' + i + '@vietnam',
+    'DTSTAMP:20260101T000000Z',
+    'DTSTART:' + stamp(w.d, w.a),
+    'DTEND:'   + stamp(w.d, w.b),
+    'SUMMARY:🎮 זמן משחק — וייטנאם 2026',
+    'DESCRIPTION:' + w.why + '. פתחו את האפליקציה: סבב מהיר, טריוויה או ציד המציאות.',
+    'BEGIN:VALARM', 'TRIGGER:-PT5M', 'ACTION:DISPLAY',
+    'DESCRIPTION:הגיע הזמן למשחק', 'END:VALARM',
+    'END:VEVENT'));
+  lines.push('END:VCALENDAR');
+  const blob = new Blob([lines.join('\r\n')], { type:'text/calendar' });
+  const file = new File([blob], 'vietnam2026-games.ics', { type:'text/calendar' });
+  if (navigator.canShare && navigator.canShare({ files:[file] })) {
+    navigator.share({ files:[file], title:'זמני המשחקים' }).catch(() => {});
+    return;
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'vietnam2026-games.ics'; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
 /* ══ speed round ════════════════════════════════════════════════════
    Ten questions, fifteen seconds each, and the clock is the game: answer
    instantly for the full 1000, and the value decays to 500 by the time
@@ -1651,6 +1765,11 @@ function triviaHTML() {
   return '<div class="tv-wrap">' +
     '<div class="tv-head"><b>טריוויה וייטנאם</b>' +
       '<span>' + sc.pts + '/' + TRIVIA_MAX + ' נק׳</span></div>' +
+    (() => { const w = nextWindow(); return w
+      ? '<div class="gt-next">🚌 <b>המשחק הבא:</b> יום ' + w.d + ' · ' + esc(w.a) +
+        ' — ' + esc(w.why) + '</div>'
+      : ''; })() +
+    '<button class="gt-cal" data-act="game-cal">📅 להוסיף את זמני המשחקים ליומן בטלפון</button>' +
     '<button class="qz-start" data-act="quiz-start">' +
       '<b>⚡ סבב מהיר · 10 שאלות</b>' +
       '<span>15 שניות לשאלה. מי שעונה מהר — מקבל יותר.' +
@@ -2178,6 +2297,10 @@ document.addEventListener('click', e => {
   if (act === 'answer')    return answerQ(+el.dataset.s, +el.dataset.q, +el.dataset.o);
   if (act === 'mission')   return toggleMission(+el.dataset.n);
   if (act === 'quiz-start') return startQuiz();
+  if (act === 'game-cal')  return gameCalendar();
+  if (act === 'gt-close')  return closeGameTime();
+  if (act === 'gt-quiz')   { closeGameTime(); return startQuiz(); }
+  if (act === 'gt-trivia') { closeGameTime(); state.tab = 'hunt'; persist(); renderNav(); renderMain(); return; }
   if (act === 'quiz-pick')  return pickQuiz(+el.dataset.o);
   if (act === 'quiz-x')     return closeQuiz();
   if (act === 'shoot')     return shoot(+el.dataset.n);
@@ -3125,6 +3248,9 @@ setInterval(() => { if (state.open) advance(state.open); }, 3600);
 initOffline();
 initInstall();
 void loadExtraPhotos();
+setTimeout(maybeOfferGame, 1500);
+setInterval(maybeOfferGame, 5 * 60 * 1000);   // a window can open mid-session
+document.addEventListener('visibilitychange', () => { if (!document.hidden) maybeOfferGame(); });
 (async () => {
   photosBanked = ('caches' in window) && (await cachedCount()) >= ALL_PHOTOS.length;
   /* Already through the gate on a previous visit but never set up. */
