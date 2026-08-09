@@ -294,6 +294,8 @@ input{font-family:inherit}
 
 /* ── offline download banner ──────────────────────────────────────── */
 .offer[hidden]{display:none}
+.offer.install{background:linear-gradient(135deg,#FFF6E0,#FCF7E8);outline:3px solid var(--amber);outline-offset:-3px}
+.offer.install .offer-go{background:linear-gradient(135deg,#7A5CFF,#FF5A8C);color:#fff;padding:0 20px;min-height:48px}
 .offer{margin:12px 15px 0;padding:12px 13px;border-radius:3px;background:var(--paper);box-shadow:0 7px 20px rgba(0,0,0,.4);transform:rotate(-.8deg);
   background-image:repeating-linear-gradient(180deg,transparent 0,transparent 26px,rgba(31,78,121,.10) 26px,rgba(31,78,121,.10) 27px);
   display:flex;align-items:center;gap:11px;flex-wrap:wrap}
@@ -307,11 +309,9 @@ input{font-family:inherit}
 .dl-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5CE1E6,#3EE08F);transition:width .3s ease}
 
 /* ── vibe switch ──────────────────────────────────────────────────────*/
-.vibe{display:flex;gap:7px;padding:12px 15px 0}
-.vibe-b{flex:1;min-height:40px;border-radius:12px;font-size:12.5px;font-weight:800;
-  background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.10);color:#8b97bd;transition:all .2s var(--ease)}
-.vibe-b.on{background:var(--paper);color:var(--ink);border-color:#fff;box-shadow:0 5px 14px rgba(0,0,0,.35);transform:translateY(-1px)}
-.hl-vibe{background:rgba(255,180,67,.16);border-radius:8px;padding:6px 7px;margin:-2px -7px}
+.hl-vibe{border-radius:8px;padding:7px;margin:-2px -7px}
+.hl-teen{background:rgba(122,92,255,.14);box-shadow:inset 3px 0 0 #7A5CFF}
+.hl-parent{background:rgba(193,68,14,.10);box-shadow:inset 3px 0 0 var(--stamp)}
 
 /* ── personal mission ─────────────────────────────────────────────────*/
 .mine{display:block;width:100%;text-align:right;margin-top:11px;padding:12px 13px;border-radius:3px;
@@ -350,6 +350,89 @@ input{font-family:inherit}
 .pod-note{margin-top:10px;font-size:11.5px;line-height:1.55;color:#5c6470}
 .pod-note b{color:var(--stamp)}
 .pod-note.warn{margin-top:6px;color:#8a6a10}
+
+/* ── install guide ────────────────────────────────────────────────────*/
+.howto[hidden]{display:none}
+.howto{position:fixed;inset:0;z-index:250;display:grid;place-items:center;padding:20px 16px;overflow-y:auto;
+  background:rgba(6,8,18,.88);backdrop-filter:blur(6px)}
+.ht-card{width:100%;max-width:390px;background:var(--paper);border-radius:6px;padding:20px 18px 16px;
+  box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.ht-card h2{font-family:var(--hand);font-size:28px;color:var(--ink);margin:0 0 2px;font-weight:400;text-align:center}
+.ht-sub{font-size:12.5px;color:#5c6470;text-align:center;margin:0 0 16px}
+.ht-step{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:1px dashed rgba(31,78,121,.22)}
+.ht-step:first-of-type{border-top:0}
+.ht-n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;
+  font-size:13px;font-weight:800;display:grid;place-items:center}
+.ht-step > div:nth-child(2){flex:1;min-width:0}
+.ht-step b{display:block;font-size:14px;color:#26303f;line-height:1.35}
+.ht-step i{display:block;font-style:normal;font-size:11.5px;color:#6b7382;margin-top:2px;line-height:1.4}
+.ht-icon{flex:none;width:34px;color:var(--stamp)}
+.ht-icon svg{width:100%;display:block}
+.ht-warn{margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(214,69,69,.10);
+  border:1px solid rgba(214,69,69,.3);font-size:12px;line-height:1.55;color:#7a1d1d}
+.ht-close{width:100%;margin-top:14px;min-height:48px;border-radius:13px;font-family:var(--hand);font-size:19px;
+  background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
+
+/* ── game time ────────────────────────────────────────────────────────*/
+.gt-next{margin-top:11px;padding:10px 13px;border-radius:13px;background:rgba(92,225,230,.12);
+  border:1px solid rgba(92,225,230,.32);font-size:12.5px;line-height:1.5;color:#B9F7F9}
+.gt-next b{color:#fff}
+.gt-cal{width:100%;margin-top:8px;min-height:44px;border-radius:12px;background:rgba(255,255,255,.05);
+  border:1px dashed rgba(255,255,255,.22);color:#a8b3d3;font-size:12.5px}
+.gametime[hidden]{display:none}
+.gametime{position:fixed;inset:0;z-index:245;display:grid;place-items:center;padding:22px;
+  background:rgba(6,8,18,.86);backdrop-filter:blur(6px)}
+.gt-card{width:100%;max-width:340px;background:var(--paper);border-radius:6px;padding:22px 18px 18px;
+  text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.6);transform:rotate(-1deg)}
+.gt-emoji{font-size:54px;line-height:1}
+.gt-card h2{font-family:var(--hand);font-size:29px;color:var(--ink);margin:6px 0 4px;font-weight:400}
+.gt-card p{font-size:13px;color:#5c6470;margin:0 0 16px;line-height:1.5}
+.gt-b{width:100%;min-height:50px;border-radius:13px;margin-bottom:8px;font-family:var(--hand);font-size:18px;
+  background:rgba(31,78,121,.09);border:2px solid rgba(31,78,121,.2);color:var(--ink)}
+.gt-b.main{background:linear-gradient(135deg,#7A5CFF,#FF5A8C);border-color:#fff;color:#fff}
+.gt-skip{width:100%;min-height:38px;border-radius:10px;background:none;color:#8a94ab;font-size:12.5px}
+
+/* ── speed round ──────────────────────────────────────────────────────*/
+.qz-start{display:block;width:100%;margin-top:11px;padding:13px;border-radius:15px;text-align:right;
+  background:linear-gradient(135deg,#7A5CFF,#FF5A8C);border:2px solid rgba(255,255,255,.85);
+  box-shadow:0 8px 22px rgba(122,92,255,.35)}
+.qz-start b{display:block;font-family:var(--hand);font-size:21px;color:#fff;font-weight:400}
+.qz-start span{display:block;font-size:11.5px;color:rgba(255,255,255,.9);margin-top:2px;line-height:1.4}
+.quiz[hidden]{display:none}
+.quiz{position:fixed;inset:0;z-index:225;display:grid;place-items:center;padding:18px 16px;
+  background:linear-gradient(178deg,#1b1240,#0f1428 60%,#2a1030)}
+.qz-card{width:100%;max-width:430px}
+.qz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.qz-top span{font-size:12px;font-weight:800;color:#a9b4d4}
+.qz-top b{font-family:var(--mono);font-size:26px;color:#FFB443;line-height:1;min-width:36px;text-align:center}
+.qz-track{height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;margin-bottom:18px}
+.qz-track i{display:block;height:100%;background:linear-gradient(90deg,#3EE08F,#FFB443,#FF3B5C);
+  transition:width .1s linear}
+.qz-q{font-family:var(--hand);font-size:25px;color:#fff;line-height:1.3;text-align:center;margin-bottom:18px;
+  text-wrap:pretty}
+.qz-as{display:flex;flex-direction:column;gap:9px}
+.qz-a{min-height:56px;padding:10px 14px;border-radius:14px;text-align:right;font-size:14px;line-height:1.4;
+  background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.14);color:#e7ecff;
+  transition:all .18s var(--ease)}
+.qz-a:active{transform:scale(.98)}
+.qz-a.ok{background:rgba(62,224,143,.28);border-color:var(--mint);color:#fff;font-weight:700}
+.qz-a.no{background:rgba(255,59,92,.24);border-color:#FF3B5C;color:#fff}
+.qz-a.dim{opacity:.35}
+.qz-got{margin-top:14px;text-align:center;font-family:var(--hand);font-size:24px;color:#ff9db0}
+.qz-got.win{color:#7BE7A6}
+.qz-quit{width:100%;margin-top:14px;min-height:40px;border-radius:12px;background:none;
+  border:1px dashed rgba(255,255,255,.22);color:#8b97bd;font-size:12px}
+.qz-end{text-align:center}
+.qz-end-m{font-size:64px;line-height:1}
+.qz-end h2{font-family:var(--hand);font-size:32px;color:#fff;margin:6px 0 2px;font-weight:400}
+.qz-end-s{font-family:var(--script);font-weight:700;font-size:64px;color:#FFB443;line-height:1;direction:ltr}
+.qz-end p{font-size:13px;color:#a9b4d4;margin:4px 0 0}
+.qz-end-x{display:inline-block;margin-top:12px;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:700;
+  background:rgba(62,224,143,.16);border:1px solid rgba(62,224,143,.4);color:#8df3bd}
+.qz-again{width:100%;margin-top:20px;min-height:52px;border-radius:14px;font-family:var(--hand);font-size:19px;
+  background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
+.qz-close{width:100%;margin-top:9px;min-height:44px;border-radius:12px;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);color:#fff;font-size:13px}
 
 /* ── trivia ───────────────────────────────────────────────────────────*/
 .tv-wrap{margin-top:20px}
@@ -534,8 +617,14 @@ input{font-family:inherit}
 .su-next{width:100%;margin-top:18px;min-height:52px;border-radius:14px;font-family:var(--hand);font-size:19px;
   background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714}
 .su-next[disabled]{background:rgba(255,255,255,.07);color:#6b7392;cursor:not-allowed}
+.su-next.quiet{margin-top:10px;min-height:44px;font-size:16px;background:none;
+  border:1px solid rgba(255,255,255,.16);color:#8f9abd;box-shadow:none}
 .su-go{width:100%;margin-top:12px;min-height:50px;border-radius:14px;font-family:var(--hand);font-size:18px;
   background:rgba(92,225,230,.16);border:2px solid rgba(92,225,230,.45);color:#B9F7F9}
+.su-go.big{margin-top:4px;min-height:58px;font-size:20px;
+  background:linear-gradient(135deg,#7A5CFF,#FF5A8C);border-color:#fff;color:#fff;
+  box-shadow:0 8px 22px rgba(122,92,255,.35)}
+.su-bank{margin-top:13px;font-size:12px;line-height:1.5;color:#8f9abd;text-align:center}
 .su-dl{background:rgba(255,255,255,.05);border-radius:14px;padding:14px}
 .su-state{font-size:13px;color:#a9b4d4;text-align:center;font-weight:700}
 .su-dl .dl-bar{margin-bottom:9px}
@@ -656,6 +745,71 @@ input{font-family:inherit}
   <div class="book-body" id="bookBody"></div>
 </div>
 
+<div class="howto" id="howto" hidden>
+  <div class="ht-card">
+    <h2>להוסיף למסך הבית</h2>
+    <p class="ht-sub">שלוש לחיצות, ואז זה נפתח כמו אפליקציה רגילה.</p>
+
+    <div class="ht-step">
+      <span class="ht-n">1</span>
+      <div><b>לוחצים על כפתור השיתוף</b>
+        <i>הוא בתחתית המסך באמצע (באייפונים ישנים — למעלה מימין)</i></div>
+      <div class="ht-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 52">
+          <rect x="6" y="20" width="28" height="28" rx="5" fill="none" stroke="currentColor" stroke-width="3.4"/>
+          <path d="M20 32 V6" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+          <path d="M12 14 L20 5 L28 14" fill="none" stroke="currentColor" stroke-width="3.4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="ht-step">
+      <span class="ht-n">2</span>
+      <div><b>גוללים למטה ובוחרים "הוסף למסך הבית"</b>
+        <i>Add to Home Screen — עם אייקון של ריבוע ופלוס</i></div>
+      <div class="ht-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 40">
+          <rect x="4" y="4" width="32" height="32" rx="8" fill="none" stroke="currentColor" stroke-width="3.4"/>
+          <path d="M20 12 V28 M12 20 H28" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="ht-step">
+      <span class="ht-n">3</span>
+      <div><b>לוחצים "הוסף" למעלה מימין</b>
+        <i>ואז סוגרים את הדפדפן ופותחים את האייקון החדש</i></div>
+      <div class="ht-icon" aria-hidden="true">
+        <svg viewBox="0 0 40 40">
+          <path d="M8 21 L17 30 L33 11" fill="none" stroke="currentColor" stroke-width="4.4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="ht-warn">⚠️ אם פתחתם את הקישור מתוך וואטסאפ — כפתור השיתוף לא יופיע.
+      לוחצים על אייקון המצפן למטה ("פתח בספארי") ומתחילים משלב 1.</div>
+
+    <button class="ht-close" data-act="howto-x">הבנתי</button>
+  </div>
+</div>
+
+<div class="gametime" id="gametime" hidden>
+  <div class="gt-card">
+    <div class="gt-emoji">🎮</div>
+    <h2>הגיע הזמן למשחק!</h2>
+    <p id="gtWhy"></p>
+    <button class="gt-b main" data-act="gt-quiz">⚡ סבב מהיר · 10 שאלות</button>
+    <button class="gt-b" data-act="gt-trivia">🎯 טריוויה וציד המציאות</button>
+    <button class="gt-skip" data-act="gt-close">אחר כך</button>
+  </div>
+</div>
+
+<div class="quiz" id="quiz" hidden>
+  <div class="qz-card" id="quizBody"></div>
+</div>
+
 <div class="setup" id="setup" hidden>
   <div class="su-card">
     <div class="su-dots" id="setupDots"></div>
@@ -738,11 +892,6 @@ input{font-family:inherit}
       </div>
       <div class="subtitle">19 ימים · 9–27 בספטמבר · 11 מגלי ארצות</div>
     </header>
-
-    <div class="vibe">
-      <button class="vibe-b" data-act="vibe" data-v="teen">🎧 מצב נוער</button>
-      <button class="vibe-b" data-act="vibe" data-v="parent">🍷 מצב הורים</button>
-    </div>
 
     <div class="stats">
       <div class="stat stat--hunt"><div class="stat-k">ציד</div><div class="stat-v" id="statHunt">0/12</div></div>
@@ -1283,7 +1432,7 @@ const RESULTS = [
 ];
 
 /* ══ state ══════════════════════════════════════════════════════════ */
-const state = { tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, missions:[], vibe:'teen', vnd:'50000', slide:{}, music:false, speaking:null };
+const state = { tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, missions:[], quizBest:0, quizPlays:0, vibe:'teen', vnd:'50000', slide:{}, music:false, speaking:null };
 
 function load() {
   try {
@@ -1296,6 +1445,8 @@ function load() {
     state.eaten = s.eaten || [];
     state.answers = s.answers || {};
     state.missions = s.missions || [];
+    state.quizBest = s.quizBest || 0;
+    state.quizPlays = s.quizPlays || 0;
     state.vibe  = s.vibe  || 'teen';
     state.tab   = s.tab   || 'days';
     state.open  = s.open ?? 1;
@@ -1304,7 +1455,7 @@ function load() {
 function persist() {
   try {
     localStorage.setItem(KEY, JSON.stringify({
-      found:state.found, done:state.done, said:state.said, eaten:state.eaten, answers:state.answers, missions:state.missions,
+      found:state.found, done:state.done, said:state.said, eaten:state.eaten, answers:state.answers, missions:state.missions, quizBest:state.quizBest, quizPlays:state.quizPlays,
       vibe:state.vibe, tab:state.tab, open:state.open
     }));
   } catch (e) {}
@@ -1424,27 +1575,19 @@ function paintSubtitle() {
 /* A day's timeline, with the evening line that matches the current vibe
    slotted in by time so the schedule still reads in order. */
 function dayRows(d) {
-  const v = VIBES[d.n] && VIBES[d.n][state.vibe];
   const rows = d.highlights.slice();
-  if (v) {
-    const row = { time:v[0], icon:v[1], text:v[2], vibe:true };
+  const pair = VIBES[d.n];
+  if (!pair) return rows;
+  /* Both evenings, slotted by time so the day still reads in order. */
+  ['teen', 'parent'].forEach(k => {
+    const v = pair[k];
+    if (!v) return;
+    const row = { time:v[0], icon:v[1], text:v[2], vibe:k };
     let i = rows.findIndex(r => r.time > row.time);
     if (i < 0) i = rows.length;
     rows.splice(i, 0, row);
-  }
+  });
   return rows;
-}
-
-function setVibe(v) {
-  if (state.vibe === v) return;
-  state.vibe = v;
-  persist();
-  paintVibe();
-  if (state.tab === 'days') { $('#daysList').innerHTML = DAYS.map(dayHTML).join(''); if (state.open) syncReel(state.open); }
-}
-
-function paintVibe() {
-  $$('.vibe-b').forEach(b => b.classList.toggle('on', b.dataset.v === state.vibe));
 }
 
 function toggleFood(id) {
@@ -1456,6 +1599,200 @@ function toggleFood(id) {
   if (card) { card.classList.toggle('on', !has); card.setAttribute('aria-pressed', String(!has)); }
   const n = $('#foodCount'); if (n) n.textContent = eaten.length + '/' + FOODS.length;
   if (!has && !badged) celebrate(it.emoji, 'טעמתם! ' + it.name);
+}
+
+/* ══ game time ══════════════════════════════════════════════════════
+   The dead hours of the trip, taken from the itinerary itself: the long
+   drives between valleys and the flights. Open the app inside one of
+   these and it says so. */
+const GAME_WINDOWS = [
+  { d:1,  a:'01:30', b:'15:30', why:'11 שעות טיסה לבנגקוק' },
+  { d:1,  a:'19:15', b:'20:50', why:'הקפיצה האחרונה להנוי' },
+  { d:2,  a:'09:30', b:'15:30', why:'הנסיעה מהנוי אל ההרים' },
+  { d:4,  a:'10:00', b:'16:30', why:'הדרך מטו לה לסאפה' },
+  { d:7,  a:'12:30', b:'17:00', why:'הנסיעה חזרה להנוי' },
+  { d:9,  a:'08:00', b:'12:00', why:'הדרך אל מפרץ הא לונג' },
+  { d:10, a:'13:15', b:'16:30', why:'מהספינה לנין בין' },
+  { d:12, a:'16:30', b:'19:00', why:'הנסיעה האחרונה להנוי' },
+  { d:14, a:'09:45', b:'11:00', why:'הטיסה לדה נאנג' },
+  { d:18, a:'18:15', b:'19:30', why:'הטיסה חזרה להנוי' },
+  { d:19, a:'13:15', b:'16:00', why:'הדרך לשדה התעופה' }
+];
+const GAME_SEEN = 'vn-game-seen';
+
+const hhmm = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+
+function currentWindow() {
+  const t = tripToday();
+  if (!t.inTrip) return null;
+  const now = new Date();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  return GAME_WINDOWS.find(w => w.d === t.n && mins >= hhmm(w.a) && mins <= hhmm(w.b)) || null;
+}
+
+function nextWindow() {
+  const t = tripToday();
+  const now = new Date();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  if (t.inTrip) {
+    const later = GAME_WINDOWS.find(w => w.d === t.n && hhmm(w.a) > mins);
+    if (later) return { ...later, today: true };
+  }
+  const from = t.inTrip ? t.n + 1 : 1;
+  return GAME_WINDOWS.find(w => w.d >= from) || null;
+}
+
+function maybeOfferGame() {
+  const w = currentWindow();
+  if (!w) return;
+  const key = 'd' + w.d + '-' + w.a;
+  try { if (localStorage.getItem(GAME_SEEN) === key) return; } catch (e) {}
+  $('#gtWhy').textContent = w.why;
+  $('#gametime').hidden = false;
+  try { localStorage.setItem(GAME_SEEN, key); } catch (e) {}
+}
+
+function closeGameTime() { $('#gametime').hidden = true; }
+
+/* One .ics the phone imports once, so the reminder comes from iOS or
+   Android itself. A web page cannot ring a phone it is not running in —
+   push would need a server, and the calendar already does this job. */
+function gameCalendar() {
+  const pad = n => String(n).padStart(2, '0');
+  const stamp = (day, t) => '2026' + pad(TRIP_MONTH + 1) + pad(8 + day) + 'T' + t.replace(':', '') + '00';
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//vietnam2026//HE', 'CALSCALE:GREGORIAN'];
+  GAME_WINDOWS.forEach((w, i) => lines.push(
+    'BEGIN:VEVENT',
+    'UID:vn2026-game-' + i + '@vietnam',
+    'DTSTAMP:20260101T000000Z',
+    'DTSTART:' + stamp(w.d, w.a),
+    'DTEND:'   + stamp(w.d, w.b),
+    'SUMMARY:🎮 זמן משחק — וייטנאם 2026',
+    'DESCRIPTION:' + w.why + '. פתחו את האפליקציה: סבב מהיר, טריוויה או ציד המציאות.',
+    'BEGIN:VALARM', 'TRIGGER:-PT5M', 'ACTION:DISPLAY',
+    'DESCRIPTION:הגיע הזמן למשחק', 'END:VALARM',
+    'END:VEVENT'));
+  lines.push('END:VCALENDAR');
+  const blob = new Blob([lines.join('\r\n')], { type:'text/calendar' });
+  const file = new File([blob], 'vietnam2026-games.ics', { type:'text/calendar' });
+  if (navigator.canShare && navigator.canShare({ files:[file] })) {
+    navigator.share({ files:[file], title:'זמני המשחקים' }).catch(() => {});
+    return;
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'vietnam2026-games.ics'; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+/* ══ speed round ════════════════════════════════════════════════════
+   Ten questions, fifteen seconds each, and the clock is the game: answer
+   instantly for the full 1000, and the value decays to 500 by the time
+   the bar runs out. Wrong or too slow is nothing. That spread is what
+   makes two people who both know the answer finish apart. */
+const QUIZ_N = 10, QUIZ_SECS = 15, QUIZ_MAX = 1000;
+let quiz = null, quizTimer = null;
+
+const flatQuestions = () => TRIVIA.flatMap(set => set.qs);
+
+function startQuiz() {
+  const all = flatQuestions().slice();
+  for (let i = all.length - 1; i > 0; i--) {          // shuffle, then take ten
+    const j = Math.floor(Math.random() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]];
+  }
+  quiz = { qs: all.slice(0, QUIZ_N), i: 0, score: 0, picked: null, t0: 0, left: QUIZ_SECS, done: false };
+  $('#quiz').hidden = false;
+  document.body.style.overflow = 'hidden';
+  askQuiz();
+}
+
+function askQuiz() {
+  quiz.picked = null;
+  quiz.left = QUIZ_SECS;
+  quiz.t0 = Date.now();
+  paintQuiz();
+  clearInterval(quizTimer);
+  quizTimer = setInterval(() => {
+    quiz.left = Math.max(0, QUIZ_SECS - (Date.now() - quiz.t0) / 1000);
+    const bar = $('#qzBar');
+    if (bar) bar.style.width = (quiz.left / QUIZ_SECS * 100) + '%';
+    const num = $('#qzSecs');
+    if (num) num.textContent = Math.ceil(quiz.left);
+    if (quiz.left <= 0) pickQuiz(-1);
+  }, 100);
+}
+
+function pickQuiz(oi) {
+  if (quiz.picked !== null) return;
+  clearInterval(quizTimer);
+  const q = quiz.qs[quiz.i];
+  const used = Math.min(QUIZ_SECS, (Date.now() - quiz.t0) / 1000);
+  const gained = oi === q.c ? Math.round(QUIZ_MAX * (1 - (used / QUIZ_SECS) / 2)) : 0;
+  quiz.picked = oi;
+  quiz.gained = gained;
+  quiz.score += gained;
+  paintQuiz();
+  setTimeout(() => {
+    quiz.i++;
+    if (quiz.i >= quiz.qs.length) endQuiz(); else askQuiz();
+  }, 1600);
+}
+
+function endQuiz() {
+  quiz.done = true;
+  const record = quiz.score > state.quizBest;
+  applyChange({ quizBest: Math.max(state.quizBest, quiz.score), quizPlays: state.quizPlays + 1 });
+  quiz.record = record;
+  paintQuiz();
+  if (record) celebrate('🏆', 'שיא חדש! ' + quiz.score);
+}
+
+function closeQuiz() {
+  clearInterval(quizTimer);
+  quiz = null;
+  $('#quiz').hidden = true;
+  document.body.style.overflow = '';
+  renderMain();
+}
+
+function paintQuiz() {
+  const box = $('#quizBody');
+  if (quiz.done) {
+    box.innerHTML =
+      '<div class="qz-end">' +
+        '<div class="qz-end-m">' + (quiz.record ? '🏆' : '🎯') + '</div>' +
+        '<h2>' + (quiz.record ? 'שיא חדש!' : 'סיימתם') + '</h2>' +
+        '<div class="qz-end-s">' + quiz.score + '</div>' +
+        '<p>נקודות בסבב הזה' + (quiz.record ? '' : ' · השיא שלכם: ' + state.quizBest) + '</p>' +
+        '<div class="qz-end-x">שווה ' + Math.round(state.quizBest / 200) + ' נק׳ בתחרות המשפחתית</div>' +
+        '<button class="qz-again" data-act="quiz-start">↻ סבב נוסף</button>' +
+        '<button class="qz-close" data-act="quiz-x">חזרה</button>' +
+      '</div>';
+    return;
+  }
+  const q = quiz.qs[quiz.i];
+  const shown = quiz.picked !== null;
+  box.innerHTML =
+    '<div class="qz-top">' +
+      '<span>שאלה ' + (quiz.i + 1) + '/' + quiz.qs.length + '</span>' +
+      '<b id="qzSecs">' + Math.ceil(quiz.left) + '</b>' +
+      '<span>' + quiz.score + ' נק׳</span>' +
+    '</div>' +
+    '<div class="qz-track"><i id="qzBar" style="width:' + (quiz.left / QUIZ_SECS * 100) + '%"></i></div>' +
+    '<div class="qz-q">' + esc(q.q) + '</div>' +
+    '<div class="qz-as">' + q.a.map((opt, oi) => {
+      let cls = 'qz-a';
+      if (shown && oi === q.c) cls += ' ok';
+      else if (shown && oi === quiz.picked) cls += ' no';
+      else if (shown) cls += ' dim';
+      return '<button class="' + cls + '"' + (shown ? ' disabled' : '') +
+        ' data-act="quiz-pick" data-o="' + oi + '">' + esc(opt) + '</button>';
+    }).join('') + '</div>' +
+    (shown
+      ? '<div class="qz-got' + (quiz.gained ? ' win' : '') + '">' +
+        (quiz.gained ? '+' + quiz.gained + ' נקודות' : (quiz.picked === -1 ? 'נגמר הזמן' : 'לא נכון')) + '</div>'
+      : '<button class="qz-quit" data-act="quiz-x">יציאה</button>');
 }
 
 function toggleMission(n) {
@@ -1493,6 +1830,15 @@ function triviaHTML() {
   return '<div class="tv-wrap">' +
     '<div class="tv-head"><b>טריוויה וייטנאם</b>' +
       '<span>' + sc.pts + '/' + TRIVIA_MAX + ' נק׳</span></div>' +
+    (() => { const w = nextWindow(); return w
+      ? '<div class="gt-next">🚌 <b>המשחק הבא:</b> יום ' + w.d + ' · ' + esc(w.a) +
+        ' — ' + esc(w.why) + '</div>'
+      : ''; })() +
+    '<button class="gt-cal" data-act="game-cal">📅 להוסיף את זמני המשחקים ליומן בטלפון</button>' +
+    '<button class="qz-start" data-act="quiz-start">' +
+      '<b>⚡ סבב מהיר · 10 שאלות</b>' +
+      '<span>15 שניות לשאלה. מי שעונה מהר — מקבל יותר.' +
+      (state.quizBest ? ' השיא שלכם: ' + state.quizBest : '') + '</span></button>' +
     '<p class="foods-sub">שאלה נענית פעם אחת בלבד — אז תחשבו. שאלות "שימו לב" שוות 3 נקודות, כי אפשר לענות עליהן רק אם באמת הסתכלתם סביב.</p>' +
     TRIVIA.map((set, si) => {
       const answered = set.qs.filter((_, qi) => state.answers[qid(si, qi)] !== undefined).length;
@@ -1603,7 +1949,7 @@ function dayHTML(d) {
         '<div class="note-day"><span class="star">✳</span><span class="num">DAY ' + d.n + '</span><span class="star">✳</span></div>' +
         '<div class="hls">' +
           dayRows(d).map(h =>
-            '<div class="hl' + (h.vibe ? ' hl-vibe' : '') + '">' +
+            '<div class="hl' + (h.vibe ? ' hl-vibe hl-' + h.vibe : '') + '">' +
               '<div class="hl-time">' + esc(h.time) + '</div>' +
               '<div class="hl-icon">' + esc(h.icon) + '</div>' +
               '<div class="hl-text">' + esc(h.text) + '</div>' +
@@ -2011,21 +2357,28 @@ document.addEventListener('click', e => {
   if (act === 'sos-close') return closeSOS();
   if (act === 'sos-setup') return sosSetup();
   if (act === 'sos-share') return void shareIce();
-  if (act === 'vibe')      return setVibe(el.dataset.v);
   if (act === 'food')      return toggleFood(el.dataset.id);
   if (act === 'answer')    return answerQ(+el.dataset.s, +el.dataset.q, +el.dataset.o);
   if (act === 'mission')   return toggleMission(+el.dataset.n);
+  if (act === 'quiz-start') return startQuiz();
+  if (act === 'game-cal')  return gameCalendar();
+  if (act === 'gt-close')  return closeGameTime();
+  if (act === 'gt-quiz')   { closeGameTime(); return startQuiz(); }
+  if (act === 'gt-trivia') { closeGameTime(); state.tab = 'hunt'; persist(); renderNav(); renderMain(); return; }
+  if (act === 'quiz-pick')  return pickQuiz(+el.dataset.o);
+  if (act === 'quiz-x')     return closeQuiz();
   if (act === 'shoot')     return shoot(+el.dataset.n);
   if (act === 'shot-del')  return void delShot(el.dataset.id);
   if (act === 'who')       { askName(true); renderMain(); return; }
   if (act === 'story')     return addStory(+el.dataset.n);
   if (act === 'story-del') return delStory(+el.dataset.n, +el.dataset.i);
   if (act === 'install')   return void installApp();
+  if (act === 'howto-x')   return closeHowto();
   if (act === 'export')    return void exportAlbum();
   if (act === 'pick-me')   { setMe(el.dataset.n); paintSetup(); return; }
   if (act === 'pick-pic')  return $('#avatarFile').click();
   if (act === 'su-next')   { setupStep++; paintSetup(); return; }
-  if (act === 'su-save')   return void setupSave();
+  if (act === 'su-install') return void installApp();
   if (act === 'su-geo')    return setupGeo();
   if (act === 'su-done')   return closeSetup();
   if (act === 'import')    return $('#albumFile').click();
@@ -2118,6 +2471,19 @@ async function cachedCount() {
 }
 
 let priming = false;
+const bank = { done:0, total:0, running:false };
+
+/* The setup sheet, if it is open, watches the same numbers. */
+function bankLine() {
+  if (!('caches' in window)) return '';
+  if (photosBanked) return '\u2713 התמונות שמורות בטלפון \u2014 הכול יעבוד גם בלי רשת';
+  if (bank.running) return '\u23f3 שומר את התמונות ברקע\u2026 ' + bank.done + ' מתוך ' + bank.total;
+  return 'התמונות נשמרות ברקע לבד. לא צריך לעשות כלום.';
+}
+function paintBank() {
+  const el = $('#suState');
+  if (el) el.textContent = bankLine();
+}
 
 async function primePhotos() {
   const card = $('#offer'), title = $('#offerTitle'), sub = $('#offerSub');
@@ -2131,6 +2497,7 @@ async function primePhotos() {
   }
   if (priming) return;
   priming = true;
+  bank.running = true;
   go.hidden = true;
   bar.hidden = false;
   title.textContent = 'שומר את הטיול…';
@@ -2143,6 +2510,7 @@ async function primePhotos() {
   const tick = () => {
     fill.style.width = Math.round(done / total * 100) + '%';
     sub.textContent = 'שומר את התמונות בטלפון… ' + done + ' מתוך ' + total;
+    bank.done = done; bank.total = total; paintBank();
   };
   tick();
 
@@ -2161,6 +2529,9 @@ async function primePhotos() {
   };
   await Promise.all(Array.from({ length:6 }, worker));
   priming = false;
+  bank.running = false;
+  photosBanked = true;
+  paintBank();
   bar.hidden = true;
 
   if (failed) {
@@ -2185,15 +2556,23 @@ function isStandalone() {
   return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 }
 
+/* iOS never fires beforeinstallprompt, so there is nothing to trigger —
+   the only honest thing is to show exactly where the button is. */
 async function installApp() {
   if (installEvent) {
     installEvent.prompt();
     const res = await installEvent.userChoice.catch(() => null);
     installEvent = null;
     if (res && res.outcome === 'accepted') $('#install').hidden = true;
+    if (!$('#setup').hidden) paintSetup();
     return;
   }
-  window.alert('להוספה למסך הבית:\n\n\u2022 באייפון — לוחצים על כפתור השיתוף (הריבוע עם החץ למעלה) ואז "הוסף למסך הבית".\n\n\u2022 באנדרואיד — תפריט שלוש הנקודות ואז "התקן אפליקציה".');
+  $('#howto').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeHowto() {
+  $('#howto').hidden = true;
+  document.body.style.overflow = '';
 }
 
 function initInstall() {
@@ -2210,8 +2589,13 @@ async function initOffline() {
     try { await navigator.serviceWorker.register('./sw.js'); } catch (e) {}
   }
   if (!('caches' in window)) return;
-  /* Offer the download only when photos are actually missing. */
-  if ((await cachedCount()) < ALL_PHOTOS.length) $('#offer').hidden = false;
+  if ((await cachedCount()) >= ALL_PHOTOS.length) { photosBanked = true; return; }
+  $('#offer').hidden = false;
+  /* A phone on a metered or crawling connection gets asked. Everyone
+     else just gets the photos — no button, no wall. */
+  const c = navigator.connection;
+  if (c && (c.saveData || /2g/.test(c.effectiveType || ''))) return;
+  void primePhotos();
 }
 
 /* ══ who am I ═══════════════════════════════════════════════════════
@@ -2225,7 +2609,7 @@ function myName() {
 function setMe(name) {
   try { localStorage.setItem(ME_KEY, name); } catch (e) {}
   const who = ALL_PEOPLE.find(x => x.n === name);
-  if (who) { state.vibe = who.kid ? 'teen' : 'parent'; persist(); paintVibe(); }
+  if (who) { state.vibe = who.kid ? 'teen' : 'parent'; persist(); }
 }
 function askName(force) {
   if (force) openSetup(0);
@@ -2523,6 +2907,7 @@ function myScore() {
   const myStories = Object.values(stories()).flat().filter(x => x.by === myName()).length;
   return {
     trivia:   triviaScore().pts,
+    quiz:     Math.round(state.quizBest / 200),
     photos:   mine * 2,
     stories:  myStories * 3,
     missions: state.missions.length * 3,
@@ -2680,7 +3065,7 @@ function closeSetup() {
 }
 
 function setupReady() {
-  return { me: !!myName(), photos: photosBanked, ice: iceContacts().length > 0 };
+  return { me: !!myName(), ice: iceContacts().length > 0 };
 }
 
 let photosBanked = false;
@@ -2710,14 +3095,17 @@ function paintSetup() {
         ? '<button class="su-next" data-act="su-done" ' + (r.me ? '' : 'disabled') + '>שמור</button>'
         : '<button class="su-next" data-act="su-next" ' + (r.me ? '' : 'disabled') + '>הבא ←</button>');
   } else if (setupStep === 1) {
-    box.innerHTML = '<h2>לשמור את הטיול</h2>' +
-      '<p>זה מוריד את כל התמונות לטלפון. בווייטנאם לרוב לא תהיה לכם רשת — בלי זה האפליקציה תהיה ריקה.<br><b>עשו את זה עכשיו, על Wi-Fi.</b></p>' +
-      '<div class="su-dl">' +
-        '<div class="dl-bar" id="suBar" hidden><i></i></div>' +
-        '<div class="su-state" id="suState">' + (photosBanked ? 'נשמר ✓' : 'עוד לא נשמר') + '</div>' +
-      '</div>' +
-      '<button class="su-go" data-act="su-save">' + (photosBanked ? '↻ לשמור שוב' : '⬇ להוריד עכשיו') + '</button>' +
-      '<button class="su-next" data-act="su-next" ' + (r.photos ? '' : 'disabled') + '>הבא ←</button>';
+    const installed = isStandalone();
+    box.innerHTML = '<h2>להוסיף למסך הבית</h2>' +
+      '<p>ככה זה נפתח כמו אפליקציה אמיתית — אייקון משלה, מסך מלא, בלי לחפש כל פעם את הקישור בוואטסאפ.</p>' +
+      (installed
+        ? '<div class="su-check ok"><b>✓ כבר מותקנת</b>' +
+          '<span>אתם פתוחים מתוך האייקון במסך הבית. מצוין.</span></div>'
+        : '<button class="su-go big" data-act="su-install">' +
+            (installEvent ? '⬇\u2002להתקין עכשיו · לחיצה אחת' : '📱\u2002להראות לי איך') + '</button>') +
+      '<div class="su-bank" id="suState">' + bankLine() + '</div>' +
+      '<button class="su-next' + (installed ? '' : ' quiet') + '" data-act="su-next">' +
+        (installed ? 'הבא ←' : 'אחר כך ←') + '</button>';
   } else {
     const ice = iceContacts();
     box.innerHTML = '<h2>כפתור החירום</h2>' +
@@ -2732,35 +3120,6 @@ function paintSetup() {
       '<button class="su-next" data-act="su-done">מוכנים, נכנסים!</button>';
   }
   $('#setupDots').innerHTML = dots;
-}
-
-async function setupSave() {
-  const bar = $('#suBar'), st = $('#suState');
-  if (!('caches' in window)) { photosBanked = true; paintSetup(); return; }
-  bar.hidden = false;
-  const fill = bar.querySelector('i');
-  const cache = await caches.open(PHOTO_CACHE);
-  const queue = ALL_PHOTOS.slice();
-  const total = queue.length;
-  let n = 0, failed = 0;
-  const tick = () => { fill.style.width = Math.round(n / total * 100) + '%';
-                       st.textContent = 'שומר… ' + n + ' מתוך ' + total; };
-  tick();
-  await Promise.all(Array.from({ length:6 }, async () => {
-    while (queue.length) {
-      const u = queue.shift();
-      try { if (!(await cache.match(u))) await cache.put(u, await fetch(u, { mode:'no-cors', cache:'no-store' })); }
-      catch (e) { failed++; }
-      n++; tick();
-    }
-  }));
-  /* Never trap someone behind a failed download — but say so plainly. */
-  photosBanked = true;
-  st.textContent = failed ? ('נשמרו ' + (total - failed) + ' מתוך ' + total + '. כדאי לנסות שוב ברשת טובה.')
-                          : 'הכול שמור בטלפון ✓';
-  bar.hidden = true;
-  $('#offer').hidden = true;
-  paintSetup();
 }
 
 function setupGeo() {
@@ -2950,7 +3309,6 @@ load();
 })();
 renderHero();
 renderNav();
-paintVibe();
 paintSubtitle();
 renderMain();
 syncStats();
@@ -2959,6 +3317,9 @@ setInterval(() => { if (state.open) advance(state.open); }, 3600);
 initOffline();
 initInstall();
 void loadExtraPhotos();
+setTimeout(maybeOfferGame, 1500);
+setInterval(maybeOfferGame, 5 * 60 * 1000);   // a window can open mid-session
+document.addEventListener('visibilitychange', () => { if (!document.hidden) maybeOfferGame(); });
 (async () => {
   photosBanked = ('caches' in window) && (await cachedCount()) >= ALL_PHOTOS.length;
   /* Already through the gate on a previous visit but never set up. */
