@@ -666,9 +666,14 @@ input{font-family:inherit}
   background:linear-gradient(135deg,#FFD36E,#FFB443)}
 .sos-btn.call{background:linear-gradient(135deg,#7BE7A6,#3EE08F)}
 .sos-btn.msg{background:linear-gradient(135deg,#8FE9EC,#5CE1E6)}
+.sos-btn.emg{background:linear-gradient(135deg,#FF8A65,#FF3B5C);color:#fff;font-size:16px}
 .sos-btn[hidden]{display:none}
+.sos-group-t{margin:14px 0 8px;font-size:11px;font-weight:800;letter-spacing:.4px;color:#ffd9df;text-align:center}
+.sos-group-t:first-child{margin-top:0}
 .sos-note{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.07);
   border:1px solid rgba(255,255,255,.14);font-size:12.5px;line-height:1.65;color:#ffd9df}
+.sos-addnow{display:block;width:100%;margin-top:10px;min-height:48px;border-radius:13px;
+  background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714;font-family:var(--hand);font-size:17px}
 .sos-close{width:100%;margin-top:14px;min-height:50px;border-radius:14px;background:rgba(255,255,255,.10);
   border:1px solid rgba(255,255,255,.20);color:#fff;font-family:var(--hand);font-size:20px}
 .sos-setup{width:100%;margin-top:8px;min-height:44px;border-radius:12px;background:none;
@@ -2380,6 +2385,7 @@ document.addEventListener('click', e => {
   if (act === 'su-next')   { setupStep++; paintSetup(); return; }
   if (act === 'su-install') return void installApp();
   if (act === 'su-geo')    return setupGeo();
+  if (act === 'su-ice')    { sosSetup(); paintSetup(); return; }
   if (act === 'su-done')   return closeSetup();
   if (act === 'import')    return $('#albumFile').click();
   if (act === 'cover')     { const i = $('#shotFile'); i.value=''; i.dataset.day = '0'; i.click(); return; }
@@ -3109,12 +3115,13 @@ function paintSetup() {
   } else {
     const ice = iceContacts();
     box.innerHTML = '<h2>כפתור החירום</h2>' +
-      '<p>הכפתור האדום 🆘 שלמעלה מוצא אתכם ומתקשר הביתה. בואו נוודא שהוא מוכן.</p>' +
+      '<p>הכפתור האדום 🆘 שלמעלה מוצא אתכם ומתקשר הביתה — וגם למשטרה/אמבולנס/כבאים בוייטנאם בלי שום הגדרה. בואו נוודא שהוא הכי מוכן שאפשר.</p>' +
       '<div class="su-check' + (ice.length ? ' ok' : ' bad') + '">' +
-        '<b>' + (ice.length ? '✓ מספרי חירום נטענו' : '✗ אין מספרי חירום') + '</b>' +
+        '<b>' + (ice.length ? '✓ מספרי חירום משפחתיים נטענו' : '✗ אין עדיין מספרי חירום משפחתיים') + '</b>' +
         '<span>' + (ice.length ? ice.map(c => esc(c.name)).join(' · ')
-                               : 'פתחו את לינק החירום שההורים שלחו בוואטסאפ, ואז חזרו לכאן') + '</span>' +
+                               : 'אפשר להזין עכשיו ישירות, או לפתוח לינק חירום שהורה אחר שלח בוואטסאפ') + '</span>' +
       '</div>' +
+      '<button class="su-go" data-act="su-ice">' + (ice.length ? '✏️ לערוך מספרי חירום' : '➕ להזין מספר חירום עכשיו — 30 שניות') + '</button>' +
       '<div class="su-check" id="suGeo"><b>מיקום — עוד לא נבדק</b><span>לחצו כדי לאשר גישה למיקום</span></div>' +
       '<button class="su-go" data-act="su-geo">📍 לבדוק מיקום</button>' +
       '<button class="su-next" data-act="su-done">מוכנים, נכנסים!</button>';
@@ -3125,14 +3132,19 @@ function paintSetup() {
 function setupGeo() {
   const el = $('#suGeo');
   if (!navigator.geolocation) { el.className = 'su-check bad';
-    el.innerHTML = '<b>✗ אין גישה למיקום</b><span>הטלפון הזה לא תומך</span>'; return; }
+    el.innerHTML = '<b>✗ אין גישה למיקום</b><span>הטלפון הזה לא תומך — כפתור החירום עדיין יעבוד לחיוג, רק בלי מיקום</span>'; return; }
   el.innerHTML = '<b>מחפש…</b><span>אשרו את בקשת המיקום</span>';
-  navigator.geolocation.getCurrentPosition(
-    pos => { el.className = 'su-check ok';
-      el.innerHTML = '<b>✓ המיקום עובד</b><span>דיוק כ-' + Math.round(pos.coords.accuracy) + ' מטר</span>'; },
-    () => { el.className = 'su-check bad';
-      el.innerHTML = '<b>✗ המיקום חסום</b><span>אשרו "מיקום" לאתר הזה בהגדרות הדפדפן</span>'; },
-    { enableHighAccuracy:true, timeout:12000 });
+  try {
+    navigator.geolocation.getCurrentPosition(
+      pos => { el.className = 'su-check ok';
+        el.innerHTML = '<b>✓ המיקום עובד</b><span>דיוק כ-' + Math.round(pos.coords.accuracy) + ' מטר</span>'; },
+      () => { el.className = 'su-check bad';
+        el.innerHTML = '<b>✗ המיקום חסום</b><span>אשרו "מיקום" לאתר הזה בהגדרות הדפדפן — כפתור החירום עדיין יעבוד לחיוג בלי זה</span>'; },
+      { enableHighAccuracy:true, timeout:12000 });
+  } catch (e) {
+    el.className = 'su-check bad';
+    el.innerHTML = '<b>✗ המיקום חסום</b><span>כפתור החירום עדיין יעבוד לחיוג, רק בלי מיקום</span>';
+  }
 }
 
 /* ══ emergency ══════════════════════════════════════════════════════
@@ -3206,44 +3218,78 @@ function sosMessage() {
        + '(דיוק בערך ' + Math.round(acc) + ' מטר, השעה ' + t + ')';
 }
 
+/* Vietnam's own emergency numbers — cellular voice, no data, no setup.
+   This is the layer that must work even on a brand-new phone where a
+   parent never got around to adding family contacts, so it renders
+   unconditionally, every time, regardless of iceContacts(). Family
+   contacts (below) are the *better* option when they exist, never the
+   *only* one. */
+const VN_EMERGENCY = [
+  { emoji:'🚓', name:'משטרה (וייטנאם)', phone:'113' },
+  { emoji:'🚑', name:'אמבולנס (וייטנאם)', phone:'115' },
+  { emoji:'🚒', name:'כבאים (וייטנאם)', phone:'114' }
+];
+
 function renderSosActions() {
   const box = $('#sosActs');
-  const list = iceContacts();
-  if (!list.length) {
-    box.innerHTML = '<div class="sos-note">עוד לא הוגדרו מספרי חירום. '
-      + 'הורים — לחצו על ⚙︎ למטה והזינו מספר טלפון אחד לפחות.</div>';
-    return;
-  }
+  /* A contact with no dialable digits would render a dead "tel:+" link —
+     drop it here rather than let it look clickable and do nothing. */
+  const list = iceContacts().filter(c => c && c.name && cleanNum(c.phone));
   const msg = encodeURIComponent(sosMessage());
-  box.innerHTML = list.map(c => {
-    const n = cleanNum(c.phone);
-    return '<a class="sos-btn call" href="tel:+' + n + '">📞 להתקשר ל' + esc(c.name) + '</a>'
-         + '<a class="sos-btn msg" href="https://wa.me/' + n + '?text=' + msg + '" target="_blank" rel="noopener">💬 וואטסאפ ל' + esc(c.name) + ' עם המיקום</a>';
-  }).join('')
-  + '<a class="sos-btn" href="sms:+' + cleanNum(list[0].phone) + '?body=' + msg + '">✉️ SMS עם המיקום (עובד גם בלי אינטרנט)</a>';
+
+  const familyHTML = list.length
+    ? '<div class="sos-group-t">להתקשר למשפחה</div>' + list.map(c => {
+        const n = cleanNum(c.phone);
+        return '<a class="sos-btn call" href="tel:+' + n + '">📞 להתקשר ל' + esc(c.name) + '</a>'
+             + '<a class="sos-btn msg" href="https://wa.me/' + n + '?text=' + msg + '" target="_blank" rel="noopener">💬 וואטסאפ ל' + esc(c.name) + ' עם המיקום</a>';
+      }).join('')
+      + '<a class="sos-btn" href="sms:+' + cleanNum(list[0].phone) + '?body=' + msg + '">✉️ SMS עם המיקום (עובד גם בלי אינטרנט)</a>'
+    : '<div class="sos-note">עוד לא הוגדרו מספרי חירום משפחתיים בטלפון הזה.'
+      + '<button type="button" class="sos-addnow" data-act="sos-setup">➕ להוסיף עכשיו — 30 שניות</button></div>';
+
+  const emergencyHTML =
+    '<div class="sos-group-t">חירום רשמי בוייטנאם · תמיד עובד, גם בלי הגדרה</div>' +
+    VN_EMERGENCY.map(c => '<a class="sos-btn emg" href="tel:' + c.phone + '">' + c.emoji + ' ' + esc(c.name) + ' · ' + c.phone + '</a>').join('');
+
+  box.innerHTML = familyHTML + emergencyHTML;
 }
 
 function locate() {
-  const state = $('#sosState'), coord = $('#sosCoord'), meta = $('#sosMeta');
+  /* Named sosStateEl, not "state" — this used to shadow the app's global
+     `state` object for the rest of the function. Nothing here happened to
+     read the global, so it was latent rather than live, but it is exactly
+     the kind of landmine that turns into a real bug the next time someone
+     touches this code. Renamed defensively. */
+  const sosStateEl = $('#sosState'), coord = $('#sosCoord'), meta = $('#sosMeta');
   if (!navigator.geolocation) {
-    state.textContent = 'הטלפון הזה לא יודע למצוא מיקום';
+    sosStateEl.textContent = 'הטלפון הזה לא יודע למצוא מיקום';
+    meta.textContent = 'אפשר עדיין להתקשר — הכפתורים למטה עובדים בלי מיקום בכלל';
     renderSosActions();
     return;
   }
-  state.textContent = 'מחפש איפה אתם…';
-  sosWatch = navigator.geolocation.watchPosition(pos => {
-    lastFix = { lat:pos.coords.latitude.toFixed(5), lon:pos.coords.longitude.toFixed(5), acc:pos.coords.accuracy };
-    state.textContent = 'מצאתי אתכם ✓';
-    coord.textContent = lastFix.lat + ', ' + lastFix.lon;
-    meta.textContent = 'דיוק בערך ' + Math.round(lastFix.acc) + ' מטר · מתעדכן כל הזמן';
+  sosStateEl.textContent = 'מחפש איפה אתם…';
+  try {
+    sosWatch = navigator.geolocation.watchPosition(pos => {
+      lastFix = { lat:pos.coords.latitude.toFixed(5), lon:pos.coords.longitude.toFixed(5), acc:pos.coords.accuracy };
+      sosStateEl.textContent = 'מצאתי אתכם ✓';
+      coord.textContent = lastFix.lat + ', ' + lastFix.lon;
+      meta.textContent = 'דיוק בערך ' + Math.round(lastFix.acc) + ' מטר · מתעדכן כל הזמן';
+      renderSosActions();
+    }, err => {
+      sosStateEl.textContent = err.code === 1 ? 'המיקום חסום בהגדרות' : 'לא מצליח למצוא מיקום';
+      meta.textContent = err.code === 1
+        ? 'צריך לאשר "מיקום" לאתר הזה בהגדרות הדפדפן — אבל אפשר עדיין להתקשר, הכפתורים למטה עובדים'
+        : 'אפשר עדיין להתקשר — הכפתורים למטה עובדים';
+      renderSosActions();
+    }, { enableHighAccuracy:true, timeout:15000, maximumAge:10000 });
+  } catch (e) {
+    /* Some locked-down webviews throw synchronously instead of calling the
+       error callback. Either way, the call/text buttons below must not
+       depend on this having worked. */
+    sosStateEl.textContent = 'לא מצליח למצוא מיקום';
+    meta.textContent = 'אפשר עדיין להתקשר — הכפתורים למטה עובדים';
     renderSosActions();
-  }, err => {
-    state.textContent = err.code === 1 ? 'המיקום חסום בהגדרות' : 'לא מצליח למצוא מיקום';
-    meta.textContent = err.code === 1
-      ? 'צריך לאשר "מיקום" לאתר הזה בהגדרות הדפדפן'
-      : 'אפשר עדיין להתקשר — הכפתורים למטה עובדים';
-    renderSosActions();
-  }, { enableHighAccuracy:true, timeout:15000, maximumAge:10000 });
+  }
 }
 
 /* Tonight's hotel, in Latin script — something a child can hold up to a
@@ -3267,7 +3313,10 @@ function openSOS() {
 function closeSOS() {
   $('#sos').hidden = true;
   document.body.style.overflow = '';
-  if (sosWatch !== null) { navigator.geolocation.clearWatch(sosWatch); sosWatch = null; }
+  if (sosWatch !== null) {
+    try { navigator.geolocation.clearWatch(sosWatch); } catch (e) {}
+    sosWatch = null;
+  }
 }
 
 function sosSetup() {
