@@ -250,13 +250,122 @@ input{font-family:inherit}
 .tip{margin-top:11px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);font-size:12.5px;line-height:1.7;color:#a8b3d3}
 .tip b{color:#fff}
 
+/* ── section headers inside a tab, used by wallet + radar ───────────── */
+.sect{margin-top:26px}
+.sect-h{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
+.sect-h h2{margin:0;font-family:var(--hand);font-weight:400;font-size:21px;color:#fff}
+.sect-sub{font-size:12px;color:#8b95b8}
+
+/* ── bargain meter ────────────────────────────────────────────────── */
+.barg{position:relative;padding:16px 15px;border-radius:4px;background-color:var(--paper);background-image:repeating-linear-gradient(180deg,transparent 0,transparent 30px,rgba(31,78,121,.12) 30px,rgba(31,78,121,.12) 31px);box-shadow:0 8px 22px rgba(0,0,0,.4)}
+.barg-row{margin-top:10px}
+.barg-row:first-child{margin-top:0}
+.barg-row label{display:block;font-family:var(--script);font-weight:700;font-size:15px;color:var(--ink);margin-bottom:6px}
+.barg-slider{width:100%;accent-color:var(--stamp);height:26px}
+.barg-nums{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:#5c6470;margin-top:2px}
+.barg-input{width:100%;font-family:var(--mono);font-size:20px;font-weight:700;color:var(--ink);background:#fff;border:2px dashed rgba(31,78,121,.4);border-radius:10px;padding:9px 12px;direction:ltr;text-align:left;outline:none}
+.barg-verdict{margin-top:13px;padding:13px 14px;border-radius:14px;font-size:13.5px;line-height:1.6;font-weight:700;transition:all .2s var(--ease)}
+.barg-verdict.great{background:rgba(62,224,143,.16);color:#1f4e79;border:2px solid rgba(62,224,143,.55)}
+.barg-verdict.ok{background:rgba(255,180,67,.20);color:#5c3d05;border:2px solid rgba(255,180,67,.6)}
+.barg-verdict.bad{background:rgba(214,69,69,.16);color:#5c1414;border:2px solid rgba(214,69,69,.55)}
+.barg-emoji{font-size:20px;margin-left:6px}
+
+/* ── budget tracker ───────────────────────────────────────────────── */
+.bud{position:relative;padding:16px 15px;border-radius:4px;background-color:var(--paper);box-shadow:0 8px 22px rgba(0,0,0,.4)}
+.bud-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.bud-left b{font-family:var(--script);font-weight:700;font-size:22px;color:var(--ink);direction:ltr;display:block}
+.bud-left span{font-size:11px;color:#5c6470}
+.bud-total{display:flex;align-items:center;gap:5px}
+.bud-total input{width:96px;font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink);background:#fff;border:2px dashed rgba(31,78,121,.4);border-radius:8px;padding:6px 8px;direction:ltr;text-align:left;outline:none}
+.bud-bar{margin-top:11px;height:14px;border-radius:99px;background:rgba(31,78,121,.14);overflow:hidden}
+.bud-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#5CE1E6,#3EE08F);transition:width .3s ease}
+.bud-bar.over i{background:linear-gradient(90deg,#FF8A65,#D64545)}
+.bud-add{width:100%;margin-top:12px;min-height:46px;border-radius:12px;background:rgba(31,78,121,.09);border:2px dashed rgba(31,78,121,.32);color:var(--ink);font-family:var(--hand);font-size:16px}
+.tx-list{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.tx{position:relative;display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
+.tx-emoji{font-size:20px;flex:none}
+.tx-mid{flex:1;min-width:0}
+.tx-item{font-size:13px;font-weight:700;color:#fff;line-height:1.3}
+.tx-meta{font-size:10.5px;color:#8b95b8;margin-top:1px}
+.tx-amt{font-family:var(--mono);font-size:13px;font-weight:700;color:#FFC2D4;direction:ltr}
+.tx-del{flex:none;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.08);color:#8b95b8;font-size:12px;display:grid;place-items:center}
+.tx-empty{text-align:center;font-size:12.5px;color:#8b95b8;padding:14px 0}
+
+/* ── local radar ──────────────────────────────────────────────────── */
+.rad-cats{display:flex;gap:7px;flex-wrap:wrap}
+.rad-cat{display:flex;align-items:center;gap:5px;padding:8px 13px;border-radius:999px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.10);color:#c3ccea;font-size:12.5px;font-weight:700;min-height:38px}
+.rad-cat .n{display:inline-grid;place-items:center;min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:rgba(255,255,255,.14);font-size:9.5px}
+.rad-cat.on{background:linear-gradient(135deg,#FF5A8C,#FFB443);border-color:transparent;color:#2b0714}
+.rad-cat.on .n{background:rgba(0,0,0,.18);color:#2b0714}
+.rad-toolbar{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.rad-mini{padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);color:#8b97bd;font-size:11.5px;font-weight:700;min-height:34px}
+.rad-mini.on{background:rgba(62,224,143,.16);border-color:rgba(62,224,143,.5);color:#8df3bd}
+.rad-geo{margin-top:8px;font-size:11px;color:#8b95b8;text-align:center}
+.rad-list{display:flex;flex-direction:column;gap:11px;margin-top:14px}
+.spot{position:relative;background:var(--paper);border-radius:14px;padding:14px;box-shadow:0 6px 16px rgba(0,0,0,.38)}
+.spot-h{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.spot-name{font-family:var(--script);font-weight:700;font-size:19px;color:var(--ink);line-height:1.15}
+.spot-cat{font-size:11px;color:#8a6a10;margin-top:1px}
+.spot-dist{flex:none;font-family:var(--mono);font-size:11.5px;font-weight:700;color:#fff;background:var(--ink);padding:4px 9px;border-radius:8px;white-space:nowrap}
+.spot-desc{font-size:13px;line-height:1.55;color:#26303f;margin-top:8px}
+.spot-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.spot-tag{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;background:rgba(31,78,121,.09);color:var(--ink)}
+.spot-meta{display:flex;align-items:center;gap:10px;margin-top:9px;font-size:12px;color:#5c6470}
+.spot-price{letter-spacing:1px;color:var(--stamp);font-weight:700}
+.spot-open{font-weight:700}
+.spot-open.yes{color:#1f9d5c}
+.spot-open.no{color:#c1440e}
+.spot-tip{position:relative;margin-top:10px;padding:11px 12px;background:#FFE9A8;box-shadow:0 4px 12px rgba(0,0,0,.24);transform:rotate(-.6deg);border-radius:2px}
+.spot-tip-k{font-size:9px;font-weight:800;letter-spacing:1.2px;color:#8a6a10}
+.spot-tip-v{font-family:var(--script);font-weight:700;font-size:15.5px;color:#4a3608;line-height:1.25;margin-top:2px}
+.spot-go{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:11px;min-height:44px;border-radius:12px;background:rgba(31,78,121,.09);border:2px solid rgba(31,78,121,.20);color:var(--ink);font-family:var(--hand);font-size:16px}
+.rad-empty{text-align:center;font-size:13px;color:#8b95b8;padding:26px 0;line-height:1.6}
+
+/* ── persistent mini music player (docked above the tab bar) ────────── */
+.musicbar[hidden]{display:none}
+.musicbar{display:flex;align-items:center;gap:9px;padding:8px 12px;background:linear-gradient(90deg,var(--mb1,#7A5CFF),var(--mb2,#FF5A8C));border-top:1px solid rgba(255,255,255,.18)}
+.mb-art{flex:none;width:34px;height:34px;border-radius:9px;background:rgba(0,0,0,.18);display:grid;place-items:center;font-size:17px}
+.mb-mid{flex:1;min-width:0;color:#fff}
+.mb-title{font-size:12px;font-weight:800;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mb-sub{font-size:10px;opacity:.85;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mb-track{margin-top:4px;height:3px;border-radius:99px;background:rgba(255,255,255,.28);overflow:hidden}
+.mb-track i{display:block;height:100%;background:#fff;transition:width .25s linear}
+.mb-btns{display:flex;align-items:center;gap:2px;flex:none}
+.mb-btn{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:14px;background:rgba(255,255,255,.14)}
+.mb-btn.play{width:36px;height:36px;background:rgba(255,255,255,.94);color:#2b0714;font-size:15px}
+
+/* ── music hub tab ────────────────────────────────────────────────── */
+.mode-grid{display:flex;flex-direction:column;gap:11px}
+.mode-card{position:relative;overflow:hidden;border-radius:16px;padding:16px 15px;box-shadow:0 8px 22px rgba(0,0,0,.4);transition:all .2s var(--ease)}
+.mode-card.on{outline:3px solid #fff;outline-offset:-3px}
+.mode-h{display:flex;align-items:center;gap:10px}
+.mode-emoji{font-size:26px}
+.mode-name{font-family:var(--hand);font-weight:400;font-size:20px;color:#fff;line-height:1.15}
+.mode-desc{font-size:12px;color:rgba(255,255,255,.85);margin-top:2px}
+.mode-pick{margin-right:auto;flex:none;font-size:11px;font-weight:800;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.2);color:#fff}
+.mode-card.on .mode-pick{background:#fff;color:#2b0714}
+.player{margin-top:16px;position:relative;padding:18px 16px;border-radius:18px;text-align:center;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.45)}
+.player-art{font-size:44px}
+.player-track{font-family:var(--script);font-weight:700;font-size:22px;margin-top:6px;line-height:1.2}
+.player-artist{font-size:12px;opacity:.85;margin-top:2px}
+.player-track-bar{margin-top:14px;height:5px;border-radius:99px;background:rgba(255,255,255,.25);overflow:hidden}
+.player-track-bar i{display:block;height:100%;background:#fff;transition:width .25s linear}
+.player-time{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;opacity:.8;margin-top:5px}
+.player-ctrl{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px}
+.pc-btn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:16px;display:grid;place-items:center}
+.pc-btn.play{width:58px;height:58px;background:#fff;color:#2b0714;font-size:22px}
+.vol-row{display:flex;align-items:center;gap:9px;margin-top:16px}
+.vol-row span{font-size:15px}
+.vol-row input{flex:1;accent-color:#fff}
+
 /* ── bottom nav ───────────────────────────────────────────────────── */
-.nav{position:sticky;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(6,1fr);gap:3px;padding:8px 6px 12px;background:linear-gradient(180deg,rgba(15,20,40,.70),rgba(13,16,32,.99));backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.08)}
-.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;border-radius:14px;transition:all .2s var(--ease);background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.09);color:#8b97bd}
+.dock{position:sticky;bottom:0;z-index:30}
+.nav{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;padding:8px 4px 12px;background:linear-gradient(180deg,rgba(15,20,40,.70),rgba(13,16,32,.99));backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.08)}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:52px;border-radius:12px;transition:all .2s var(--ease);background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.09);color:#8b97bd;padding:0 1px}
 .tab.on{background:var(--paper);color:var(--ink);border:2px solid #fff;transform:rotate(-2deg) translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.4);font-weight:800}
-.tab-icon{font-size:19px;line-height:1}
-.tab-label{font-size:9.5px;font-weight:800;line-height:1;white-space:nowrap}
-@media (min-width:400px){.tab-label{font-size:10.5px}}
+.tab-icon{font-size:16px;line-height:1}
+.tab-label{font-size:8px;font-weight:800;line-height:1;white-space:nowrap}
+@media (min-width:400px){.tab-label{font-size:9px}}
 
 /* ── celebration burst ────────────────────────────────────────────── */
 .burst{position:absolute;inset:0;z-index:60;pointer-events:none;display:grid;place-items:center}
@@ -678,6 +787,23 @@ input{font-family:inherit}
 .sos-field input{width:100%;font-family:var(--mono);font-size:17px;font-weight:700;color:var(--ink);
   background:#fff;border:2px solid rgba(31,78,121,.3);border-radius:10px;padding:10px;direction:ltr;text-align:left;outline:none}
 
+/* ── expense modal ────────────────────────────────────────────────── */
+.xmodal[hidden]{display:none}
+.xmodal{position:fixed;inset:0;z-index:255;display:grid;place-items:center;padding:20px 16px;
+  background:radial-gradient(120% 45% at 50% 0%,rgba(122,92,255,.28),transparent 62%),rgba(6,8,18,.86);backdrop-filter:blur(3px)}
+.xm-card{width:100%;max-width:400px;background:var(--paper);border-radius:18px;padding:20px 18px;box-shadow:0 20px 50px rgba(0,0,0,.55);animation:slidein .22s var(--ease)}
+.xm-card h2{margin:0 0 14px;font-family:var(--hand);font-weight:400;font-size:24px;color:var(--ink);text-align:center}
+.xm-label{display:block;font-family:var(--script);font-weight:700;font-size:15px;color:var(--ink);margin:12px 0 6px}
+.xm-input{width:100%;font-family:var(--mono);font-size:16px;font-weight:700;color:var(--ink);
+  background:#fff;border:2px dashed rgba(31,78,121,.4);border-radius:10px;padding:10px 12px;outline:none}
+.xm-amt{direction:ltr;text-align:left}
+.xm-cats{display:flex;gap:6px;flex-wrap:wrap}
+.xm-cat{padding:8px 12px;border-radius:999px;background:#fff;border:2px solid rgba(31,78,121,.18);font-size:12.5px;font-weight:700;color:var(--ink);min-height:38px}
+.xm-cat.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.xm-btns{display:flex;gap:9px;margin-top:18px}
+.xm-cancel{flex:1;min-height:46px;border-radius:12px;background:rgba(31,78,121,.08);color:var(--ink);font-weight:700;font-size:14px}
+.xm-save{flex:1;min-height:46px;border-radius:12px;background:linear-gradient(135deg,#FF5A8C,#FFB443);color:#2b0714;font-family:var(--hand);font-size:18px}
+
 /* ── large screens ────────────────────────────────────────────────────
    The app stays a single mobile column by design. On a desktop it gets a
    richer backdrop and a little more width, so it reads as a deliberate
@@ -842,6 +968,22 @@ input{font-family:inherit}
   </div>
 </div>
 
+<div class="xmodal" id="expModal" hidden>
+  <form class="xm-card" id="expForm">
+    <h2>הוצאה חדשה 🎒</h2>
+    <label class="xm-label" for="expItem">על מה שילמתם?</label>
+    <input class="xm-input" id="expItem" type="text" placeholder="לדוגמה: בון מי" required maxlength="40">
+    <label class="xm-label" for="expAmt">כמה דונג?</label>
+    <input class="xm-input xm-amt" id="expAmt" type="tel" inputmode="numeric" placeholder="25000" required>
+    <label class="xm-label">קטגוריה</label>
+    <div class="xm-cats" id="expCats"></div>
+    <div class="xm-btns">
+      <button type="button" class="xm-cancel" data-act="exp-close">ביטול</button>
+      <button type="submit" class="xm-save">לשמור</button>
+    </div>
+  </form>
+</div>
+
 <div class="gate" id="gate">
   <div class="gate-card">
     <div class="gate-cover" id="gateCover" hidden></div>
@@ -918,7 +1060,10 @@ input{font-family:inherit}
 
     <main class="main" id="main"></main>
 
-    <nav class="nav" id="nav"></nav>
+    <div class="dock">
+      <div class="musicbar" id="musicBar" hidden></div>
+      <nav class="nav" id="nav"></nav>
+    </div>
     <div id="burstHost"></div>
     <input type="file" id="shotFile" accept="image/*" capture="environment" hidden>
     <input type="file" id="albumFile" accept="application/json,.json" hidden>
@@ -1408,6 +1553,8 @@ const TABS = [
   { id:'days', icon:'📅', label:'יומן' }, { id:'hunt', icon:'🎮', label:'משחקים' },
   { id:'talk', icon:'🗣️', label:'מילים' }, { id:'badges', icon:'🏆', label:'הישגים' },
   { id:'money', icon:'🍦', label:'גלידות' },
+  { id:'radar', icon:'🧭', label:'סקר סודי' },
+  { id:'music', icon:'🎧', label:'פסקול' },
   { id:'album', icon:'📸', label:'האלבום' }
 ];
 
@@ -1431,8 +1578,158 @@ const RESULTS = [
   { emoji:'🍜', label:'קערות פו (50,000₫)',   per:50000 }
 ];
 
+/* ══ local radar ════════════════════════════════════════════════════
+   Seed data only — real coordinates for real neighborhoods, but the spot
+   itself is a realistic example, not a verified listing. Distance is
+   computed live from the phone's GPS to `coords` when location is
+   granted; `distanceMeters` is the fallback shown before that (and in
+   any browser without geolocation). */
+const RADAR_CATS = [
+  { id:'food',    emoji:'🍜', label:'אוכל ושתייה' },
+  { id:'thrift',  emoji:'👟', label:'יד שנייה וסניקרס' },
+  { id:'views',   emoji:'🌅', label:'נוף ושקיעה' },
+  { id:'culture', emoji:'🎨', label:'אמנות ותרבות' }
+];
+
+const RADAR_SPOTS = [
+  { id:'hn-egg', name:'קפה ג׳יאנג — קפה הביצה המקורי', category:'food', region:'הנוי', distanceMeters:320,
+    coords:{lat:21.0335,lng:105.8542}, rating:4.7, priceLevel:1, tags:['#HiddenGem','#Viral'],
+    description:'בית הקפה שבו הומצא קפה הביצה ב-1946, במעלה מדרגות צרות מעל חנות אופנוע.',
+    teenTip:'תזמינו "cà phê trứng nóng" ותשבו למעלה — הכיסאות הקטנים והנוף לרחוב הם החוויה.',
+    mapsQuery:'Cafe Giang Hanoi', openHours:{ from:'07:00', to:'22:00' } },
+  { id:'hn-boba', name:'פינת בואבה בשוק הלילה', category:'food', region:'הנוי', distanceMeters:480,
+    coords:{lat:21.0345,lng:105.8500}, rating:4.5, priceLevel:1, tags:['#Viral','#SweetTooth'],
+    description:'דוכן קטן בלי שילוט באנגלית, עם תור של מקומיים בלבד.',
+    teenTip:'תבקשו "trân châu đường đen" — בואבה בסוכר חום שרוף, הכי טוב שיש.',
+    mapsQuery:'Hanoi Old Quarter night market', openHours:{ from:'18:00', to:'23:30' } },
+  { id:'hn-thrift', name:'שוק הבגדים היד-שנייה של חאם לונג', category:'thrift', region:'הנוי', distanceMeters:900,
+    coords:{lat:21.0270,lng:105.8460}, rating:4.3, priceLevel:1, tags:['#ThriftFind','#HiddenGem'],
+    description:'ערימות של בגדי יבוא יד שנייה מיפן וקוריאה, וזוגות סניקרס נדירים בזול.',
+    teenTip:'תמיד אפשר להוריד עוד 30% מהמחיר הראשוני — אל תשלמו את הסכום שאומרים קודם.',
+    mapsQuery:'Cho Hom Hanoi secondhand clothes', openHours:{ from:'08:00', to:'19:00' } },
+  { id:'hn-view', name:'גג בית קפה מול אגם הואן קיאם', category:'views', region:'הנוי', distanceMeters:650,
+    coords:{lat:21.0287,lng:105.8524}, rating:4.6, priceLevel:2, tags:['#SunsetSpot'],
+    description:'בית קפה בקומה חמישית עם מרפסת פתוחה מול האגם, בלי תור תיירים.',
+    teenTip:'תגיעו קצת לפני השקיעה ותזמינו שוקו קר — השולחנות ליד המעקה הכי מבוקשים.',
+    mapsQuery:'Hoan Kiem Lake rooftop cafe', openHours:{ from:'07:00', to:'23:00' } },
+  { id:'hn-art', name:'סמטת קיר הקרמיקה', category:'culture', region:'הנוי', distanceMeters:1400,
+    coords:{lat:21.0410,lng:105.8580}, rating:4.4, priceLevel:1, tags:['#ArtWalk'],
+    description:'קיר פסיפס קרמיקה שאורכו כמעט 4 קילומטרים, מספר את כל ההיסטוריה של וייטנאם.',
+    teenTip:'תחפשו את הקטע עם ציורי הילדים — כל אריח שם צויר בפועל על ידי תלמיד וייטנאמי.',
+    mapsQuery:'Hanoi Ceramic Mosaic Mural', openHours:{ from:'00:00', to:'23:59' } },
+  { id:'sp-food', name:'דוכן צלי חזיר של שבט הדזאי', category:'food', region:'סאפה', distanceMeters:250,
+    coords:{lat:22.3400,lng:103.8410}, rating:4.6, priceLevel:1, tags:['#StreetEats'],
+    description:'צלייה על אש פתוחה בצד הכביש, בלי תפריט — פשוט מצביעים על מה שרוצים.',
+    teenTip:'תבקשו את הבשר עם עלי לימון כבושים — זה מה שהמקומיים אוכלים, לא מה שנותנים לתיירים.',
+    mapsQuery:'Sapa grilled pork stalls', openHours:{ from:'15:00', to:'22:00' } },
+  { id:'sp-thrift', name:'שוק האריגים של שבט המונג השחור', category:'thrift', region:'סאפה', distanceMeters:400,
+    coords:{lat:22.3372,lng:103.8420}, rating:4.5, priceLevel:2, tags:['#HandMade','#HiddenGem'],
+    description:'רקמות אינדיגו יד עם דוגמאות ייחודיות לכל משפחה — לא מיוצר בהמוני.',
+    teenTip:'שאלו את המוכרת כמה זמן לקח לרקום — ברוב המקרים התשובה תפתיע אתכם.',
+    mapsQuery:'Sapa Black Hmong textile market', openHours:{ from:'08:00', to:'18:00' } },
+  { id:'sp-view', name:'נקודת התצפית הנסתרת מעל עמק מואנג הואה', category:'views', region:'סאפה', distanceMeters:2100,
+    coords:{lat:22.3180,lng:103.8550}, rating:4.9, priceLevel:1, tags:['#SunsetSpot','#OffTheGrid'],
+    description:'לא מסומנת בגוגל מפות, מגיעים דרך שביל צר בין שדות אורז.',
+    teenTip:'הזמן הכי טוב הוא שעה לפני השקיעה, כשהערפל מתחיל לרדת לתוך העמק.',
+    mapsQuery:'Muong Hoa valley viewpoint Sapa', openHours:{ from:'05:30', to:'19:00' } },
+  { id:'sp-culture', name:'בית התה של הזקנה מכפר טא פין', category:'culture', region:'סאפה', distanceMeters:1800,
+    coords:{lat:22.3050,lng:103.8700}, rating:4.7, priceLevel:1, tags:['#LocalStory'],
+    description:'בית עץ פרטי שנפתח לאורחים, מספרים בו סיפורים על החיים בהרים ליד האח.',
+    teenTip:'תשאלו על הכובע המסורתי שהיא לובשת — לכל צבע יש משמעות שונה בשבט.',
+    mapsQuery:'Ta Phin village Sapa', openHours:{ from:'09:00', to:'17:00' } },
+  { id:'hl-food', name:'דוכן פירות הים על המזח בקאט בא', category:'food', region:'הא לונג', distanceMeters:300,
+    coords:{lat:20.7280,lng:107.0490}, rating:4.5, priceLevel:2, tags:['#Fresh','#EarlyBird'],
+    description:'הדייגים מוכרים ישר מהסירה בבוקר, לפני שהמסעדות קונות את הכול.',
+    teenTip:'תגיעו עד 7 בבוקר — הצדפות והחסילונים הכי טריים נגמרים מהר.',
+    mapsQuery:'Cat Ba fishing pier seafood', openHours:{ from:'06:00', to:'09:00' } },
+  { id:'hl-view', name:'מצוק התצפית של קאן טי', category:'views', region:'הא לונג', distanceMeters:1200,
+    coords:{lat:20.7220,lng:107.0350}, rating:4.8, priceLevel:1, tags:['#OffTheGrid','#SunsetSpot'],
+    description:'טיפוס קצר של 15 דקות למצוק שממנו רואים את כל המפרץ בלי אף סירת תיירים בפריים.',
+    teenTip:'עלו לשם בכביש הקטן שיוצא מהעיר, לא עם הסיור המאורגן — זה חינם וריק מאנשים.',
+    mapsQuery:'Cat Ba viewpoint hike', openHours:{ from:'06:00', to:'19:00' } },
+  { id:'nb-food', name:'ביתן האטריות של דודה היין', category:'food', region:'נין בין', distanceMeters:550,
+    coords:{lat:20.2500,lng:105.9700}, rating:4.6, priceLevel:1, tags:['#StreetEats','#HiddenGem'],
+    description:'שולחן פלסטיק קטן בצד הכביש עם הפו הכי טובה באזור, בלי שם על השלט.',
+    teenTip:'תוסיפו את פלחי הליים והצ׳ילי הירוק שעל השולחן — זה מה שהופך את זה למיוחד.',
+    mapsQuery:'Ninh Binh pho stall Tam Coc', openHours:{ from:'06:30', to:'13:00' } },
+  { id:'nb-culture', name:'פגודה נטושה על הגבעה', category:'culture', region:'נין בין', distanceMeters:1600,
+    coords:{lat:20.2200,lng:105.9300}, rating:4.4, priceLevel:1, tags:['#OffTheGrid'],
+    description:'מקדש בודהיסטי בן מאות שנים שכמעט אף תייר לא מגיע אליו.',
+    teenTip:'אין כניסה בתשלום ואין תור — רק מורידים נעליים לפני שנכנסים לאולם הפנימי.',
+    mapsQuery:'Ninh Binh abandoned pagoda hill', openHours:{ from:'06:00', to:'18:00' } },
+  { id:'ha-food', name:'דוכן קאו לאו של דוד באי', category:'food', region:'הוי אן', distanceMeters:380,
+    coords:{lat:15.8770,lng:108.3260}, rating:4.7, priceLevel:1, tags:['#Viral','#StreetEats'],
+    description:'המרק היחיד בעיר שמכינים עם מים מבאר ספציפית אחת — כך אומרים המקומיים.',
+    teenTip:'תבקשו תוספת של שומן חזיר צלוי פריך — זה הסוד שהתפריט לא מזכיר.',
+    mapsQuery:'Hoi An cao lau stall', openHours:{ from:'11:00', to:'20:00' } },
+  { id:'ha-thrift', name:'סטודיו הסניקרס בהתאמה אישית', category:'thrift', region:'הוי אן', distanceMeters:700,
+    coords:{lat:15.8790,lng:108.3350}, rating:4.5, priceLevel:2, tags:['#CustomMade','#HiddenGem'],
+    description:'סטודיו קטן שצובע מחדש נעלי ספורט ישנות בעיצוב אישי תוך יום אחד.',
+    teenTip:'תביאו זוג נעליים ישנות משלכם — לצייר עליהן יוצא הרבה יותר זול מלקנות זוג חדש.',
+    mapsQuery:'Hoi An custom sneaker painting studio', openHours:{ from:'09:00', to:'21:00' } },
+  { id:'ha-view', name:'גשר הדייגים הנטוש בשקיעה', category:'views', region:'הוי אן', distanceMeters:1100,
+    coords:{lat:15.8850,lng:108.3450}, rating:4.8, priceLevel:1, tags:['#SunsetSpot','#OffTheGrid'],
+    description:'גשר עץ ישן שדייגים מקומיים עדיין משתמשים בו, עם נוף פתוח לנהר תו בון.',
+    teenTip:'תגיעו רגע לפני שהפנסים בעיר העתיקה נדלקים — האור על הנהר משתנה תוך דקות.',
+    mapsQuery:'Thu Bon river fishing bridge Hoi An', openHours:{ from:'05:30', to:'19:30' } },
+  { id:'ha-culture', name:'בית המלאכה של צובעי הפנסים', category:'culture', region:'הוי אן', distanceMeters:500,
+    coords:{lat:15.8810,lng:108.3300}, rating:4.6, priceLevel:2, tags:['#HandMade','#LocalStory'],
+    description:'משפחה שמייצרת פנסי משי ביד כבר ארבעה דורות, בסמטה מאחורי השוק הראשי.',
+    teenTip:'אפשר לשבת ולנסות לקפל פנס אחד בעצמכם — הם שמחים להראות איך עושים את זה.',
+    mapsQuery:'Hoi An lantern workshop family', openHours:{ from:'08:00', to:'20:00' } }
+];
+
+/* ══ smart wallet ═══════════════════════════════════════════════════ */
+const EXP_CATS = [
+  { id:'food',       emoji:'🍜', label:'אוכל' },
+  { id:'shopping',   emoji:'🛍️', label:'קניות' },
+  { id:'transport',  emoji:'🛵', label:'תחבורה' },
+  { id:'activities', emoji:'🎟️', label:'פעילויות' },
+  { id:'other',      emoji:'🧾', label:'אחר' }
+];
+
+/* ══ trip soundtrack ════════════════════════════════════════════════
+   No licensed tracks are bundled — this is an offline-first zero-server
+   app (see README), so "playback" is a small generative Web Audio engine
+   riffing on the same oscillator helpers as the header's music button.
+   Each mode is a distinct scale/tempo/timbre; each "track" just reseeds
+   the pattern, so Next/Previous audibly changes what plays. */
+const MUSIC_MODES = [
+  { id:'road', emoji:'🚐', name:'אנרגיית כביש', desc:'שירים עליזים לנסיעה המשפחתית', c1:'#FF5A8C', c2:'#FFB443',
+    step:420, wave:'triangle', bass:true, scale:[523.25,587.33,659.25,783.99,880,1046.5],
+    tracks:[
+      { title:'מבצע קטנוע', artist:'להקת הכביש הראשי', dur:52, pattern:[0,2,4,5,4,2,1,3] },
+      { title:'ספירה לאחור להמראה', artist:'להקת הכביש הראשי', dur:48, pattern:[0,4,2,5,3,1,4,2] },
+      { title:'אלף הרים בחלון', artist:'להקת הכביש הראשי', dur:55, pattern:[2,4,5,4,2,0,2,4] }
+    ] },
+  { id:'culture', emoji:'🏮', name:'ווייב מקומי', desc:'צלילים בהשראת המוזיקה המסורתית של האזור', c1:'#3EE08F', c2:'#5CE1E6',
+    step:640, wave:'sine', bass:false, scale:[440,493.88,587.33,659.25,783.99,880],
+    tracks:[
+      { title:'שוק הלילה', artist:'תזמורת הרחוב הישן', dur:60, pattern:[0,3,2,4,1,3,0,5] },
+      { title:'תה בין ההרים', artist:'תזמורת הרחוב הישן', dur:58, pattern:[1,3,4,2,0,3,1,4] },
+      { title:'פעמון המקדש', artist:'תזמורת הרחוב הישן', dur:64, pattern:[0,2,0,4,2,5,3,2] }
+    ] },
+  { id:'chill', emoji:'🌙', name:'צ׳יל ולילה', desc:'לו-פיי רגוע לזמן מנוחה בין הרפתקאות', c1:'#7A5CFF', c2:'#5CE1E6',
+    step:1250, wave:'sine', bass:true, scale:[349.23,392,440,466.16,523.25,587.33],
+    tracks:[
+      { title:'אחרי השקיעה', artist:'לילה טוב וייטנאם', dur:75, pattern:[0,2,3,2,4,3,1,0] },
+      { title:'מרפסת המלון', artist:'לילה טוב וייטנאם', dur:70, pattern:[1,3,1,4,2,3,0,2] },
+      { title:'ערפל על ההרים', artist:'לילה טוב וייטנאם', dur:80, pattern:[0,1,3,2,3,4,2,1] }
+    ] }
+];
+
 /* ══ state ══════════════════════════════════════════════════════════ */
-const state = { tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, missions:[], quizBest:0, quizPlays:0, vibe:'teen', vnd:'50000', slide:{}, music:false, speaking:null };
+const state = {
+  tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, missions:[], quizBest:0, quizPlays:0,
+  vibe:'teen', vnd:'50000', slide:{}, speaking:null,
+  radarCat:'all', radarBudget:0, radarOpenOnly:false,
+  bargAsk:'200000', bargTarget:'120000',
+  budget:{ total:1000000, transactions:[
+    { id:1, item:'בון מי לארוחת בוקר', amount:25000, category:'food', day:1 },
+    { id:2, item:'מחזיק מפתחות מהשוק', amount:40000, category:'shopping', day:1 }
+  ] },
+  audioMode:'road', audioTrack:0, audioPlaying:false, audioVolume:0.6, audioEngaged:false
+};
 
 function load() {
   try {
@@ -1450,13 +1747,23 @@ function load() {
     state.vibe  = s.vibe  || 'teen';
     state.tab   = s.tab   || 'days';
     state.open  = s.open ?? 1;
+    state.radarCat     = s.radarCat     || 'all';
+    state.radarBudget  = s.radarBudget  || 0;
+    state.radarOpenOnly = !!s.radarOpenOnly;
+    state.budget = (s.budget && Array.isArray(s.budget.transactions))
+      ? s.budget : state.budget;
+    state.audioMode   = MUSIC_MODES.some(m => m.id === s.audioMode) ? s.audioMode : 'road';
+    state.audioVolume = (typeof s.audioVolume === 'number') ? s.audioVolume : 0.6;
+    state.audioEngaged = !!s.audioEngaged;
   } catch (e) {}
 }
 function persist() {
   try {
     localStorage.setItem(KEY, JSON.stringify({
       found:state.found, done:state.done, said:state.said, eaten:state.eaten, answers:state.answers, missions:state.missions, quizBest:state.quizBest, quizPlays:state.quizPlays,
-      vibe:state.vibe, tab:state.tab, open:state.open
+      vibe:state.vibe, tab:state.tab, open:state.open,
+      radarCat:state.radarCat, radarBudget:state.radarBudget, radarOpenOnly:state.radarOpenOnly,
+      budget:state.budget, audioMode:state.audioMode, audioVolume:state.audioVolume, audioEngaged:state.audioEngaged
     }));
   } catch (e) {}
 }
@@ -1484,6 +1791,7 @@ const $  = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 const cssUrl = u => "url('" + String(u).replace(/'/g, "%27") + "')";
+const vndFmt = n => Number(n || 0).toLocaleString('en-US');
 
 /* ══ audio ══════════════════════════════════════════════════════════ */
 let audioCtx = null, musicTimer = null, burstTimer = null, speakTimer = null;
@@ -1506,29 +1814,114 @@ function note(f, t, dur, vol, type) {
   o.connect(g); g.connect(c.destination);
   o.start(t); o.stop(t + dur + 0.05);
 }
-function toggleMusic() {
-  const btn = $('#musicBtn');
-  if (state.music) {
-    clearInterval(musicTimer); musicTimer = null;
-    state.music = false;
-    btn.classList.remove('on'); btn.textContent = '🔇';
-    return;
-  }
+/* ══ trip soundtrack engine ═════════════════════════════════════════
+   Generative Web Audio "radio" — three modes, each its own scale/tempo/
+   timbre; each track just reseeds the note pattern so Next/Previous
+   audibly changes what plays. No files to fetch, so it works offline
+   like the rest of the app. `musicTimer` schedules the notes (same
+   helper the old single riff used); `audioProgress` just drives the
+   on-screen clock and rolls to the next track when a "track" ends. */
+let audioProgress = null, audioStep = 0, audioElapsed = 0;
+
+const currentMode  = () => MUSIC_MODES.find(m => m.id === state.audioMode) || MUSIC_MODES[0];
+const currentTrack = () => { const m = currentMode(); return m.tracks[state.audioTrack % m.tracks.length]; };
+
+function audioTick() {
   const c = ac(); if (!c) return;
-  const scale = [523.25, 587.33, 659.25, 783.99, 880, 1046.5];
-  const pattern = [0, 2, 4, 3, 1, 5, 4, 2];
-  let step = 0;
-  const tick = () => {
-    const t = ac().currentTime;
-    const f = scale[pattern[step % pattern.length]];
-    note(f, t, 0.9, 0.07, 'sine');
-    note(f / 2, t, 1.1, 0.035, 'triangle');
-    step++;
-  };
-  tick();
-  musicTimer = setInterval(tick, 620);
-  state.music = true;
-  btn.classList.add('on'); btn.textContent = '🎵';
+  const mode = currentMode(), track = currentTrack(), t = c.currentTime;
+  const f = mode.scale[track.pattern[audioStep % track.pattern.length]];
+  note(f, t, mode.step / 1000 * 0.92, 0.065 * state.audioVolume, mode.wave);
+  if (mode.bass) note(f / 2, t, mode.step / 1000 * 1.3, 0.032 * state.audioVolume, 'triangle');
+  audioStep++;
+}
+
+function startEngine() {
+  clearInterval(musicTimer); clearInterval(audioProgress);
+  const c = ac(); if (!c) return;
+  audioTick();
+  musicTimer = setInterval(audioTick, currentMode().step);
+  audioProgress = setInterval(() => {
+    audioElapsed += 0.25;
+    if (audioElapsed >= currentTrack().dur) { audioElapsed = 0; changeTrack(1); return; }
+    paintPlayerProgress();
+  }, 250);
+}
+
+function stopEngine() {
+  clearInterval(musicTimer); musicTimer = null;
+  clearInterval(audioProgress); audioProgress = null;
+}
+
+function toggleMusic() {
+  state.audioPlaying = !state.audioPlaying;
+  state.audioEngaged = true;
+  if (state.audioPlaying) startEngine(); else stopEngine();
+  persist();
+  renderMusicUI();
+}
+
+function setAudioMode(id) {
+  state.audioEngaged = true;
+  if (id !== state.audioMode) { state.audioMode = id; state.audioTrack = 0; audioStep = 0; audioElapsed = 0; }
+  if (state.audioPlaying) startEngine();
+  persist();
+  renderMusicUI();
+}
+
+function changeTrack(dir) {
+  state.audioEngaged = true;
+  const n = currentMode().tracks.length;
+  state.audioTrack = (state.audioTrack + dir + n) % n;
+  audioStep = 0; audioElapsed = 0;
+  if (state.audioPlaying) startEngine();
+  persist();
+  renderMusicUI();
+}
+
+function setAudioVolume(v) {
+  state.audioVolume = Math.max(0, Math.min(1, +v));
+  persist();
+}
+
+/* Full re-render of anything showing player state: the header button,
+   the persistent dock bar, and — only when it is the visible tab — the
+   Music Hub page. Called on every play/pause/mode/track change. */
+function renderMusicUI() {
+  const btn = $('#musicBtn');
+  if (btn) { btn.classList.toggle('on', state.audioPlaying); btn.textContent = state.audioPlaying ? '🎵' : '🔇'; }
+  renderMusicBar();
+  if (state.tab === 'music') renderMain();
+}
+
+/* Cheap per-tick update for the progress bars, so the 4×/second clock
+   doesn't re-render the whole page (same reasoning as syncReel()). */
+function paintPlayerProgress() {
+  const track = currentTrack();
+  const pct = Math.min(100, audioElapsed / track.dur * 100);
+  const mm = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  $$('.mb-track i, .player-track-bar i').forEach(el => { el.style.width = pct + '%'; });
+  const time = $('.player-time');
+  if (time) time.innerHTML = '<span>' + mm(audioElapsed) + '</span><span>' + mm(track.dur) + '</span>';
+}
+
+function renderMusicBar() {
+  const el = $('#musicBar');
+  if (!el) return;
+  if (!state.audioEngaged) { el.hidden = true; return; }
+  const mode = currentMode(), track = currentTrack();
+  el.hidden = false;
+  el.style.setProperty('--mb1', mode.c1);
+  el.style.setProperty('--mb2', mode.c2);
+  el.innerHTML =
+    '<div class="mb-art">' + mode.emoji + '</div>' +
+    '<div class="mb-mid"><div class="mb-title">' + esc(track.title) + '</div>' +
+      '<div class="mb-sub">' + esc(mode.name) + ' · ' + esc(track.artist) + '</div>' +
+      '<div class="mb-track"><i style="width:' + (audioElapsed / track.dur * 100) + '%"></i></div></div>' +
+    '<div class="mb-btns">' +
+      '<button class="mb-btn" data-act="audio-prev" aria-label="הקודם">⏮</button>' +
+      '<button class="mb-btn play" data-act="music" aria-label="' + (state.audioPlaying ? 'השהיה' : 'ניגון') + '">' + (state.audioPlaying ? '⏸' : '▶') + '</button>' +
+      '<button class="mb-btn" data-act="audio-next" aria-label="הבא">⏭</button>' +
+    '</div>';
 }
 
 function celebrate(emoji, text) {
@@ -2105,8 +2498,154 @@ function moneyHTML() {
       ).join('') +
     '</div>' +
     '<div class="tip"><b>טריק הזיכרון:</b> מוחקים שלושה אפסים ומחלקים בשבע — וקיבלתם שקלים. 100,000₫ ≈ 14 ₪. השטר הגדול ביותר הוא 500,000₫ — בערך 70 ₪.</div>' +
+
+    '<div class="sect">' +
+      '<div class="sect-h"><h2>💸 בדיקת מיקוח</h2></div>' +
+      '<p class="sect-sub">בשווקים אין תגי מחיר. תגידו כמה המוכר ביקש וכמה נראה לכם הוגן — ונגיד לכם אם לשלם או להתמקח.</p>' +
+      '<div class="barg">' +
+        '<div class="barg-row">' +
+          '<label for="bargAsk">כמה המוכר ביקש?</label>' +
+          '<input class="barg-slider" id="bargAsk" type="range" min="10000" max="1000000" step="10000" value="' + esc(state.bargAsk) + '">' +
+          '<div class="barg-nums"><span>₫' + vndFmt(state.bargAsk) + '</span><span>₫1,000,000</span></div>' +
+        '</div>' +
+        '<div class="barg-row">' +
+          '<label for="bargTarget">מה נראה לכם מחיר הוגן?</label>' +
+          '<input class="barg-input" id="bargTarget" type="tel" inputmode="numeric" placeholder="120000" value="' + esc(state.bargTarget) + '">' +
+        '</div>' +
+        '<div id="bargVerdict">' + bargainVerdictHTML() + '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="sect">' +
+      '<div class="sect-h"><h2>🎒 יומן ההוצאות שלי</h2></div>' +
+      '<p class="sect-sub">כמה נשאר לכם מהתקציב האישי לטיול.</p>' +
+      budgetHTML() +
+    '</div>' +
   '</div>';
 }
+
+/* ── bargain meter ── */
+function bargainVerdictHTML() {
+  const ask = +state.bargAsk || 0, target = +state.bargTarget || 0;
+  if (!target) return '<div class="barg-verdict ok"><span class="barg-emoji">🤔</span>קודם תזינו מחיר הוגן בעיניכם, ונגיד לכם מה לעשות.</div>';
+  const ratio = ask / target;
+  if (ratio <= 1.15) return '<div class="barg-verdict great"><span class="barg-emoji">🟢</span>מחיר מצוין! זה קרוב למה שהגדרתם כהוגן — אפשר לסגור עסקה.</div>';
+  if (ratio <= 1.5)  return '<div class="barg-verdict ok"><span class="barg-emoji">🟡</span>סביר, אבל יש מקום למיקוח. נסו להוריד בעוד כ-15%–20%.</div>';
+  const counter = Math.round(ask * 0.6 / 1000) * 1000;
+  return '<div class="barg-verdict bad"><span class="barg-emoji">🔴</span>מלכודת תיירים! תציעו כ-40% פחות — בערך ₫' + vndFmt(counter) + ', ותתקדמו משם.</div>';
+}
+
+/* ── budget tracker ── */
+function budgetHTML() {
+  const b = state.budget;
+  const spent = b.transactions.reduce((sum, t) => sum + (+t.amount || 0), 0);
+  const total = +b.total || 0;
+  const pct = total ? Math.min(100, Math.round(spent / total * 100)) : 0;
+  const over = total > 0 && spent > total;
+  return '<div class="bud">' +
+      '<div class="bud-top">' +
+        '<div class="bud-left"><b>₫' + vndFmt(spent) + '</b><span>הוצאתם מתוך התקציב</span></div>' +
+        '<div class="bud-total">₫<input id="budgetTotal" type="tel" inputmode="numeric" value="' + esc(total) + '"></div>' +
+      '</div>' +
+      '<div class="bud-bar' + (over ? ' over' : '') + '" id="budgetBar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="sect-sub" id="budgetRemain" style="margin-top:6px">' + (over
+        ? 'חרגתם ב-₫' + vndFmt(spent - total) + ' מהתקציב'
+        : '₫' + vndFmt(total - spent) + ' נשארו לכם') + '</div>' +
+      '<button class="bud-add" data-act="exp-open">➕ הוצאה חדשה</button>' +
+      '<div class="tx-list">' +
+        (b.transactions.length
+          ? b.transactions.slice().reverse().map(t => {
+              const cat = EXP_CATS.find(c => c.id === t.category) || EXP_CATS[EXP_CATS.length - 1];
+              return '<div class="tx">' +
+                '<div class="tx-emoji">' + cat.emoji + '</div>' +
+                '<div class="tx-mid"><div class="tx-item">' + esc(t.item) + '</div>' +
+                  '<div class="tx-meta">' + esc(cat.label) + (t.day ? ' · יום ' + t.day : '') + '</div></div>' +
+                '<div class="tx-amt">₫' + vndFmt(t.amount) + '</div>' +
+                '<button class="tx-del" data-act="exp-del" data-id="' + t.id + '">✕</button>' +
+              '</div>';
+            }).join('')
+          : '<div class="tx-empty">עוד לא הוספתם הוצאות. תלחצו למעלה כדי להתחיל לעקוב 👆</div>') +
+      '</div>' +
+    '</div>';
+}
+
+/* ── bargain meter + budget: live inputs, no full re-render ── */
+function setBargAsk(v) {
+  state.bargAsk = String(v).replace(/[^0-9]/g, '');
+  persist();
+  const nums = document.querySelector('.barg-nums span');
+  if (nums) nums.textContent = '₫' + vndFmt(state.bargAsk);
+  const verdict = $('#bargVerdict');
+  if (verdict) verdict.innerHTML = bargainVerdictHTML();
+}
+function setBargTarget(v) {
+  state.bargTarget = String(v).replace(/[^0-9]/g, '').slice(0, 10);
+  persist();
+  const verdict = $('#bargVerdict');
+  if (verdict) verdict.innerHTML = bargainVerdictHTML();
+}
+
+function setBudgetTotal(v) {
+  state.budget.total = +String(v).replace(/[^0-9]/g, '') || 0;
+  persist();
+  paintBudgetBar();
+}
+function paintBudgetBar() {
+  const b = state.budget;
+  const spent = b.transactions.reduce((sum, t) => sum + (+t.amount || 0), 0);
+  const total = +b.total || 0;
+  const pct = total ? Math.min(100, Math.round(spent / total * 100)) : 0;
+  const over = total > 0 && spent > total;
+  const bar = $('#budgetBar');
+  if (bar) { bar.classList.toggle('over', over); const i = bar.querySelector('i'); if (i) i.style.width = pct + '%'; }
+  const remain = $('#budgetRemain');
+  if (remain) remain.textContent = over ? 'חרגתם ב-₫' + vndFmt(spent - total) + ' מהתקציב' : '₫' + vndFmt(total - spent) + ' נשארו לכם';
+}
+
+/* ── expense modal ── */
+let expPickedCat = 'food';
+function paintExpCats() {
+  const el = $('#expCats');
+  if (!el) return;
+  el.innerHTML = EXP_CATS.map(c =>
+    '<button type="button" class="xm-cat' + (c.id === expPickedCat ? ' on' : '') + '" data-act="exp-cat-pick" data-id="' + c.id + '">' +
+      c.emoji + ' ' + esc(c.label) + '</button>'
+  ).join('');
+}
+function pickExpCat(id) { expPickedCat = id; paintExpCats(); }
+function openExpenseModal() {
+  expPickedCat = 'food';
+  $('#expItem').value = '';
+  $('#expAmt').value = '';
+  paintExpCats();
+  $('#expModal').hidden = false;
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => { const el = $('#expItem'); if (el) el.focus(); }, 60);
+}
+function closeExpenseModal() {
+  $('#expModal').hidden = true;
+  document.body.style.overflow = '';
+}
+function saveExpense() {
+  const item = $('#expItem').value.trim();
+  const amount = +$('#expAmt').value.replace(/[^0-9]/g, '');
+  if (!item || !amount) return;
+  const today = tripToday();
+  state.budget.transactions.push({ id:Date.now(), item, amount, category:expPickedCat, day: today.inTrip ? today.n : null });
+  persist();
+  closeExpenseModal();
+  renderMain();
+}
+function delExpense(id) {
+  state.budget.transactions = state.budget.transactions.filter(t => t.id !== id);
+  persist();
+  renderMain();
+}
+
+/* ── radar filters ── */
+function setRadarCat(id) { state.radarCat = id; persist(); renderMain(); }
+function setRadarBudget(lvl) { state.radarBudget = state.radarBudget === lvl ? 0 : lvl; persist(); renderMain(); }
+function toggleRadarOpen() { state.radarOpenOnly = !state.radarOpenOnly; persist(); renderMain(); }
 
 function albumHTML() {
   const mineOf = n => shots.filter(s => s.day === n);
@@ -2170,7 +2709,119 @@ function albumHTML() {
   '</div>';
 }
 
-const VIEWS = { days:daysHTML, hunt:huntHTML, talk:talkHTML, badges:badgesHTML, money:moneyHTML, album:albumHTML };
+/* Ephemeral — never persisted. A fresh fix each session is more useful
+   than a stale one from last time the app was open. */
+let userGeo = null, geoBusy = false;
+
+function radarGeo() {
+  if (!navigator.geolocation) { geoBusy = false; renderMain(); return; }
+  geoBusy = true;
+  renderMain();
+  navigator.geolocation.getCurrentPosition(
+    pos => { userGeo = { lat:pos.coords.latitude, lng:pos.coords.longitude }; geoBusy = false; renderMain(); },
+    ()  => { geoBusy = false; window.alert('לא הצלחנו למצוא את המיקום שלכם — יש לאשר גישה למיקום בהגדרות הדפדפן.'); renderMain(); },
+    { enableHighAccuracy:true, timeout:12000 }
+  );
+}
+
+function radarHTML() {
+  return '<div class="page">' +
+    headHTML('הסקר הסודי 🧭', C.mint) +
+    '<p class="lead">מקומות שמקומיים אוהבים — לא התיירות הרגילה. תסננו לפי מה שמתחשק, ותנווטו ישר לשם.</p>' +
+    '<div class="rad-cats">' +
+      '<button class="rad-cat' + (state.radarCat === 'all' ? ' on' : '') + '" data-act="radar-cat" data-id="all">כל הקטגוריות<span class="n">' + RADAR_SPOTS.length + '</span></button>' +
+      RADAR_CATS.map(c => '<button class="rad-cat' + (state.radarCat === c.id ? ' on' : '') + '" data-act="radar-cat" data-id="' + c.id + '">' +
+        c.emoji + ' ' + esc(c.label) + '<span class="n">' + RADAR_SPOTS.filter(s => s.category === c.id).length + '</span></button>').join('') +
+    '</div>' +
+    '<div class="rad-toolbar">' +
+      [0, 1, 2, 3].map(lvl => '<button class="rad-mini' + (state.radarBudget === lvl ? ' on' : '') + '" data-act="radar-budget" data-lvl="' + lvl + '">' +
+        (lvl === 0 ? '💰 כל התקציבים' : 'עד ' + '₫'.repeat(lvl)) + '</button>').join('') +
+      '<button class="rad-mini' + (state.radarOpenOnly ? ' on' : '') + '" data-act="radar-open">🟢 פתוח עכשיו</button>' +
+      '<button class="rad-mini' + (userGeo ? ' on' : '') + '" data-act="radar-geo">📍 ' + (geoBusy ? 'מחפש…' : (userGeo ? 'המיקום פעיל' : 'גלה קרוב אליי')) + '</button>' +
+    '</div>' +
+    (userGeo ? '<div class="rad-geo">המרחקים למטה מחושבים מהמיקום החי שלכם</div>' : '') +
+    '<div class="rad-list" id="radarList">' + radarListHTML() + '</div>' +
+  '</div>';
+}
+
+function isOpenNow(oh) {
+  const now = new Date(), mins = now.getHours() * 60 + now.getMinutes();
+  const [fh, fm] = oh.from.split(':').map(Number), [th, tm] = oh.to.split(':').map(Number);
+  const f = fh * 60 + fm, t = th * 60 + tm;
+  return f <= t ? (mins >= f && mins <= t) : (mins >= f || mins <= t);
+}
+function fmtDist(m) { return m < 1000 ? Math.round(m) + ' מ׳' : (m / 1000).toFixed(1) + ' ק"מ'; }
+function haversine(a, b) {
+  const R = 6371000, toRad = d => d * Math.PI / 180;
+  const dLat = toRad(b.lat - a.lat), dLng = toRad(b.lng - a.lng);
+  const la1 = toRad(a.lat), la2 = toRad(b.lat);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+function radarFiltered() {
+  return RADAR_SPOTS
+    .filter(s => state.radarCat === 'all' || s.category === state.radarCat)
+    .filter(s => !state.radarBudget || s.priceLevel <= state.radarBudget)
+    .filter(s => !state.radarOpenOnly || isOpenNow(s.openHours))
+    .map(s => ({ ...s, liveDist: userGeo ? haversine(userGeo, s.coords) : s.distanceMeters }))
+    .sort((a, b) => a.liveDist - b.liveDist);
+}
+function radarListHTML() {
+  const list = radarFiltered();
+  if (!list.length) return '<div class="rad-empty">שום מקום לא עונה על הסינון הזה כרגע.<br>נסו לפתוח קטגוריה או תקציב נוסף 🤷</div>';
+  return list.map(spotHTML).join('');
+}
+function spotHTML(s) {
+  const cat = RADAR_CATS.find(c => c.id === s.category);
+  const open = isOpenNow(s.openHours);
+  const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + s.coords.lat + ',' + s.coords.lng;
+  return '<div class="spot">' +
+    '<div class="spot-h"><div><div class="spot-name">' + esc(s.name) + '</div>' +
+      '<div class="spot-cat">' + cat.emoji + ' ' + esc(cat.label) + ' · ' + esc(s.region) + '</div></div>' +
+      '<div class="spot-dist">📍 ' + fmtDist(s.liveDist) + '</div></div>' +
+    '<div class="spot-desc">' + esc(s.description) + '</div>' +
+    '<div class="spot-tags">' + s.tags.map(t => '<span class="spot-tag">' + esc(t) + '</span>').join('') + '</div>' +
+    '<div class="spot-meta"><span>⭐ ' + s.rating.toFixed(1) + '</span>' +
+      '<span class="spot-price">' + '₫'.repeat(s.priceLevel) + '</span>' +
+      '<span class="spot-open ' + (open ? 'yes' : 'no') + '">' + (open ? '🟢 פתוח עכשיו' : '🔴 סגור כרגע') + '</span></div>' +
+    '<div class="spot-tip"><div class="spot-tip-k">טיפ מתבגר</div><div class="spot-tip-v">' + esc(s.teenTip) + '</div></div>' +
+    '<a class="spot-go" href="' + mapsUrl + '" target="_blank" rel="noopener">🗺️ ניווט בגוגל מפות</a>' +
+  '</div>';
+}
+
+function musicHTML() {
+  const mode = currentMode(), track = currentTrack();
+  const pct = audioElapsed / track.dur * 100;
+  const mm = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  return '<div class="page">' +
+    headHTML('פסקול הטיול 🎧', C.cyan) +
+    '<p class="lead">שלושה מצבים לפי הרגע: כביש, ווייב מקומי, או צ׳יל בלילה. הכול מתנגן ישר בטלפון, בלי אינטרנט.</p>' +
+    '<div class="mode-grid">' +
+      MUSIC_MODES.map(m => '<div class="mode-card' + (m.id === state.audioMode ? ' on' : '') + '" data-act="audio-mode" data-id="' + m.id + '" ' +
+        'style="background:linear-gradient(135deg,' + m.c1 + ',' + m.c2 + ')">' +
+        '<div class="mode-h"><div class="mode-emoji">' + m.emoji + '</div>' +
+          '<div><div class="mode-name">' + esc(m.name) + '</div><div class="mode-desc">' + esc(m.desc) + '</div></div>' +
+          '<div class="mode-pick">' + (m.id === state.audioMode ? 'מתנגן ✓' : 'לבחור') + '</div></div>' +
+      '</div>').join('') +
+    '</div>' +
+    '<div class="player" style="background:linear-gradient(160deg,' + mode.c1 + ',' + mode.c2 + ')">' +
+      '<div class="player-art">' + mode.emoji + '</div>' +
+      '<div class="player-track">' + esc(track.title) + '</div>' +
+      '<div class="player-artist">' + esc(track.artist) + ' · ' + esc(mode.name) + '</div>' +
+      '<div class="player-track-bar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="player-time"><span>' + mm(audioElapsed) + '</span><span>' + mm(track.dur) + '</span></div>' +
+      '<div class="player-ctrl">' +
+        '<button class="pc-btn" data-act="audio-prev" aria-label="הקודם">⏮</button>' +
+        '<button class="pc-btn play" data-act="music" aria-label="נגן/השהה">' + (state.audioPlaying ? '⏸' : '▶') + '</button>' +
+        '<button class="pc-btn" data-act="audio-next" aria-label="הבא">⏭</button>' +
+      '</div>' +
+      '<div class="vol-row"><span>🔈</span><input id="audioVol" type="range" min="0" max="1" step="0.05" value="' + state.audioVolume + '"><span>🔊</span></div>' +
+    '</div>' +
+    '<div class="tip"><b>איך זה עובד:</b> אין קבצי מוזיקה שמורידים — זה מנוע סאונד קטן שמנגן ישר בטלפון, ולכן זה גם עובד בלי אינטרנט בכל שלב של הטיול.</div>' +
+  '</div>';
+}
+
+const VIEWS = { days:daysHTML, hunt:huntHTML, talk:talkHTML, badges:badgesHTML, money:moneyHTML, radar:radarHTML, music:musicHTML, album:albumHTML };
 
 /* ══ render ═════════════════════════════════════════════════════════ */
 function renderNav() {
@@ -2404,6 +3055,17 @@ document.addEventListener('click', e => {
       if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 80, behavior:'smooth' });
     }, 80);
   }
+  if (act === 'radar-cat')    return setRadarCat(el.dataset.id);
+  if (act === 'radar-budget') return setRadarBudget(+el.dataset.lvl);
+  if (act === 'radar-open')   return toggleRadarOpen();
+  if (act === 'radar-geo')    return void radarGeo();
+  if (act === 'exp-open')     return openExpenseModal();
+  if (act === 'exp-close')    return closeExpenseModal();
+  if (act === 'exp-cat-pick') return pickExpCat(el.dataset.id);
+  if (act === 'exp-del')      return delExpense(+el.dataset.id);
+  if (act === 'audio-mode')   return setAudioMode(el.dataset.id);
+  if (act === 'audio-next')   return changeTrack(1);
+  if (act === 'audio-prev')   return changeTrack(-1);
 });
 
 document.addEventListener('change', e => {
@@ -2426,10 +3088,26 @@ document.addEventListener('input', e => {
     if (cleaned !== e.target.value) e.target.value = cleaned;
     setVnd(cleaned, false);
   }
+  if (e.target.id === 'bargAsk')     return setBargAsk(e.target.value);
+  if (e.target.id === 'bargTarget') {
+    const cleaned = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+    if (cleaned !== e.target.value) e.target.value = cleaned;
+    return setBargTarget(cleaned);
+  }
+  if (e.target.id === 'budgetTotal') {
+    const cleaned = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+    if (cleaned !== e.target.value) e.target.value = cleaned;
+    return setBudgetTotal(cleaned);
+  }
+  if (e.target.id === 'audioVol') return setAudioVolume(e.target.value);
+});
+
+document.addEventListener('submit', e => {
+  if (e.target.id === 'expForm') { e.preventDefault(); saveExpense(); }
 });
 
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && state.music) toggleMusic();
+  if (document.hidden && state.audioPlaying) toggleMusic();
 });
 
 /* ══ family gate ════════════════════════════════════════════════════
@@ -2978,7 +3656,7 @@ function openMovie() {
   document.body.style.overflow = 'hidden';
   paintMovie();
   movieTimer = setInterval(() => { movieIdx = (movieIdx + 1) % shots.length; paintMovie(); }, 3800);
-  if (!state.music) toggleMusic();
+  if (!state.audioPlaying) toggleMusic();
 }
 
 function paintMovie() {
@@ -2997,7 +3675,7 @@ function closeMovie() {
   clearInterval(movieTimer); movieTimer = null;
   $('#movie').hidden = true;
   document.body.style.overflow = '';
-  if (state.music) toggleMusic();
+  if (state.audioPlaying) toggleMusic();
 }
 
 /* ══ the booklet ════════════════════════════════════════════════════
@@ -3311,6 +3989,7 @@ renderHero();
 renderNav();
 paintSubtitle();
 renderMain();
+renderMusicBar();
 syncStats();
 DAYS.slice(0, 3).forEach(d => preload(d.urls));
 setInterval(() => { if (state.open) advance(state.open); }, 3600);
