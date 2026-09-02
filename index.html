@@ -744,6 +744,94 @@ input{font-family:inherit}
 .su-check b{display:block;font-size:13.5px;color:#fff}
 .su-check span{display:block;font-size:11.5px;color:#a9b4d4;margin-top:2px;line-height:1.5}
 
+/* ── chrono-lens ──────────────────────────────────────────────────────
+   A per-day "meet the history of this place" modal, opened from a day
+   card. Same full-screen-scroll shell as .setup, plus a live camera
+   viewport up top. */
+.act--chrono{display:flex;width:100%;margin-top:8px;min-height:46px;align-items:center;justify-content:center;gap:8px;
+  border-radius:14px;background:rgba(122,92,255,.14);border:1px solid rgba(122,92,255,.42);color:#D9CFFF;font-size:13px;font-weight:700}
+
+.chrono[hidden]{display:none}
+.chrono{position:fixed;inset:0;z-index:215;overflow-y:auto;padding:0 0 26px;
+  background:linear-gradient(178deg,#150e2e,#0d0a1c 55%,#160c28)}
+.chrono-card{max-width:430px;margin:0 auto}
+.chrono-close{position:sticky;top:10px;float:left;margin:10px 0 0 12px;z-index:2;width:38px;height:38px;border-radius:50%;
+  background:rgba(0,0,0,.45);color:#fff;font-size:16px;backdrop-filter:blur(6px)}
+
+/* viewport: live camera (or a gradient fallback) with a scan-grid overlay
+   and a temporal color grade driven by the slider */
+.cv-wrap{position:relative;aspect-ratio:3/4;overflow:hidden;background:#000}
+.cv-video,.cv-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:filter .25s ease}
+.cv-fallback{display:flex;align-items:center;justify-content:center;font-size:64px}
+.cv-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);
+  background-size:12.5% 12.5%}
+.cv-crosshair{position:absolute;top:50%;left:50%;width:64px;height:64px;transform:translate(-50%,-50%);pointer-events:none;
+  border:1.5px solid rgba(255,255,255,.55);border-radius:50%}
+.cv-crosshair::before,.cv-crosshair::after{content:'';position:absolute;background:rgba(255,255,255,.55)}
+.cv-crosshair::before{top:50%;left:-14px;width:12px;height:1.5px}
+.cv-crosshair::after{top:50%;right:-14px;width:12px;height:1.5px}
+.cv-corners{position:absolute;inset:10px;pointer-events:none}
+.cv-corners i{position:absolute;width:18px;height:18px;border:2px solid rgba(255,255,255,.7)}
+.cv-corners i:nth-child(1){top:0;left:0;border-width:2px 0 0 2px}
+.cv-corners i:nth-child(2){top:0;right:0;border-width:2px 2px 0 0}
+.cv-corners i:nth-child(3){bottom:0;left:0;border-width:0 0 2px 2px}
+.cv-corners i:nth-child(4){bottom:0;right:0;border-width:0 2px 2px 0}
+.cv-tag{position:absolute;top:14px;right:14px;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.5);
+  color:#B9F7F9;font-family:var(--mono);font-size:10.5px;font-weight:700;backdrop-filter:blur(4px)}
+.cv-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.cv-flash.go{animation:chronoFlash .5s ease-out}
+@keyframes chronoFlash{0%{opacity:1}100%{opacity:0}}
+
+.cv-time{position:absolute;left:14px;right:14px;bottom:14px;padding:10px 12px;border-radius:14px;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(6px)}
+.cv-time-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:#cfd6f0;margin-bottom:4px}
+.cv-time input{width:100%;accent-color:var(--violet)}
+
+/* NPC card */
+.npc{position:relative;margin:14px 16px 0;padding:16px 15px;border-radius:4px;background-color:var(--paper);
+  background-image:repeating-linear-gradient(180deg,transparent 0,transparent 28px,rgba(31,78,121,.10) 28px,rgba(31,78,121,.10) 29px);
+  box-shadow:0 8px 22px rgba(0,0,0,.4)}
+.npc-h{display:flex;align-items:center;gap:11px}
+.npc-emoji{width:52px;height:52px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:26px;background:#fff;border:2px solid rgba(31,78,121,.2)}
+.npc-name{font-family:var(--script);font-weight:700;font-size:19px;color:var(--ink);line-height:1.15}
+.npc-tag{display:inline-block;margin-top:2px;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px}
+.npc-tag.history{background:rgba(62,224,143,.18);color:#1f9d5c}
+.npc-tag.legend{background:rgba(122,92,255,.16);color:#6a4fd6}
+.npc-tag.rep{background:rgba(255,180,67,.22);color:#8a6a10}
+.npc-greet{margin-top:11px;font-size:13.5px;line-height:1.6;color:#26303f;min-height:1.6em}
+.npc-greet .caret{animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* chat */
+.chat-qs{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.chat-q{width:100%;text-align:right;padding:11px 13px;border-radius:12px;background:rgba(31,78,121,.07);
+  border:2px dashed rgba(31,78,121,.28);color:var(--ink);font-size:13px;font-weight:700}
+.chat-q.done{background:rgba(31,78,121,.03);border-style:solid;border-color:rgba(31,78,121,.14);color:#7a8494}
+.chat-a{margin-top:7px;padding:11px 13px;border-radius:12px;background:#FFE9A8;color:#4a3608;font-size:13px;line-height:1.6;
+  box-shadow:0 3px 10px rgba(0,0,0,.18)}
+
+/* quest log */
+.cquests{margin:16px 16px 0;display:flex;flex-direction:column;gap:8px}
+.cquest{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:13px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.cquest.done{background:rgba(62,224,143,.14);border-color:rgba(62,224,143,.45)}
+.cq-box{flex:none;width:26px;height:26px;border-radius:8px;border:2px solid rgba(255,255,255,.3);display:grid;place-items:center;font-size:14px;color:transparent}
+.cquest.done .cq-box{background:var(--mint);border-color:var(--mint);color:#0a2e1c}
+.cq-t{flex:1;font-size:12.5px;line-height:1.5;color:#dfe3f4}
+.cquest.done .cq-t{color:#8df3bd}
+
+/* capture: vibe picker + button */
+.cap-box{margin:18px 16px 0;padding:15px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);text-align:center}
+.cap-t{font-family:var(--script);font-weight:700;font-size:17px;color:#fff}
+.vibes{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.vibe-b{flex:1;max-width:110px;padding:10px 6px;border-radius:13px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12);font-size:12px;color:#cfd6f0;font-weight:700}
+.vibe-b.on{background:var(--paper);border-color:#fff;color:var(--ink)}
+.vibe-b em{display:block;font-size:22px;font-style:normal;margin-bottom:2px}
+.cap-go{width:100%;margin-top:12px;min-height:54px;border-radius:15px;font-family:var(--hand);font-size:19px;
+  background:linear-gradient(135deg,#7A5CFF,#FF5A8C);color:#fff;box-shadow:0 8px 20px rgba(122,92,255,.35)}
+.cap-go[disabled]{opacity:.5}
+
 /* ── emergency ────────────────────────────────────────────────────────
    Deliberately loud and always on screen. A child in trouble should not
    have to find the right tab. */
@@ -987,6 +1075,26 @@ input{font-family:inherit}
       <button type="submit" class="xm-save">לשמור</button>
     </div>
   </form>
+</div>
+
+<div class="chrono" id="chrono" hidden>
+  <div class="chrono-card">
+    <button class="chrono-close" data-act="chrono-close" aria-label="לסגור">✕</button>
+    <div class="cv-wrap">
+      <video class="cv-video" id="cvVideo" autoplay playsinline muted hidden></video>
+      <div class="cv-fallback" id="cvFallback"></div>
+      <div class="cv-grid"></div>
+      <div class="cv-crosshair"></div>
+      <div class="cv-corners"><i></i><i></i><i></i><i></i></div>
+      <div class="cv-tag" id="cvTag"></div>
+      <div class="cv-flash" id="cvFlash"></div>
+      <div class="cv-time">
+        <div class="cv-time-row"><span id="cvYearFrom"></span><span id="cvYearNow">עכשיו · 2026</span></div>
+        <input type="range" id="cvSlider" min="0" max="100" value="100">
+      </div>
+    </div>
+    <div id="chronoBody"></div>
+  </div>
 </div>
 
 <div class="gate" id="gate">
@@ -1573,7 +1681,9 @@ const BADGES = [
   { id:'collector', emoji:'💎', name:'אספן על', how:'כל 12 פריטי הציד', test:s => s.found.length >= 12 },
   { id:'local', emoji:'🗣️', name:'כמעט מקומי', how:'להשמיע 8 מילים', test:s => s.said.length >= 8 },
   { id:'brave', emoji:'😱', name:'אמיץ הזכוכית', how:'גשר הזכוכית + רכבת ההרים', test:s => [5,7].every(n => s.done.includes(n)) },
-  { id:'champ', emoji:'👑', name:'אלוף וייטנאם', how:'כל 19 הימים', test:s => s.done.length === 19 }
+  { id:'champ', emoji:'👑', name:'אלוף וייטנאם', how:'כל 19 הימים', test:s => s.done.length === 19 },
+  { id:'timetraveler', emoji:'🕰️', name:'נוסע בזמן', how:'משימות כרונו-לנס ב-3 אזורים', test:s => new Set((s.chronoDone||[]).map(id => id.split(':')[0])).size >= 3 },
+  { id:'historian', emoji:'📜', name:'היסטוריון וייטנאם', how:'כל 18 משימות הכרונו-לנס', test:s => (s.chronoDone||[]).length >= 18 }
 ];
 
 const RESULTS = [
@@ -1723,6 +1833,97 @@ const MUSIC_MODES = [
     ] }
 ];
 
+/* ══ chrono-lens ════════════════════════════════════════════════════
+   One character per region (keyed by the same d.region string every day
+   already carries), so every day picks up a "meet the history of this
+   place" button for free. Each entry is labelled by kind, on purpose:
+   'history' = a real, documented person and event; 'legend' = a known
+   folk tale, clearly not literal history; 'rep' = a representative
+   character standing in for a real community, not one named individual.
+   The line between them is the whole point of a kids' history feature —
+   it's told straight in the tag, not blurred for effect. Facts checked
+   against multiple sources before writing; see the PR description. */
+const CHRONO = {
+  'הנוי': {
+    name:'הקיסר לה לוי', era:1428, kind:'history', tag:'היסטוריה + אגדה', emoji:'⚔️', color:C.cyan,
+    intro:'ברוכים הבאים לתשואן קיאם — לפני שקראו לה ככה, זו הייתה סתם "האגם הירוק". אני לה לוי. עד לפני רגע (בערך 600 שנה) הייתי מלך כאן.',
+    qa:[
+      { q:'רגע, באמת קיבלת חרב קסומה מצב ענק?',
+        a:'האגדה אומרת שכן — צב זהוב בשם קים קווי נתן לי חרב בשם "רצון השמיים" כדי לגרש את הכובשים הסינים. האמת ההיסטורית: ניצחתי במלחמה אמיתית שנמשכה כעשר שנים (1418–1427), בלי קסמים — רק אסטרטגיה, סבלנות, ועם שלא ויתר.' },
+      { q:'אז למה קוראים לאגם "האגם של החרב המוחזרת"?',
+        a:'כי אחרי הניצחון שטתי כאן בסירה — והצב עלה וביקש את החרב בחזרה, "לפני שהיא תשחית אותך". שלפתי אותה וזרקתי למים; הוא תפס אותה בפה וצלל. מאז קוראים לאגם "הואן קיאם" — אגם החרב המוחזרת.' },
+      { q:'יש עדיין צב באגם?',
+        a:'עד 2016 אכן חי כאן צב ענק אמיתי, בן מאות שנים — קראו לו "הצב הקדוש", וכולם בהאנוי התאבלו כשהוא מת. עכשיו הוא שמור, חנוט, במקדש הקטן שבאמצע האגם.' }
+    ],
+    quests:['צלמו את המקדש הקטן שבאמצע האגם (מגדל הצב)','מצאו את הגשר האדום — גשר הזריחה — ותעברו בו','שאלו את לה לוי שאלה אחת']
+  },
+  'טו לה': {
+    name:'רוח קרן השמיים', era:1300, kind:'legend', tag:'אגדה', emoji:'☁️', color:C.mint,
+    intro:'ברוכים הבאים ל"קרן השמיים" — ככה קוראים להר הזה בשפת התאי. הוא כל כך גבוה, שהעננים בבוקר נראים כמו ים מתחת לרגליים.',
+    qa:[
+      { q:'למה קוראים להר "קרן השמיים"?',
+        a:'כי כשעומדים כאן בבוקר, העננים ממלאים את כל העמק למטה — ורק הפסגה בולטת מעליהם, כמו קרן שיוצאת מתוך ים של ענן. בני התאי, שחיים כאן כבר מאות שנים, נתנו לו את השם הזה.' },
+      { q:'מי גר פה, בהרים?',
+        a:'בעיקר בני שבט התאי ובני ה-H\'mong. הם מגדלים אורז במדרגות שגילפו בהר דור אחרי דור — בלי שום ציוד מודרני, רק ידיים, מים, וסבלנות של מאות שנים.' },
+      { q:'זה מסוכן לנסוע בכביש ההררי הזה?',
+        a:'זה אחד המעברים המפותלים בוייטנאם — אבל גם אחד היפים בעולם. הנהגים המקומיים מכירים כל עיקול. תיהנו מהנוף, וסמכו על מי שנוהג.' }
+    ],
+    quests:['צלמו את מדרגות האורז מנקודת התצפית הכי גבוהה שתמצאו','מצאו ענן שנמצא ממש מתחתכם — לא מעליכם','שאלו את רוח ההר שאלה אחת']
+  },
+  'סאפה': {
+    name:'שומרת המדרגות', era:1900, kind:'rep', tag:'דמות מייצגת', emoji:'🧣', color:C.amber,
+    intro:'שלום, אני שומרת המדרגות — לא אישה היסטורית אחת ספציפית, אלא כל אישה מבני ה-H\'mong שגידלה אורז על ההר הזה וצבעה בגדים בכחול אינדיגו עמוק, דור אחרי דור.',
+    qa:[
+      { q:'למה הבגדים כל כך כחולים?',
+        a:'מצבע שנקרא אינדיגו — צמח שגדל כאן בהרים. משרים אותו, טוחנים, וצובעים בד שוב ושוב עד שהוא כמעט שחור-כחול. הידיים של מי שצובע נשארות כחולות שבועות — זה סימן כבוד, לא לכלוך.' },
+      { q:'כמה זמן לוקח לגדל אורז פה?',
+        a:'עונה שלמה — שותלים בסוף האביב, קוצרים בסתיו. תראו את השדות בדיוק באמצע ההחלפה: חלקם ירוקים בוהקים, חלקם כבר מזהיבים לקראת הקציר.' },
+      { q:'המדרגות נבנו לבד?',
+        a:'לא — דורות שלמים. כל "מדרגה" היא קיר אבן ואדמה שנבנה ביד, אחת מעל השנייה, כדי שהמים לא יישטפו במורד ההר. יש כאן מדרגות בנות מאות שנים.' }
+    ],
+    quests:['צלמו יד עובדת של מישהי מקומית — בלי הפנים','מצאו כפות ידיים כחולות מצבע אינדיגו','שאלו את שומרת המדרגות שאלה אחת']
+  },
+  'הא לונג': {
+    name:'לונג מאו — אם הדרקונים', era:0, kind:'legend', tag:'אגדה', emoji:'🐉', color:C.violet,
+    intro:'שלום, אני לונג מאו — אם הדרקונים. הקיסר השמימי שלח אותי ואת הילדים שלי לכאן, לפני שאויבים תקפו מהצפון.',
+    qa:[
+      { q:'איך נוצרו כל האיים האלה?',
+        a:'כשירדנו משמיים, פלטנו מהפה אבנים יקרות ואבני ירקן — כדי לבנות חומה שתעצור את אוניות האויב. האבנים נפלו לים והפכו לאלפי האיים שאתם רואים כאן.' },
+      { q:'למה נשארתם כאן אחרי הניצחון?',
+        a:'התאהבנו במקום. במקום לחזור לשמיים נשארנו ליד המפרץ — לכן קוראים לו "הא לונג", הדרקון היורד. ולאיים הקטנים בצפון קוראים "באי טו לונג" — איפה שהגורים שלי ירדו.' },
+      { q:'זה סיפור אמיתי?',
+        a:'זו אגדה, לא היסטוריה — וזה בסדר גמור! השם "הא לונג" עצמו הופיע במפות רק לפני כמאתיים שנה. אבל תסתכלו סביבכם: אלפיים איי גיר שמזכירים גב של דרקון שקוע במים. קל להבין למה נולד הסיפור.' }
+    ],
+    quests:['מצאו אי שנראה כמו חיה','צלמו את המפרץ מהסיפון בשקיעה','שאלו את אם הדרקונים שאלה אחת']
+  },
+  'נין בין': {
+    name:'הקיסר דין בו לין', era:968, kind:'history', tag:'היסטוריה', emoji:'🐃', color:C.pink,
+    intro:'שלום! אני דין בו לין — הקיסר הראשון של וייטנאם המאוחדת. אבל לפני שהייתי קיסר... הייתי סתם ילד שרעה תאואי מים, ממש כאן, בהוא לו.',
+    qa:[
+      { q:'איך הופכים מרועה תאואים לקיסר?',
+        a:'התחלתי כמנהיג משחק: אספתי את ילדי הכפר, עשיתי מהם "צבא", בנינו דגלים מקנים, והם נשאו אותי על זרועות שלובות כאילו אני כבר מלך. המבוגרים צחקו — עד שגדלתי, ואיחדתי את 12 האדונים הלוחמים שקרעו את וייטנאם לגזרים. ב-968 הכרזתי על ממלכה מאוחדת.' },
+      { q:'למה הבירה שלך הייתה דווקא כאן, בנין בין?',
+        a:'הוא לו מוקפת הרי אבן גיר — חומה טבעית שאויב לא יכול לחצות בקלות. בניתי כאן את הבירה הראשונה של וייטנאם המאוחדת, ממש איפה שאתם משוטטים היום בטאם קוק.' },
+      { q:'מה קרה אחר כך?',
+        a:'שלטתי כ-11 שנה — התחלה של תקופה ארוכה של וייטנאם עצמאית. גם היום יש מקדשים בהוא לו לזכרי, אפשר לבקר בהם ולראות איפה הכול התחיל.' }
+    ],
+    quests:['מצאו תאו מים אמיתי עובד בשדה','צלמו שכבות: שדה, הר, ערפל','שאלו את הקיסר שאלה אחת']
+  },
+  'הוי אן': {
+    name:'סוחר גשר היפנים', era:1593, kind:'rep', tag:'דמות מייצגת', emoji:'⛩️', color:C.mint,
+    intro:'ברוכים הבאים להוי אן — לפני כ-400 שנה זה היה אחד הנמלים העמוסים באסיה. אני לא אדם היסטורי ספציפי — אני מייצג את כל הסוחרים שעבדו כאן: יפנים, סינים, וייטנאמים, ואפילו הולנדים.',
+    qa:[
+      { q:'מה זה הגשר המכוסה הזה?',
+        a:'בנו אותו סוחרים יפנים, בערך ב-1593, כדי לחבר בין הרובע היפני לרובע הסיני. באמצע יש מקדש קטן — לא לאלוהים רגיל, אלא כדי להרגיע מפלצת ים אגדית בשם נאמאזו, דג-שפמנון ענק שהראש שלו בהודו, הגוף בוייטנאם והזנב ביפן. האמינו שהיא גורמת לרעידות אדמה כשהיא זזה.' },
+      { q:'למה כולם באו לסחור דווקא כאן?',
+        a:'הנהר תו בון מוביל ישר לים, וזו הייתה עצירה מושלמת בדרך הסחר בין יפן, סין ואירופה. משי, קרמיקה, תבלינים — הכול עבר דרך הנמל הקטן הזה.' },
+      { q:'הגשר עדיין עומד?',
+        a:'כן! שיפצו אותו כמה פעמים לאורך 400 שנה, אבל הוא עדיין באותו מקום, ועדיין הסמל של הוי אן. תמצאו אותו בקלות — הוא מופיע על כל שטר של 20,000 דונג.' }
+    ],
+    quests:['מצאו את הגשר המכוסה ותצלמו אותו','מצאו פנס משי אחד שנראה כמו לפני 400 שנה','שאלו את הסוחר שאלה אחת']
+  }
+};
+
 /* ══ state ══════════════════════════════════════════════════════════ */
 const state = {
   tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, missions:[], quizBest:0, quizPlays:0,
@@ -1733,7 +1934,8 @@ const state = {
     { id:1, item:'בון מי לארוחת בוקר', amount:25000, category:'food', day:1 },
     { id:2, item:'מחזיק מפתחות מהשוק', amount:40000, category:'shopping', day:1 }
   ] },
-  audioMode:'road', audioTrack:0, audioPlaying:false, audioVolume:0.6, audioEngaged:false
+  audioMode:'road', audioTrack:0, audioPlaying:false, audioVolume:0.6, audioEngaged:false,
+  chronoDone:[]
 };
 
 function load() {
@@ -1760,6 +1962,7 @@ function load() {
     state.audioMode   = MUSIC_MODES.some(m => m.id === s.audioMode) ? s.audioMode : 'road';
     state.audioVolume = (typeof s.audioVolume === 'number') ? s.audioVolume : 0.6;
     state.audioEngaged = !!s.audioEngaged;
+    state.chronoDone = Array.isArray(s.chronoDone) ? s.chronoDone : [];
   } catch (e) {}
 }
 function persist() {
@@ -1768,7 +1971,8 @@ function persist() {
       found:state.found, done:state.done, said:state.said, eaten:state.eaten, answers:state.answers, missions:state.missions, quizBest:state.quizBest, quizPlays:state.quizPlays,
       vibe:state.vibe, tab:state.tab, open:state.open,
       radarCat:state.radarCat, radarBudget:state.radarBudget, radarOpenOnly:state.radarOpenOnly,
-      budget:state.budget, audioMode:state.audioMode, audioVolume:state.audioVolume, audioEngaged:state.audioEngaged
+      budget:state.budget, audioMode:state.audioMode, audioVolume:state.audioVolume, audioEngaged:state.audioEngaged,
+      chronoDone:state.chronoDone
     }));
   } catch (e) {}
 }
@@ -2378,6 +2582,9 @@ function dayHTML(d) {
         '<a class="act act--map" href="' + esc(d.map) + '" target="_blank" rel="noopener">📍 איפה זה?</a>' +
         '<button class="act act--next" data-act="day-next" data-n="' + d.n + '">⏭ תמונה הבאה</button>' +
       '</div>' +
+      (CHRONO[d.region]
+        ? '<button class="act act--chrono" data-act="chrono-open" data-n="' + d.n + '">🕰️ כרונו-לנס — לפגוש את ' + esc(CHRONO[d.region].name) + '</button>'
+        : '') +
       (d.ytId
         ? '<div class="tube"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(d.ytId) +
           '?rel=0&modestbranding=1" title="video" loading="lazy" allowfullscreen ' +
@@ -3072,6 +3279,12 @@ document.addEventListener('click', e => {
   if (act === 'audio-mode')   return setAudioMode(el.dataset.id);
   if (act === 'audio-next')   return changeTrack(1);
   if (act === 'audio-prev')   return changeTrack(-1);
+  if (act === 'chrono-open')  return openChrono(+el.dataset.n);
+  if (act === 'chrono-close') return closeChrono();
+  if (act === 'chrono-ask')   return askChrono(+el.dataset.i);
+  if (act === 'chrono-quest') return toggleChronoQuest(+el.dataset.i);
+  if (act === 'chrono-vibe')  return pickChronoVibe(el.dataset.v);
+  if (act === 'chrono-capture') return chronoCaptureGo();
 });
 
 document.addEventListener('change', e => {
@@ -3106,6 +3319,7 @@ document.addEventListener('input', e => {
     return setBudgetTotal(cleaned);
   }
   if (e.target.id === 'audioVol') return setAudioVolume(e.target.value);
+  if (e.target.id === 'cvSlider') return paintChronoFilter(+e.target.value);
 });
 
 document.addEventListener('submit', e => {
@@ -3471,20 +3685,206 @@ function shoot(day) {
 
 async function onShotPicked(e) {
   const file = e.target.files && e.target.files[0];
-  if (!file) return;
+  /* A capture kicked off from Chrono-Lens tags the next shoot() call — if
+     the file picker gets cancelled, that tag must not leak onto the next,
+     unrelated photo taken from the album tab. */
+  if (!file) { chronoCaptionHint = null; chronoCaptureActive = false; return; }
   const day = +e.target.dataset.day;
   const d = DAYS.find(x => x.n === day);
   const caption = window.prompt('מה לכתוב על התמונה?\n(אפשר להשאיר ריק)',
-    d ? d.cap : '') || '';
+    chronoCaptionHint || (d ? d.cap : '')) || '';
+  chronoCaptionHint = null;
+  const wasChrono = chronoCaptureActive; chronoCaptureActive = false;
   const busy = $('#shotBusy'); busy.hidden = false;
   try {
     const rec = await processShot(file, caption.trim(), day);
     await shotsPut(rec);
     await refreshShots(true);
     celebrate('📸', 'נשמר ביום ' + day);
+    if (wasChrono) closeChrono();
   } catch (err) {
     window.alert('לא הצלחתי לשמור את התמונה. אולי אין מספיק מקום בטלפון.');
   } finally { busy.hidden = true; e.target.value = ''; }
+}
+
+/* ══ chrono-lens engine ═════════════════════════════════════════════
+   A live camera view (falls back to a plain gradient when the camera is
+   denied/unavailable — the feature must still fully work), a temporal
+   slider that grades the image from "back then" to full color "now", a
+   canned Q&A per character, a 3-quest checklist, and a capture step that
+   hands off to the app's existing photo pipeline (shoot/onShotPicked)
+   so the result lands in the same album/movie/booklet as every other
+   trip photo — nothing new to store or export. */
+let chronoDay = null, chronoRegion = null, chronoStream = null;
+let chronoVibe = null, chronoCaptionHint = null, chronoCaptureActive = false;
+
+const chronoQid = (region, i) => region + ':' + i;
+
+function chronoEraLabel(c) {
+  return c.era === 0 ? 'אז · אגדה עתיקה' : 'אז · ' + c.era;
+}
+
+/* Simple char-by-char reveal. Keeps a timer handle on the element itself
+   so re-triggering (e.g. reopening the modal) cleanly cancels the old
+   one instead of two timers racing to write the same node. */
+function typewrite(el, text, speed) {
+  if (!el) return;
+  clearInterval(el._twTimer);
+  let i = 0;
+  el.textContent = '';
+  el._twTimer = setInterval(() => {
+    i++;
+    el.textContent = text.slice(0, i);
+    if (i >= text.length) { clearInterval(el._twTimer); el._twTimer = null; }
+  }, speed || 12);
+}
+
+function paintChronoFilter(pct) {
+  /* pct 0 = the character's own era (warm, desaturated, sepia-heavy),
+     100 = full color, present day. */
+  const p = Math.max(0, Math.min(100, pct)) / 100;
+  const filter = 'sepia(' + (1 - p) * 0.85 + ') saturate(' + (0.35 + p * 0.65) + ') '
+    + 'contrast(' + (1 + (1 - p) * 0.12) + ') hue-rotate(' + (1 - p) * -18 + 'deg)';
+  const v = $('#cvVideo'), f = $('#cvFallback');
+  if (v) v.style.filter = filter;
+  if (f) f.style.filter = filter;
+  const c = CHRONO[chronoRegion];
+  if (c) {
+    const year = c.era === 0 ? '' : Math.round(c.era + (2026 - c.era) * p);
+    const tag = $('#cvTag');
+    if (tag) tag.textContent = p >= 0.98 ? '📍 2026 · עכשיו' : (year ? '📍 ' + year : '📍 פעם...');
+  }
+}
+
+async function startChronoCamera() {
+  const v = $('#cvVideo'), f = $('#cvFallback');
+  const c = CHRONO[chronoRegion];
+  if (f) f.textContent = c ? c.emoji : '🕰️';
+  if (f && c) f.style.background = 'linear-gradient(160deg,' + c.color + ',#151c36)';
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { if (v) v.hidden = true; if (f) f.hidden = false; return; }
+  try {
+    chronoStream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:'environment' }, audio:false });
+    if (!v) return;
+    v.srcObject = chronoStream;
+    v.hidden = false;
+    if (f) f.hidden = true;
+  } catch (e) {
+    /* Denied, no camera, insecure context, whatever — the whole feature
+       still has to work without it. */
+    if (v) v.hidden = true;
+    if (f) f.hidden = false;
+  }
+}
+
+function stopChronoCamera() {
+  if (chronoStream) { chronoStream.getTracks().forEach(t => t.stop()); chronoStream = null; }
+  const v = $('#cvVideo');
+  if (v) { v.srcObject = null; v.hidden = true; }
+}
+
+function paintChronoBody() {
+  const c = CHRONO[chronoRegion];
+  const kindClass = c.kind === 'history' ? 'history' : (c.kind === 'legend' ? 'legend' : 'rep');
+  const body = $('#chronoBody');
+  if (!body) return;
+  body.innerHTML =
+    '<div class="npc">' +
+      '<div class="npc-h">' +
+        '<div class="npc-emoji">' + c.emoji + '</div>' +
+        '<div><div class="npc-name">' + esc(c.name) + '</div>' +
+          '<span class="npc-tag ' + kindClass + '">' + esc(c.tag) + '</span></div>' +
+      '</div>' +
+      '<div class="npc-greet" id="npcGreet"></div>' +
+    '</div>' +
+    '<div class="chat-qs">' +
+      c.qa.map((qa, i) =>
+        '<div>' +
+          '<button type="button" class="chat-q" data-act="chrono-ask" data-i="' + i + '">💬 ' + esc(qa.q) + '</button>' +
+          '<div class="chat-a" id="chatA' + i + '" hidden></div>' +
+        '</div>'
+      ).join('') +
+    '</div>' +
+    '<div class="cquests">' +
+      c.quests.map((q, i) => {
+        const done = state.chronoDone.includes(chronoQid(chronoRegion, i));
+        return '<button type="button" class="cquest' + (done ? ' done' : '') + '" data-act="chrono-quest" data-i="' + i + '">' +
+          '<span class="cq-box">' + (done ? '✓' : '') + '</span>' +
+          '<span class="cq-t">' + esc(q) + '</span>' +
+        '</button>';
+      }).join('') +
+    '</div>' +
+    '<div class="cap-box">' +
+      '<div class="cap-t">לתעד את הרגע 📸</div>' +
+      '<div class="vibes">' +
+        [['🔥','אפי'],['🧭','הרפתקני'],['🥱','בקושי ער']].map(([emoji, label]) =>
+          '<button type="button" class="vibe-b" data-act="chrono-vibe" data-v="' + emoji + '"><em>' + emoji + '</em>' + esc(label) + '</button>'
+        ).join('') +
+      '</div>' +
+      '<button type="button" class="cap-go" id="chronoCapBtn" data-act="chrono-capture" disabled>לתעד עם ' + esc(c.name) + '</button>' +
+    '</div>';
+  typewrite($('#npcGreet'), c.intro, 11);
+}
+
+function openChrono(n) {
+  const d = DAYS.find(x => x.n === n);
+  const c = d && CHRONO[d.region];
+  if (!c) return;
+  chronoDay = n; chronoRegion = d.region; chronoVibe = null;
+  $('#chrono').hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('#cvYearFrom').textContent = chronoEraLabel(c);
+  $('#cvSlider').value = 100;
+  paintChronoFilter(100);
+  paintChronoBody();
+  void startChronoCamera();
+}
+
+function closeChrono() {
+  $('#chrono').hidden = true;
+  document.body.style.overflow = '';
+  stopChronoCamera();
+}
+
+function askChrono(i) {
+  const c = CHRONO[chronoRegion];
+  if (!c) return;
+  const a = $('#chatA' + i);
+  if (!a || !a.hidden) return;
+  a.hidden = false;
+  const btn = document.querySelector('.chat-q[data-i="' + i + '"]');
+  if (btn) btn.classList.add('done');
+  typewrite(a, c.qa[i].a, 9);
+}
+
+function toggleChronoQuest(i) {
+  const qid = chronoQid(chronoRegion, i);
+  const has = state.chronoDone.includes(qid);
+  const chronoDone = has ? state.chronoDone.filter(x => x !== qid) : [...state.chronoDone, qid];
+  const badged = applyChange({ chronoDone });
+  const btn = document.querySelector('.cquest[data-i="' + i + '"]');
+  if (btn) {
+    btn.classList.toggle('done', !has);
+    const box = btn.querySelector('.cq-box');
+    if (box) box.textContent = !has ? '✓' : '';
+  }
+  if (!has && !badged) celebrate('🕰️', 'משימת זמן הושלמה!');
+}
+
+function pickChronoVibe(emoji) {
+  chronoVibe = emoji;
+  $$('.vibe-b').forEach(b => b.classList.toggle('on', b.dataset.v === emoji));
+  const btn = $('#chronoCapBtn');
+  if (btn) btn.disabled = false;
+}
+
+function chronoCaptureGo() {
+  if (!chronoVibe || !chronoDay) return;
+  const c = CHRONO[chronoRegion];
+  const flash = $('#cvFlash');
+  if (flash) { flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go'); }
+  chronoCaptionHint = chronoVibe + ' עם ' + (c ? c.name : '') + ' 🕰️';
+  chronoCaptureActive = true;
+  setTimeout(() => shoot(chronoDay), 350);
 }
 
 async function delShot(id) {
