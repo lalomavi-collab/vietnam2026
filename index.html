@@ -460,11 +460,24 @@ input{font-family:inherit}
 .pod-note b{color:var(--stamp)}
 .pod-note.warn{margin-top:6px;color:#8a6a10}
 
-/* ── scam warnings ────────────────────────────────────────────────────*/
+/* ── scam warnings ────────────────────────────────────────────────────
+   The two surfaces a family sees without opening the accordion — today's
+   banner and the day-card line — get the same "loud and always visible"
+   treatment as the SOS button (sosPulse), in the scam palette instead of
+   emergency red, so the eye actually catches them before anyone wanders
+   off alone. The 17-item list itself stays calm; a pulsing wall of items
+   would just get tuned out, which defeats the point. */
+@keyframes scamPulse{0%,100%{box-shadow:0 3px 10px rgba(214,69,69,.4),0 0 0 0 rgba(255,107,133,.55)}
+                     70%{box-shadow:0 3px 10px rgba(214,69,69,.4),0 0 0 9px rgba(255,107,133,0)}}
+@keyframes scamWiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(11deg)}
+                      60%{transform:rotate(-7deg)}80%{transform:rotate(4deg)}}
 .scam-lead{line-height:1.65;margin:0 0 14px;text-wrap:pretty}
 .scam-now{padding:11px 13px;border-radius:13px;margin-bottom:14px;font-size:12.5px;line-height:1.55;
-  background:rgba(214,69,69,.14);border:1px solid rgba(255,107,133,.42);color:#FFD3DA}
+  background:linear-gradient(150deg,rgba(255,90,110,.24),rgba(214,25,52,.15));
+  border:1.5px solid rgba(255,107,133,.55);color:#FFD3DA;
+  box-shadow:0 3px 10px rgba(214,69,69,.35);animation:scamPulse 2.6s ease-out infinite}
 .scam-now b{color:#fff}
+.scam-now-i,.day-scam-i{display:inline-block;font-size:16px;animation:scamWiggle 1.7s ease-in-out infinite}
 .scam-g{margin-bottom:14px}
 .scam-g-t{display:flex;align-items:baseline;gap:7px;font-size:12px;font-weight:800;color:#7f8aab;
   text-transform:none;letter-spacing:.02em;padding:0 2px 6px}
@@ -490,7 +503,9 @@ input{font-family:inherit}
 .scam-end p{margin:0;font-size:12.5px;line-height:1.65;color:#a8b6cf;text-wrap:pretty}
 .day-scam{display:flex;align-items:center;gap:8px;width:100%;text-align:start;min-height:46px;
   margin-top:12px;padding:9px 12px;border-radius:13px;font-size:12.5px;font-weight:700;
-  background:rgba(214,69,69,.12);border:1px solid rgba(255,107,133,.34);color:#FFD3DA}
+  background:linear-gradient(150deg,rgba(255,90,110,.22),rgba(214,25,52,.13));
+  border:1.5px solid rgba(255,107,133,.5);color:#FFD3DA;
+  box-shadow:0 3px 10px rgba(214,69,69,.3);animation:scamPulse 2.6s ease-out infinite}
 .day-scam em{margin-inline-start:auto;font-style:normal;font-size:15px;letter-spacing:1px}
 
 /* ── install guide ────────────────────────────────────────────────────*/
@@ -965,6 +980,7 @@ input{font-family:inherit}
 @media (prefers-reduced-motion:reduce){
   .rainbow,.reel-frame.on,.phrase.speaking .orb{animation:none}
   .page,.day-body{animation-duration:.01ms}
+  .scam-now,.day-scam,.scam-now-i,.day-scam-i{animation:none}
 }
 </style>
 </head>
@@ -2725,7 +2741,7 @@ function dayHTML(d) {
       '</button>' : '') +
 
       (scamsForDay(d.n).length
-        ? '<button class="day-scam" data-act="scam-go" data-n="' + d.n + '">🚨 ' +
+        ? '<button class="day-scam" data-act="scam-go" data-n="' + d.n + '"><span class="day-scam-i">🚨</span> ' +
           scamsForDay(d.n).length + ' דברים להיזהר מהם ' + esc(d.region === 'הנוי' ? 'בהנוי' : 'ב' + d.region) +
           '<em>' + esc(scamsForDay(d.n).map(x => x.icon).join(' ')) + '</em></button>'
         : '') +
@@ -2907,7 +2923,7 @@ function scamsHTML() {
     '<div class="sect-h"><h2>🚨 זהירות מרמאות</h2></div>' +
     '<p class="sect-sub scam-lead">רוב האנשים בוייטנאם ישרים לגמרי, ואתם ממילא עם מדריך כמעט כל הזמן. הרשימה הזאת היא בשביל השעה שאתם לבד — בשוק, ברחוב ליד המלון, בדרך חזרה.</p>' +
     (todays.length
-      ? '<div class="scam-now"><b>היום ב' + esc(DAYS[t.n - 1].region) + '</b> — ' +
+      ? '<div class="scam-now"><span class="scam-now-i">🚨</span> <b>היום ב' + esc(DAYS[t.n - 1].region) + '</b> — ' +
         todays.map(x => esc(x.icon + ' ' + x.t)).join(' · ') + '</div>'
       : '') +
     SCAM_GROUPS.map(g =>
