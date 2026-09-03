@@ -2846,8 +2846,8 @@ function dayHTML(d) {
         ? '<button class="act act--chrono" data-act="chrono-open" data-n="' + d.n + '">🕰️ כרונו-לנס — לפגוש את ' + esc(CHRONO[d.region].name) + '</button>'
         : '') +
       (d.ytId
-        ? '<div class="tube"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(d.ytId) +
-          '?rel=0&modestbranding=1" title="video" loading="lazy" allowfullscreen ' +
+        ? '<div class="tube" data-tube="' + d.n + '"><iframe src="https://www.youtube-nocookie.com/embed/' +
+          esc(d.ytId) + '?rel=0&modestbranding=1&enablejsapi=1" title="video" loading="lazy" allowfullscreen ' +
           'referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'
         : (d.yt
             ? '<a class="act act--tube" href="https://www.youtube.com/results?search_query=' +
@@ -3355,6 +3355,7 @@ function renderHero() {
 function renderMain() {
   $('#main').innerHTML = VIEWS[state.tab]();
   if (state.tab === 'days' && state.open) syncReel(state.open);
+  armTubes();
 }
 
 function syncStats() {
@@ -3408,6 +3409,52 @@ function advance(n) {
 }
 
 const preload = urls => urls.forEach(u => { const i = new Image(); i.src = u; });
+
+/* ══ video fallback ═════════════════════════════════════════════════
+   A YouTube id is not a promise. Videos get deleted, go private, or have
+   embedding switched off by their owner, and every one of those leaves a
+   dead rectangle on the page. The iframe player reports all of them as
+   onError over postMessage (100/101/150), so when that arrives the frame
+   is replaced by the search link the app already falls back to. */
+const YT_DEAD = [100, 101, 150];
+
+function tubeFallback(n) {
+  const box = document.querySelector('[data-tube="' + n + '"]');
+  const d = DAYS.find(x => x.n === n);
+  if (!box || !d || !d.yt) return;
+  box.outerHTML = '<a class="act act--tube" href="https://www.youtube.com/results?search_query=' +
+    encodeURIComponent(d.yt) + '" target="_blank" rel="noopener">' +
+    '🎥 לראות סרטונים מהמקום<em>דורש אינטרנט</em></a>';
+}
+
+window.addEventListener('message', ev => {
+  if (!/youtube(-nocookie)?\.com$/.test((() => {
+    try { return new URL(ev.origin).hostname.replace(/^www\./, ''); } catch (e) { return ''; }
+  })())) return;
+  let msg;
+  try { msg = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data; } catch (e) { return; }
+  if (!msg || msg.event !== 'onError') return;
+  const code = +(msg.info && msg.info.errorCode !== undefined ? msg.info.errorCode : msg.info);
+  if (!YT_DEAD.includes(code)) return;
+  document.querySelectorAll('[data-tube]').forEach(box => {
+    const f = box.querySelector('iframe');
+    if (f && f.contentWindow === ev.source) tubeFallback(+box.dataset.tube);
+  });
+});
+
+/* The player only speaks once it has been spoken to. */
+function armTubes() {
+  document.querySelectorAll('[data-tube] iframe').forEach(f => {
+    if (f.dataset.armed) return;
+    f.dataset.armed = '1';
+    f.addEventListener('load', () => {
+      try {
+        f.contentWindow.postMessage(JSON.stringify(
+          { event:'listening', id:f.closest('[data-tube]').dataset.tube }), '*');
+      } catch (e) {}
+    });
+  });
+}
 
 /* ══ actions ════════════════════════════════════════════════════════ */
 function goTab(id) {
