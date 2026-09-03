@@ -85,6 +85,16 @@ input{font-family:inherit}
 .icon-btn.music.on{background:var(--amber);color:#2b1400}
 
 /* ── stat stickers ────────────────────────────────────────────────── */
+.nextup[hidden]{display:none}
+.nextup{display:flex;align-items:center;gap:8px;width:calc(100% - 30px);margin:0 15px 10px;
+  min-height:40px;padding:7px 11px;border-radius:12px;text-align:start;
+  background:linear-gradient(135deg,rgba(122,92,255,.22),rgba(255,90,140,.16));
+  border:1px solid rgba(122,92,255,.42)}
+.nextup.quiet{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.10)}
+.nx-i{flex:none;font-size:17px;line-height:1}
+.nx-t{flex:1;min-width:0;font-size:12px;line-height:1.4;color:#cdd5ee;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nx-t b{color:#fff;font-weight:800}
 .stats{padding:14px 15px 2px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
 .stat{border-radius:13px;padding:7px 9px 8px;box-shadow:0 5px 14px rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.85);transform:rotate(var(--rot))}
 .stat--hunt{background:var(--mint);--rot:-2deg}
@@ -682,6 +692,11 @@ input{font-family:inherit}
 .quest-shots{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
 .shot{position:relative;width:78px;height:78px;border-radius:2px;overflow:hidden;background:#dfd8c4;box-shadow:0 3px 9px rgba(0,0,0,.3)}
 .shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot video{width:100%;height:100%;object-fit:cover;display:block}
+.shot-play{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
+  font-size:20px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7)}
+.movie-vid[hidden]{display:none}
+.movie-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#05060d}
 .shot-x{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;font-size:12px;line-height:1}
 .quest-add{width:100%;margin-top:10px;min-height:44px;border-radius:12px;background:rgba(31,78,121,.09);border:2px dashed rgba(31,78,121,.32);color:var(--ink);font-family:var(--hand);font-size:16px}
 .quest.done .quest-add{background:rgba(62,224,143,.14);border-color:rgba(31,78,121,.22)}
@@ -996,6 +1011,7 @@ input{font-family:inherit}
 
 <div class="movie" id="movie" hidden>
   <div class="movie-img" id="movieImg"></div>
+  <video class="movie-vid" id="movieVid" playsinline hidden></video>
   <div class="movie-shade"></div>
   <div class="movie-txt">
     <div class="movie-day" id="movieDay"></div>
@@ -1195,6 +1211,7 @@ input{font-family:inherit}
         <button class="icon-btn sos-top" id="sosFab" data-act="sos" title="חירום" aria-label="כפתור חירום">🆘</button>
       </div>
       <div class="subtitle">19 ימים · 9–27 בספטמבר · 11 מגלי ארצות</div>
+      <button class="nextup" id="nextup" data-act="nextup" hidden></button>
     </header>
 
     <div class="stats">
@@ -1227,7 +1244,7 @@ input{font-family:inherit}
       <nav class="nav" id="nav"></nav>
     </div>
     <div id="burstHost"></div>
-    <input type="file" id="shotFile" accept="image/*" capture="environment" hidden>
+    <input type="file" id="shotFile" accept="image/*,video/*" capture="environment" hidden>
     <input type="file" id="albumFile" accept="application/json,.json" hidden>
     <input type="file" id="avatarFile" accept="image/*" hidden>
     <div class="busy" id="shotBusy" hidden><div class="busy-in">שומר את התמונה…</div></div>
@@ -2215,6 +2232,81 @@ function tripToday() {
   return { n, inTrip: n >= 1 && n <= 19, until: 1 - n };
 }
 
+/* ══ what happens next ══════════════════════════════════════════════
+   The itinerary already knows every hour of every day; before this it
+   just sat there and let you find it. Departure is 9 Sep 00:55 from
+   Tel Aviv, so the whole thing has one anchor before the trip and
+   nineteen after it. */
+const TAKEOFF = new Date(TRIP_YEAR, TRIP_MONTH, 9, 0, 55);
+
+function minsOf(hhmm) {
+  const [h, m] = hhmm.split(':').map(Number);
+  return h * 60 + m;
+}
+
+/* Two numbers, largest unit first, so it reads the way a person counts:
+   days and hours far out, hours and minutes close in, minutes alone at
+   the end. */
+const COUNT = {
+  day:  [null, 'יום', 'יומיים'],
+  hour: [null, 'שעה', 'שעתיים'],
+  min:  [null, 'דקה', 'שתי דקות']
+};
+const plural = { day:'ימים', hour:'שעות', min:'דקות' };
+const count = (n, unit) => COUNT[unit][n] || (n + ' ' + plural[unit]);
+
+function untilText(ms) {
+  const mins = Math.max(0, Math.round(ms / 60000));
+  const d = Math.floor(mins / 1440), h = Math.floor((mins % 1440) / 60), m = mins % 60;
+  /* A vav takes a hyphen before a numeral ("ו-14 שעות") but not before a
+     word ("ושעתיים"). */
+  const and = x => (/^\d/.test(x) ? ' ו-' : ' ו') + x;
+  if (d) return h ? count(d, 'day') + and(count(h, 'hour')) : count(d, 'day');
+  if (h) return m ? count(h, 'hour') + and(count(m, 'min')) : count(h, 'hour');
+  if (m > 1) return count(m, 'min');
+  return 'רגע';
+}
+
+function nextUp() {
+  const t = tripToday();
+  const now = new Date();
+
+  if (!t.inTrip) {
+    if (t.until > 0) return { icon:'✈️', text:'ההמראה מתל אביב', at:TAKEOFF, before:true };
+    return null;                                   // the trip is behind us
+  }
+
+  const day = DAYS[t.n - 1];
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const row = dayRows(day).find(r => minsOf(r.time) > mins);
+  if (!row) return { done:true, day };
+
+  const at = new Date(now);
+  at.setHours(...row.time.split(':').map(Number), 0, 0);
+  return { icon:row.icon, text:row.text, at };
+}
+
+function paintNextUp() {
+  const el = $('#nextup');
+  if (!el) return;
+  const n = nextUp();
+  if (!n) { el.hidden = true; return; }
+  el.hidden = false;
+
+  if (n.done) {
+    el.classList.add('quiet');
+    el.innerHTML = '<span class="nx-i">🌙</span><span class="nx-t">' +
+      'זהו להיום — ' + esc(n.day.hotel) + '</span>';
+    return;
+  }
+  el.classList.toggle('quiet', !!n.before);
+  /* The itinerary lines are whole sentences; the strip has one line, so
+     it shows the opening clause and the day card holds the rest. */
+  const short = String(n.text).split(/[.,:—]/)[0].trim().slice(0, 46);
+  el.innerHTML = '<span class="nx-i">' + esc(n.icon) + '</span>' +
+    '<span class="nx-t"><b>בעוד ' + untilText(n.at - new Date()) + '</b> · ' + esc(short) + '</span>';
+}
+
 function paintSubtitle() {
   const t = tripToday();
   const el = document.querySelector('.subtitle');
@@ -3105,7 +3197,11 @@ function albumHTML() {
           '<div class="quest-t">' + esc(d.quest) + '</div>' +
           (mine.length
             ? '<div class="quest-shots">' + mine.map(sh =>
-                '<div class="shot"><img src="' + shotURL(sh) + '" alt="">' +
+                '<div class="shot' + (sh.kind === 'video' ? ' is-vid' : '') + '">' +
+                (sh.kind === 'video'
+                  ? '<video src="' + shotURL(sh) + '" poster="' + stillURL(sh) + '"' +
+                    ' playsinline muted preload="metadata"></video><span class="shot-play">▶</span>'
+                  : '<img src="' + shotURL(sh) + '" alt="">') +
                 '<button class="shot-x" data-act="shot-del" data-id="' + sh.id + '">✕</button></div>').join('') + '</div>'
             : '') +
           (allStories[d.n] || []).map((st, i) =>
@@ -3443,6 +3539,12 @@ document.addEventListener('click', e => {
   if (act === 'scam-go')   { const f = scamsForDay(+el.dataset.n)[0];
                              state.scam = f ? f.id : null; persist(); goTab('money');
                              setTimeout(() => { const s = $('.scams'); if (s) s.scrollIntoView({ behavior:'smooth', block:'start' }); }, 90);
+                             return; }
+  if (act === 'nextup')    { const t = tripToday();
+                             if (t.inTrip && state.open !== t.n) openDay(t.n);
+                             goTab('days');
+                             const el = $('#day-' + t.n);
+                             if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
                              return; }
   if (act === 'install')   return void installApp();
   if (act === 'howto-x')   return closeHowto();
@@ -3808,7 +3910,73 @@ function loadImage(src) {
   });
 }
 
+/* A phone clip is enormous next to a photo: thirty seconds weighs about
+   what a hundred stills do, and IndexedDB has a quota that ends the trip
+   for everything else once it is gone. So clips are bounded on the way in
+   and the limit is stated in Hebrew rather than thrown as a quota error
+   halfway through Ha Long Bay. */
+const VIDEO_MAX_BYTES = 25 * 1024 * 1024;
+const VIDEO_MAX_SECS = 45;
+const isVideo = f => (f.type || '').startsWith('video/');
+
+/* The booklet prints on paper and the album grid wants something to show
+   before anyone taps: both need a still, so one frame is lifted out of
+   the clip and stored beside it. */
+function videoPoster(file) {
+  return new Promise(resolve => {
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video');
+    v.preload = 'metadata'; v.muted = true; v.playsInline = true;
+    const give = blob => { URL.revokeObjectURL(url); resolve(blob); };
+    const fail = () => give(null);
+    v.onerror = fail;
+    v.onloadeddata = () => {
+      try {
+        const scale = Math.min(1, 1280 / Math.max(v.videoWidth, v.videoHeight));
+        const c = document.createElement('canvas');
+        c.width = Math.round(v.videoWidth * scale) || 640;
+        c.height = Math.round(v.videoHeight * scale) || 360;
+        c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
+        c.toBlob(b => give(b), 'image/jpeg', 0.8);
+      } catch (e) { fail(); }
+    };
+    /* A hair into the clip — frame zero is often black. */
+    v.onloadedmetadata = () => { try { v.currentTime = Math.min(0.6, (v.duration || 1) / 3); } catch (e) {} };
+    v.src = url;
+    setTimeout(fail, 8000);
+  });
+}
+
+function videoDuration(file) {
+  return new Promise(resolve => {
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video');
+    v.preload = 'metadata';
+    v.onloadedmetadata = () => { URL.revokeObjectURL(url); resolve(v.duration || 0); };
+    v.onerror = () => { URL.revokeObjectURL(url); resolve(0); };
+    v.src = url;
+    setTimeout(() => resolve(0), 6000);
+  });
+}
+
+async function processVideo(file, caption, day) {
+  if (file.size > VIDEO_MAX_BYTES) {
+    throw new Error('הסרטון גדול מדי — ' + Math.round(file.size / 1048576) +
+      'MB. המקסימום הוא 25MB, בערך 30 שניות. צלמו קליפ קצר יותר.');
+  }
+  const secs = await videoDuration(file);
+  if (secs > VIDEO_MAX_SECS) {
+    throw new Error('הסרטון ארוך מדי — ' + Math.round(secs) +
+      ' שניות. המקסימום הוא 45 שניות, כדי שיישאר מקום לשאר הטיול.');
+  }
+  const poster = await videoPoster(file);
+  return { id: String(day).padStart(2,'0') + '-' + Math.random().toString(36).slice(2,9),
+           day, caption: caption || '', by: myName(), blob: file, poster,
+           kind:'video', secs: Math.round(secs), w:0, h:0 };
+}
+
 async function processShot(file, caption, day) {
+  if (isVideo(file)) return processVideo(file, caption, day);
   const url = URL.createObjectURL(file);
   const img = await loadImage(url);
   const MAX = 1600;
@@ -3863,7 +4031,18 @@ function shotURL(sh) {
   if (!shotUrls.has(sh.id)) shotUrls.set(sh.id, URL.createObjectURL(sh.blob));
   return shotUrls.get(sh.id);
 }
+/* Anywhere a still is required — the grid, the printed page — a clip
+   stands in with its poster frame, and only falls back to the clip
+   itself if the frame could not be lifted. */
+function stillURL(sh) {
+  if (sh.kind !== 'video') return shotURL(sh);
+  if (!sh.poster) return '';
+  const k = sh.id + ':p';
+  if (!shotUrls.has(k)) shotUrls.set(k, URL.createObjectURL(sh.poster));
+  return shotUrls.get(k);
+}
 function dropShotURL(id) {
+  if (shotUrls.has(id + ':p')) { URL.revokeObjectURL(shotUrls.get(id + ':p')); shotUrls.delete(id + ':p'); }
   if (shotUrls.has(id)) { URL.revokeObjectURL(shotUrls.get(id)); shotUrls.delete(id); }
 }
 
@@ -3900,7 +4079,8 @@ async function onShotPicked(e) {
   if (!file) { chronoCaptionHint = null; chronoCaptureActive = false; return; }
   const day = +e.target.dataset.day;
   const d = DAYS.find(x => x.n === day);
-  const caption = window.prompt('מה לכתוב על התמונה?\n(אפשר להשאיר ריק)',
+  const caption = window.prompt(isVideo(file) ? 'מה לכתוב מתחת לסרטון?\n(אפשר להשאיר ריק)'
+                                              : 'מה לכתוב על התמונה?\n(אפשר להשאיר ריק)',
     chronoCaptionHint || (d ? d.cap : '')) || '';
   chronoCaptionHint = null;
   const wasChrono = chronoCaptureActive; chronoCaptureActive = false;
@@ -3909,10 +4089,14 @@ async function onShotPicked(e) {
     const rec = await processShot(file, caption.trim(), day);
     await shotsPut(rec);
     await refreshShots(true);
-    celebrate('📸', 'נשמר ביום ' + day);
+    celebrate(isVideo(file) ? '🎬' : '📸', 'נשמר ביום ' + day);
     if (wasChrono) closeChrono();
   } catch (err) {
-    window.alert('לא הצלחתי לשמור את התמונה. אולי אין מספיק מקום בטלפון.');
+    /* A size or length refusal is a sentence we wrote; anything else is
+       the browser running out of room. Do not blur the two. */
+    window.alert(err && err.message && /MB|שניות/.test(err.message)
+      ? err.message
+      : 'לא הצלחתי לשמור. כנראה נגמר המקום בטלפון — נסו למחוק כמה פריטים מהאלבום.');
   } finally { busy.hidden = true; e.target.value = ''; }
 }
 
@@ -4269,18 +4453,51 @@ function openMovie() {
   movieIdx = 0;
   $('#movie').hidden = false;
   document.body.style.overflow = 'hidden';
+  /* paintMovie owns the clock now — a still starts the interval, a clip
+     stops it and hands the timing to the video. Starting one here as well
+     leaked a second interval and the film advanced twice per tick. */
   paintMovie();
-  movieTimer = setInterval(() => { movieIdx = (movieIdx + 1) % shots.length; paintMovie(); }, 3800);
   if (!state.audioPlaying) toggleMusic();
 }
+
+let movieCap = null, movieToken = 0;
+function movieNext() { movieIdx = (movieIdx + 1) % shots.length; paintMovie(); }
 
 function paintMovie() {
   const sh = shots[movieIdx];
   const d = DAYS.find(x => x.n === sh.day);
-  $('#movieImg').style.backgroundImage = cssUrl(shotURL(sh));
-  $('#movieImg').style.animation = 'none';
-  void $('#movieImg').offsetWidth;
-  $('#movieImg').style.animation = 'kb 8s ease-in-out infinite alternate';
+  const vid = $('#movieVid');
+
+  /* Three things can try to advance a clip — its 'ended' event, the stall
+     cap, and a failed play() — and any of them can fire after the film has
+     already moved on, skipping a frame. The token means only callbacks
+     belonging to the frame currently on screen are obeyed. */
+  const token = ++movieToken;
+  const step = () => { if (token === movieToken) movieNext(); };
+
+  if (sh.kind === 'video') {
+    /* Hand the clock to the clip: the slideshow interval would cut it off
+       mid-sentence, so it is stopped and the clip's own end advances the
+       film. The cap is there for a clip that stalls and never ends. */
+    clearInterval(movieTimer); movieTimer = null;
+    clearTimeout(movieCap);
+    $('#movieImg').style.backgroundImage = '';
+    $('#movieImg').style.animation = 'none';
+    vid.hidden = false;
+    vid.src = shotURL(sh);
+    vid.onended = step;
+    movieCap = setTimeout(step, (sh.secs || 20) * 1000 + 4000);
+    vid.play().catch(() => { clearTimeout(movieCap); movieCap = setTimeout(step, 5000); });
+  } else {
+    vid.hidden = true; vid.onended = null;
+    if (vid.src) { vid.pause(); vid.removeAttribute('src'); vid.load(); }
+    clearTimeout(movieCap);
+    if (!movieTimer) movieTimer = setInterval(movieNext, 3800);
+    $('#movieImg').style.backgroundImage = cssUrl(shotURL(sh));
+    $('#movieImg').style.animation = 'none';
+    void $('#movieImg').offsetWidth;
+    $('#movieImg').style.animation = 'kb 8s ease-in-out infinite alternate';
+  }
   $('#movieCap').textContent = sh.caption || (d ? d.title : '');
   $('#movieDay').textContent = 'DAY ' + sh.day + (d ? ' · ' + d.date : '');
   $('#movieBar').style.width = ((movieIdx + 1) / shots.length * 100) + '%';
@@ -4288,6 +4505,9 @@ function paintMovie() {
 
 function closeMovie() {
   clearInterval(movieTimer); movieTimer = null;
+  clearTimeout(movieCap); movieCap = null;
+  const v = $('#movieVid');
+  if (v) { v.onended = null; v.pause(); v.removeAttribute('src'); v.load(); v.hidden = true; }
   $('#movie').hidden = true;
   document.body.style.overflow = '';
   if (state.audioPlaying) toggleMusic();
@@ -4315,7 +4535,8 @@ function openBooklet() {
         '<div class="bk-meta">' + esc(d.date) + ' · ' + esc(d.region) +
           (d.hotel ? ' · ' + esc(d.hotel) : '') + '</div>' +
         '<div class="bk-grid">' + (byDay[d.n] || []).map(sh =>
-          '<figure><img src="' + shotURL(sh) + '" alt="">' +
+          '<figure' + (sh.kind === 'video' ? ' class="is-vid"' : '') + '>' +
+          '<img src="' + stillURL(sh) + '" alt="">' +
           (sh.caption || sh.by ? '<figcaption>' + esc(sh.caption || '') +
             (sh.by ? '<em>' + esc(sh.by) + '</em>' : '') + '</figcaption>' : '') +
           '</figure>').join('') + '</div>' +
@@ -4646,6 +4867,9 @@ load();
 renderHero();
 renderNav();
 paintSubtitle();
+paintNextUp();
+setInterval(paintNextUp, 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) paintNextUp(); });
 renderMain();
 renderMusicBar();
 syncStats();
