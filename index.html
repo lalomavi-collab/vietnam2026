@@ -460,6 +460,39 @@ input{font-family:inherit}
 .pod-note b{color:var(--stamp)}
 .pod-note.warn{margin-top:6px;color:#8a6a10}
 
+/* ── scam warnings ────────────────────────────────────────────────────*/
+.scam-lead{line-height:1.65;margin:0 0 14px;text-wrap:pretty}
+.scam-now{padding:11px 13px;border-radius:13px;margin-bottom:14px;font-size:12.5px;line-height:1.55;
+  background:rgba(214,69,69,.14);border:1px solid rgba(255,107,133,.42);color:#FFD3DA}
+.scam-now b{color:#fff}
+.scam-g{margin-bottom:14px}
+.scam-g-t{display:flex;align-items:baseline;gap:7px;font-size:12px;font-weight:800;color:#7f8aab;
+  text-transform:none;letter-spacing:.02em;padding:0 2px 6px}
+.scam-g-t em{font-style:normal;font-size:10.5px;color:#5b6485}
+.scam{display:flex;align-items:center;gap:10px;width:100%;text-align:start;min-height:52px;
+  padding:9px 11px;margin-bottom:6px;border-radius:13px;background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.09);color:#e8ecf8}
+.scam.on{background:rgba(214,69,69,.13);border-color:rgba(255,107,133,.40)}
+.scam-i{flex:none;font-size:21px;line-height:1}
+.scam-t{flex:1;min-width:0}
+.scam-t b{display:block;font-size:13.5px;font-weight:700;line-height:1.35}
+.scam-x{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.09);font-size:15px;font-weight:800;color:#aeb8d6}
+.scam-body{margin:-2px 0 9px;padding:12px 13px;border-radius:13px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}
+.scam-body p{margin:0 0 10px;font-size:12.5px;line-height:1.65;color:#c3cbe2;text-wrap:pretty}
+.scam-body b{display:block;font-size:11.5px;font-weight:800;color:var(--mint);margin-bottom:5px}
+.scam-body ul{margin:0;padding-inline-start:17px}
+.scam-body li{font-size:12.5px;line-height:1.6;color:#dbe1f2;margin-bottom:4px}
+.scam-end{margin-top:6px;padding:13px;border-radius:14px;background:rgba(92,225,230,.09);
+  border:1px solid rgba(92,225,230,.26)}
+.scam-end b{display:block;font-size:13px;color:#B9F7F9;margin-bottom:4px}
+.scam-end p{margin:0;font-size:12.5px;line-height:1.65;color:#a8b6cf;text-wrap:pretty}
+.day-scam{display:flex;align-items:center;gap:8px;width:100%;text-align:start;min-height:46px;
+  margin-top:12px;padding:9px 12px;border-radius:13px;font-size:12.5px;font-weight:700;
+  background:rgba(214,69,69,.12);border:1px solid rgba(255,107,133,.34);color:#FFD3DA}
+.day-scam em{margin-inline-start:auto;font-style:normal;font-size:15px;letter-spacing:1px}
+
 /* ── install guide ────────────────────────────────────────────────────*/
 .howto[hidden]{display:none}
 .howto{position:fixed;inset:0;z-index:250;display:grid;place-items:center;padding:20px 16px;overflow-y:auto;
@@ -1927,7 +1960,7 @@ const CHRONO = {
 /* ══ state ══════════════════════════════════════════════════════════ */
 const state = {
   tab:'days', open:1, found:[], done:[], said:[], eaten:[], answers:{}, missions:[], quizBest:0, quizPlays:0,
-  vibe:'teen', vnd:'50000', slide:{}, speaking:null,
+  vibe:'teen', vnd:'50000', scam:null, slide:{}, speaking:null,
   radarCat:'all', radarBudget:0, radarOpenOnly:false,
   bargAsk:'200000', bargTarget:'120000',
   budget:{ total:1000000, transactions:[
@@ -2202,6 +2235,119 @@ function toggleFood(id) {
   const n = $('#foodCount'); if (n) n.textContent = eaten.length + '/' + FOODS.length;
   if (!has && !badged) celebrate(it.emoji, 'טעמתם! ' + it.name);
 }
+
+/* ══ scams ══════════════════════════════════════════════════════════
+   Not a general list of Vietnamese scams — only the ones that happen
+   in the places this itinerary actually goes, on the days it is there.
+   The family travels with a guide, so the risk window is the hour they
+   wander off on their own: the market, the street by the hotel, the
+   walk back. Prices are 2026 street rates. */
+const SCAM_GROUPS = [
+  { g:'בכל מקום', days:[], items:[
+    { id:'notes', icon:'💵', t:'שני שטרות כחולים שנראים אותו דבר',
+      w:'20,000₫ ו-500,000₫ שניהם כחולים ובערך באותו גודל — וההבדל ביניהם פי 25. יש מי שלוקח מכם את השטר הגדול, מחליף אותו ביד לקטן, ומראה לכם: "נתת לי רק עשרים".',
+      d:['לומר בקול את הסכום כשמושיטים: "חמש מאות"',
+         'לא לעזוב את השטר עד שהוא בקופה',
+         'לשלם בשטרות של 10 / 20 / 50 אלף — הרבה פחות מעניין לרמות',
+         'לספור את העודף לפני שממשיכים ללכת'] },
+    { id:'photo', icon:'📸', t:'"רק תמונה אחת, בחינם"',
+      w:'מישהו מציע לכם להחזיק את מוט הסלים על הכתף, לחבוש כובע חרוט, או מזמין אתכם לצלם אותו בבגדים מסורתיים. אחרי הצילום מגיעה הדרישה: 100,000–300,000₫.',
+      d:['לא לקחת ליד את המוט ולא את הסל. זה כל הטריק',
+         'רוצים בכל זאת? מסכמים מחיר לפני — 30–50 אלף זה הוגן',
+         'לומר "Không, cảm ơn" ולהמשיך ללכת'] },
+    { id:'atm', icon:'🏧', t:'הכספומט מציע לחייב בשקלים',
+      w:'המסך שואל אם לחייב במטבע שלכם במקום בדונג. זה נשמע נוח ועולה 3–8% יותר, כי בית העסק קובע את שער ההמרה.',
+      d:['תמיד לבחור לחייב ב-VND (דונג)',
+         'למשוך מכספומט בתוך סניף בנק, לא ברחוב'] } ]},
+
+  { g:'הנוי', days:[1,7,8,13,18,19], items:[
+    { id:'shoe', icon:'👟', t:'"הנעל שלך קרועה"',
+      w:'אדם עם ערכת צחצוח ניגש ברחוב או בבית קפה, אומר שיש בעיה בנעל, ומתחיל לעבוד עליה לפני שהספקתם לענות. הנעל הייתה בסדר. אחר כך מבקשים 200,000–500,000₫ על עבודה ששווה 30,000.',
+      d:['למשוך את הרגל אחורה. לא נותנים לגעת בנעל',
+         '"Không" בנימוס, וממשיכים ללכת',
+         'אם כבר התחיל — מסכמים מחיר עכשיו, משלמים 30–50 אלף והולכים'] },
+    { id:'taxi', icon:'🚕', t:'"המונה מקולקל" · מונית בלי מונה',
+      w:'הנהג אומר שהמונה לא עובד ונוקב במחיר קבוע, או שהמונה רץ פי שלושה מהקצב האמיתי. נוסעים גם בדרך ארוכה מהצורך.',
+      d:['מזמינים באפליקציה — Grab, Be או Xanh SM. המחיר סגור מראש',
+         'מוניות אמיתיות: Mai Linh (ירוקה) או Vinasun (לבנה)',
+         'משדה התעופה לרובע הקדום זה 250–350 אלף. לא 600',
+         'עוקבים אחרי המסלול ב-Google Maps בזמן הנסיעה'] },
+    { id:'cyclo', icon:'🚲', t:'הסיקלו שמכפיל את המחיר בסוף',
+      w:'נהג הריקשה מסכים על מחיר נמוך בהתחלה, ובסוף מתברר שזה היה לאדם, או לקילומטר, או לדקה — והחשבון גדל פי כמה.',
+      d:['לסכם סכום אחד לכל הנסיעה, בדונג, לפני שעולים',
+         'לכתוב את המספר בטלפון ולהראות לנהג שיאשר'] },
+    { id:'market', icon:'🛍️', t:'שוק דונג שואן — מה שראיתם זה לא מה שארזו',
+      w:'מראים לכם פריט טוב, ובזמן האריזה מחליפים אותו באחר. משלמים לפני שמגלים.',
+      d:['לא מורידים עיניים מהפריט עד שהוא בשקית שלכם',
+         'לפתוח ולבדוק לפני שמשלמים',
+         'המחיר הראשון הוא בערך פי 3. להתמקח בלי בושה'] },
+    { id:'coffee', icon:'☕', t:'קפה ביצים בפי שלוש',
+      w:'קפה הביצים של הנוי הוא דבר אמיתי ומעולה — ועולה 35,000–45,000₫. בבתי קפה על שפת האגם גובים 80,000–150,000 על אותו הדבר.',
+      d:['לשאול "Bao nhiêu tiền?" לפני שמזמינים',
+         'להתרחק שני רחובות מהאגם והמחיר נופל בחצי'] } ]},
+
+  { g:'סאפה', days:[4,5,6], items:[
+    { id:'guide', icon:'👣', t:'ה"מדריכה" שהצטרפה בחינם',
+      w:'אישה מהכפר מצטרפת אליכם בתחילת הטיול, הולכת לצידכם שעה־שעתיים ומספרת על המקום. בסוף המסלול, בכפר מרוחק, היא פורשת מוצרים ומבקשת תשלום גם עליהם וגם על הליווי.',
+      d:['אתם עם מדריך משלכם — לומר את זה ברור בהתחלה',
+         'לא לקחת מתנות: צמיד או פרח הופכים אחר כך לחשבון',
+         'לא מתרחקים מהקבוצה. זה נגמר רע דווקא במקום מבודד'] },
+    { id:'embroid', icon:'🧵', t:'רקמה במחיר של תייר',
+      w:'המחיר הראשון בשוק סאפה הוא פי 5 עד פי 15 מהמחיר האמיתי, ובא עם סיפור ולחץ רגשי.',
+      d:['לשאול בשלוש דוכנים לפני שקונים',
+         'להציע בערך שליש ולהתקדם משם',
+         'להיות מוכנים ללכת. זה מה שמזיז את המחיר'] } ]},
+
+  { g:'הא לונג וקאט בא', days:[9,10], items:[
+    { id:'pearl', icon:'🦪', t:'"חוות הפנינים" שעל הדרך',
+      w:'עצירה בדוכן שמוכר פנינים, דיו מיובש ומזכרות במחיר פי 3 עד פי 5. שרשרת "פנינים" ב-30 דולר היא בדרך כלל זכוכית או פלסטיק.',
+      d:['זו עצירת צילום, לא חנות. פשוט לא קונים',
+         'פנינה אמיתית יקרה גם בוייטנאם'] },
+    { id:'cruisepic', icon:'📷', t:'"הצלם של הספינה" — התמונות בתשלום',
+      w:'צלם מסתובב על הסיפון ומצלם בחינם. בסוף ההפלגה מציעים דיסק-און-קי עם התמונות ב-2,000,000₫ ומעלה.',
+      d:['אתם ממילא באתגר הצילום — צלמו בעצמכם',
+         'לומר "לא, תודה" כבר בהתחלה'] } ]},
+
+  { g:'נין בין', days:[10,11,12], items:[
+    { id:'rower', icon:'🚣', t:'החותרת שעוצרת באמצע הנהר',
+      w:'בטאם קוק חותרים ברגליים — מחזה מדהים. אבל באמצע המסלול, לפעמים בתוך המערה, הסירה נעצרת ומתחילה מכירה של שתייה, חטיפים או רקמה במחיר מופקע. קשה לסרב כשאתם באמצע נהר.',
+      d:['לוקחים מים וחטיפים מהמלון. אז אין מה למכור לכם',
+         'טיפ הוגן בסוף: 20,000–50,000₫ לאדם. לא חייבים לקנות כלום',
+         '"Không, cảm ơn" בחיוך, ולהמשיך להסתכל על הנוף'] },
+    { id:'cave', icon:'🕳️', t:'"מערה סודית" שלא בתוכנית',
+      w:'בטראנג אן מציעים לסטות מהמסלול הרשמי אל "מערה מיוחדת". באמצע מתברר שזה בתוספת תשלום של 50,000–200,000₫ לאדם.',
+      d:['נשארים במסלול שהמדריך סיכם',
+         'כל תוספת — שואלים את המדריך לפני שמסכימים'] } ]},
+
+  { g:'הוי אן ודה נאנג', days:[14,15,16,17], items:[
+    { id:'tailor', icon:'✂️', t:'חייטים — "צמר" שהוא פוליאסטר',
+      w:'בהוי אן יש יותר מ-400 חנויות חייטים, ורובן הגונות. המיעוט מוכר בד מלאכותי בתור צמר איטלקי, או מראה בד אחד ותופר מבד אחר.',
+      d:['לצלם את גליל הבד שבחרתם, עם השוליים שבהם כתוב שם היצרן',
+         'מקדמה של 30% לכל היותר. את השאר משלמים רק כשמקבלים',
+         'לקבוע איסוף יום שלם לפני הטיסה — לא בבוקר האחרון',
+         'אם נהג או "חבר" הביא אתכם לחנות — לא מזמינים באותו ביקור'] },
+    { id:'basket', icon:'🛶', t:'סירת הסלים והפנסים',
+      w:'הסירה העגולה והשיט עם הפנסים הם חוויה אמיתית — אבל המחיר קופץ באמצע, או שמופיע "דמי כניסה" לקטע נהר.',
+      d:['מחיר אחד לכל הסירה ולכל הנוסעים, מסוכם לפני העלייה',
+         'לשאול את המדריך מה המחיר ההוגן היום'] },
+    { id:'bag', icon:'🎒', t:'"התיק שלך קרוע"',
+      w:'אותו טריק של הנעל, בגרסת הוי אן: מצביעים על שריטה בנעל או קרע קטן בתיק, מציעים לתקן בזול, וגובים פי שלושה עד חמישה בסוף.',
+      d:['אותה תשובה: לא נותנים לגעת, ממשיכים ללכת'] } ]}
+];
+/* Hanoi is days 1, 7-8, 13, 18-19 — writing that as "1-19" would say the
+   opposite of the truth, so the runs are collapsed individually. */
+function dayRanges(days) {
+  const out = [];
+  for (let i = 0; i < days.length; i++) {
+    let j = i;
+    while (j + 1 < days.length && days[j + 1] === days[j] + 1) j++;
+    out.push(j > i ? days[i] + '\u2013' + days[j] : String(days[i]));
+    i = j;
+  }
+  return out.join(' \u00b7 ');
+}
+const SCAM_ITEMS = SCAM_GROUPS.flatMap(g => g.items.map(x => ({ ...x, g:g.g, days:g.days })));
+const scamsForDay = n => SCAM_ITEMS.filter(x => x.days.includes(n));
 
 /* ══ game time ══════════════════════════════════════════════════════
    The dead hours of the trip, taken from the itinerary itself: the long
@@ -2578,6 +2724,12 @@ function dayHTML(d) {
         '<span class="mine-tick">' + (state.missions.includes(d.n) ? '✓ בוצע' : 'לסמן כבוצע') + '</span>' +
       '</button>' : '') +
 
+      (scamsForDay(d.n).length
+        ? '<button class="day-scam" data-act="scam-go" data-n="' + d.n + '">🚨 ' +
+          scamsForDay(d.n).length + ' דברים להיזהר מהם ' + esc(d.region === 'הנוי' ? 'בהנוי' : 'ב' + d.region) +
+          '<em>' + esc(scamsForDay(d.n).map(x => x.icon).join(' ')) + '</em></button>'
+        : '') +
+
       '<div class="day-actions">' +
         '<a class="act act--map" href="' + esc(d.map) + '" target="_blank" rel="noopener">📍 איפה זה?</a>' +
         '<button class="act act--next" data-act="day-next" data-n="' + d.n + '">⏭ תמונה הבאה</button>' +
@@ -2733,6 +2885,41 @@ function moneyHTML() {
       '<p class="sect-sub">כמה נשאר לכם מהתקציב האישי לטיול.</p>' +
       budgetHTML() +
     '</div>' +
+    scamsHTML() +
+  '</div>';
+}
+
+function scamsHTML() {
+  const t = tripToday();
+  const todays = t.inTrip ? scamsForDay(t.n) : [];
+  const row = x =>
+    '<button class="scam' + (state.scam === x.id ? ' on' : '') + '" data-act="scam" data-id="' + x.id + '">' +
+      '<span class="scam-i">' + x.icon + '</span>' +
+      '<span class="scam-t"><b>' + esc(x.t) + '</b></span>' +
+      '<span class="scam-x">' + (state.scam === x.id ? '−' : '+') + '</span>' +
+    '</button>' +
+    (state.scam === x.id
+      ? '<div class="scam-body"><p>' + esc(x.w) + '</p>' +
+        '<b>מה עושים</b><ul>' + x.d.map(l => '<li>' + esc(l) + '</li>').join('') + '</ul></div>'
+      : '');
+
+  return '<div class="sect scams">' +
+    '<div class="sect-h"><h2>🚨 זהירות מרמאות</h2></div>' +
+    '<p class="sect-sub scam-lead">רוב האנשים בוייטנאם ישרים לגמרי, ואתם ממילא עם מדריך כמעט כל הזמן. הרשימה הזאת היא בשביל השעה שאתם לבד — בשוק, ברחוב ליד המלון, בדרך חזרה.</p>' +
+    (todays.length
+      ? '<div class="scam-now"><b>היום ב' + esc(DAYS[t.n - 1].region) + '</b> — ' +
+        todays.map(x => esc(x.icon + ' ' + x.t)).join(' · ') + '</div>'
+      : '') +
+    SCAM_GROUPS.map(g =>
+      '<div class="scam-g">' +
+        '<div class="scam-g-t">' + esc(g.g) +
+          (g.days.length ? '<em>ימים ' + dayRanges(g.days) + '</em>' : '<em>כל הטיול</em>') +
+        '</div>' +
+        g.items.map(row).join('') +
+      '</div>').join('') +
+    '<div class="scam-end"><b>ואם בכל זאת נתפסתם</b>' +
+      '<p>לא מתווכחים ולא מרימים קול. משלמים את הסכום הקטן, מתרחקים, ומספרים להורים — זה סיפור טוב לערב, לא אסון. ' +
+      'על סכום גדול באמת יש משטרת תיירים בהנוי, והמדריך יודע להגיע אליה. ואם משהו מרגיש לא בסדר — יש את הכפתור האדום למעלה.</p></div>' +
   '</div>';
 }
 
@@ -3235,6 +3422,12 @@ document.addEventListener('click', e => {
   if (act === 'who')       { askName(true); renderMain(); return; }
   if (act === 'story')     return addStory(+el.dataset.n);
   if (act === 'story-del') return delStory(+el.dataset.n, +el.dataset.i);
+  if (act === 'scam')      { state.scam = state.scam === el.dataset.id ? null : el.dataset.id;
+                             persist(); renderMain(); return; }
+  if (act === 'scam-go')   { const f = scamsForDay(+el.dataset.n)[0];
+                             state.scam = f ? f.id : null; persist(); goTab('money');
+                             setTimeout(() => { const s = $('.scams'); if (s) s.scrollIntoView({ behavior:'smooth', block:'start' }); }, 90);
+                             return; }
   if (act === 'install')   return void installApp();
   if (act === 'howto-x')   return closeHowto();
   if (act === 'export')    return void exportAlbum();
