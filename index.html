@@ -508,6 +508,16 @@ input{font-family:inherit}
   box-shadow:0 3px 10px rgba(214,69,69,.3);animation:scamPulse 2.6s ease-out infinite}
 .day-scam em{margin-inline-start:auto;font-style:normal;font-size:15px;letter-spacing:1px}
 
+/* ── scam popup (once a day, per place) ───────────────────────────────
+   Same modal shell as gametime (.gt-card/.gt-b/.gt-skip), tinted to the
+   scam palette so it reads as "pay attention" rather than "have fun". */
+.scampop[hidden]{display:none}
+.scampop{position:fixed;inset:0;z-index:246;display:grid;place-items:center;padding:22px;
+  background:rgba(6,8,18,.86);backdrop-filter:blur(6px)}
+.sp-card{border-top:5px solid #D61934}
+.sp-emoji{font-size:50px;line-height:1;display:inline-block;animation:scamWiggle 1.7s ease-in-out infinite}
+.sp-icons{font-size:22px;letter-spacing:5px;margin:2px 0 14px}
+
 /* ── install guide ────────────────────────────────────────────────────*/
 .howto[hidden]{display:none}
 .howto{position:fixed;inset:0;z-index:250;display:grid;place-items:center;padding:20px 16px;overflow-y:auto;
@@ -980,7 +990,7 @@ input{font-family:inherit}
 @media (prefers-reduced-motion:reduce){
   .rainbow,.reel-frame.on,.phrase.speaking .orb{animation:none}
   .page,.day-body{animation-duration:.01ms}
-  .scam-now,.day-scam,.scam-now-i,.day-scam-i{animation:none}
+  .scam-now,.day-scam,.scam-now-i,.day-scam-i,.sp-emoji{animation:none}
 }
 </style>
 </head>
@@ -1071,6 +1081,17 @@ input{font-family:inherit}
     <button class="gt-b main" data-act="gt-quiz">⚡ סבב מהיר · 10 שאלות</button>
     <button class="gt-b" data-act="gt-trivia">🎯 טריוויה וציד המציאות</button>
     <button class="gt-skip" data-act="gt-close">אחר כך</button>
+  </div>
+</div>
+
+<div class="scampop" id="scampop" hidden>
+  <div class="gt-card sp-card">
+    <div class="sp-emoji">🚨</div>
+    <h2 id="spTitle"></h2>
+    <p id="spWhy"></p>
+    <div class="sp-icons" id="spIcons"></div>
+    <button class="gt-b main" data-act="sp-open">מה לשים לב אליו היום</button>
+    <button class="gt-skip" data-act="sp-close">אחר כך</button>
   </div>
 </div>
 
@@ -2365,6 +2386,43 @@ function dayRanges(days) {
 const SCAM_ITEMS = SCAM_GROUPS.flatMap(g => g.items.map(x => ({ ...x, g:g.g, days:g.days })));
 const scamsForDay = n => SCAM_ITEMS.filter(x => x.days.includes(n));
 
+/* ══ scam popup ═════════════════════════════════════════════════════
+   Once a day, keyed to that day number so it resets on its own the
+   moment the itinerary moves to a new place — same "seen" idiom as
+   maybeOfferGame below. Skips silently on a day with nothing to warn
+   about, and steps aside for another modal already open rather than
+   stacking on top of it (it will get another chance on the next check,
+   since the "seen" flag is only set once it actually shows). */
+const SCAM_POP_SEEN = 'vn-scam-pop-seen';
+
+function maybeOfferScamPopup() {
+  const t = tripToday();
+  if (!t.inTrip) return;
+  const todays = scamsForDay(t.n);
+  if (!todays.length) return;
+  const key = 'd' + t.n;
+  try { if (localStorage.getItem(SCAM_POP_SEEN) === key) return; } catch (e) {}
+  if (!$('#gate').hidden || !$('#setup').hidden || !$('#gametime').hidden ||
+      !$('#quiz').hidden || !$('#chrono').hidden) return;
+  $('#spTitle').textContent = '🚨 היום ב' + DAYS[t.n - 1].region;
+  $('#spWhy').textContent = todays.length + ' דברים לשים לב אליהם היום, לפני שיוצאים לבד.';
+  $('#spIcons').textContent = todays.map(x => x.icon).join(' ');
+  $('#scampop').hidden = false;
+  try { localStorage.setItem(SCAM_POP_SEEN, key); } catch (e) {}
+}
+
+function closeScamPopup() { $('#scampop').hidden = true; }
+
+function openScamPopup() {
+  closeScamPopup();
+  const t = tripToday();
+  const f = scamsForDay(t.n)[0];
+  state.scam = f ? f.id : null;
+  persist();
+  goTab('money');
+  setTimeout(() => { const s = $('.scams'); if (s) s.scrollIntoView({ behavior:'smooth', block:'start' }); }, 90);
+}
+
 /* ══ game time ══════════════════════════════════════════════════════
    The dead hours of the trip, taken from the itinerary itself: the long
    drives between valleys and the flights. Open the app inside one of
@@ -2411,6 +2469,7 @@ function maybeOfferGame() {
   if (!w) return;
   const key = 'd' + w.d + '-' + w.a;
   try { if (localStorage.getItem(GAME_SEEN) === key) return; } catch (e) {}
+  if (!$('#scampop').hidden) return;   // let the safety popup have the screen first
   $('#gtWhy').textContent = w.why;
   $('#gametime').hidden = false;
   try { localStorage.setItem(GAME_SEEN, key); } catch (e) {}
@@ -3431,6 +3490,8 @@ document.addEventListener('click', e => {
   if (act === 'gt-close')  return closeGameTime();
   if (act === 'gt-quiz')   { closeGameTime(); return startQuiz(); }
   if (act === 'gt-trivia') { closeGameTime(); state.tab = 'hunt'; persist(); renderNav(); renderMain(); return; }
+  if (act === 'sp-open')   return openScamPopup();
+  if (act === 'sp-close')  return closeScamPopup();
   if (act === 'quiz-pick')  return pickQuiz(+el.dataset.o);
   if (act === 'quiz-x')     return closeQuiz();
   if (act === 'shoot')     return shoot(+el.dataset.n);
@@ -4654,6 +4715,9 @@ setInterval(() => { if (state.open) advance(state.open); }, 3600);
 initOffline();
 initInstall();
 void loadExtraPhotos();
+setTimeout(maybeOfferScamPopup, 1000);        // fires just ahead of maybeOfferGame — safety first
+setInterval(maybeOfferScamPopup, 5 * 60 * 1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) maybeOfferScamPopup(); });
 setTimeout(maybeOfferGame, 1500);
 setInterval(maybeOfferGame, 5 * 60 * 1000);   // a window can open mid-session
 document.addEventListener('visibilitychange', () => { if (!document.hidden) maybeOfferGame(); });
