@@ -80,7 +80,7 @@ input{font-family:inherit}
 /* Own row rather than beside the logo: at 31px the real handwriting title
    leaves too little width for this line on a 375px phone. */
 .subtitle{font-size:11px;color:#a9b4d4;font-weight:600;letter-spacing:.2px;padding:0 15px 9px;margin-top:-3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.icon-btn{position:relative;width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.07);color:#93a0c4;font-size:16px;flex:none}
+.icon-btn{position:relative;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.07);color:#93a0c4;font-size:16px;flex:none}
 .icon-btn.music{font-size:15px}
 .icon-btn.music.on{background:var(--amber);color:#2b1400}
 
@@ -900,8 +900,12 @@ input{font-family:inherit}
    have to find the right tab. */
 @keyframes sosPulse{0%,100%{box-shadow:0 3px 10px rgba(214,25,52,.45),0 0 0 0 rgba(214,25,52,.5)}
                     70%{box-shadow:0 3px 10px rgba(214,25,52,.45),0 0 0 10px rgba(214,25,52,0)}}
-.sos-top{background:linear-gradient(150deg,#FF3B5C,#D61934);color:#fff;font-size:15px;
+.sos-top{width:50px;height:50px;border-radius:15px;background:linear-gradient(150deg,#FF3B5C,#D61934);
+  color:#fff;font-size:22px;line-height:1;
   border:2px solid rgba(255,255,255,.85);box-shadow:0 3px 10px rgba(214,25,52,.45);animation:sosPulse 3.4s ease-out infinite}
+/* The tap area reaches past the paint on every side, so a finger that
+   lands slightly off still counts. */
+.sos-top::after{content:'';position:absolute;inset:-7px}
 .sos-top:active{transform:scale(.94)}
 .reset-link{width:100%;margin-top:16px;min-height:44px;border-radius:12px;background:rgba(255,255,255,.05);
   border:1px dashed rgba(255,255,255,.2);color:#8b95b8;font-size:12.5px}
@@ -1731,7 +1735,7 @@ const REGIONS = [
 const TABS = [
   { id:'days', icon:'📅', label:'יומן' }, { id:'hunt', icon:'🎮', label:'משחקים' },
   { id:'talk', icon:'🗣️', label:'מילים' }, { id:'badges', icon:'🏆', label:'הישגים' },
-  { id:'money', icon:'🍦', label:'גלידות' },
+  { id:'money', icon:'💰', label:'כסף' },
   { id:'radar', icon:'🧭', label:'סקר סודי' },
   { id:'music', icon:'🎧', label:'פסקול' },
   { id:'album', icon:'📸', label:'האלבום' }
@@ -2945,8 +2949,8 @@ const vndNumber = () => parseInt(String(state.vnd).replace(/[^0-9]/g, ''), 10) |
 function moneyHTML() {
   const money = vndNumber();
   return '<div class="page">' +
-    headHTML('מחשבון גלידות 🍦', C.violet, true) +
-    '<p class="lead">בוייטנאם המחירים נראים ענקיים — אבל 50,000 דונג הם בערך שתי כפות גלידה. תקישו מספר ותראו.</p>' +
+    headHTML('כמה זה בכסף שלנו? 💰', C.violet, true) +
+    '<p class="lead">בוייטנאם המחירים נראים ענקיים — אבל 50,000 דונג הם בערך שתי כפות גלידה. תקישו מספר ותראו כמה זה באמת.</p>' +
     '<div class="pad">' +
       '<div class="pad-tape"></div>' +
       '<label class="pad-label" for="vnd">כמה דונג כתוב על המחיר?</label>' +
