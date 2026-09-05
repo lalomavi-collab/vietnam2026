@@ -80,11 +80,21 @@ input{font-family:inherit}
 /* Own row rather than beside the logo: at 31px the real handwriting title
    leaves too little width for this line on a 375px phone. */
 .subtitle{font-size:11px;color:#a9b4d4;font-weight:600;letter-spacing:.2px;padding:0 15px 9px;margin-top:-3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.icon-btn{position:relative;width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.07);color:#93a0c4;font-size:16px;flex:none}
+.icon-btn{position:relative;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.07);color:#93a0c4;font-size:16px;flex:none}
 .icon-btn.music{font-size:15px}
 .icon-btn.music.on{background:var(--amber);color:#2b1400}
 
 /* ── stat stickers ────────────────────────────────────────────────── */
+.nextup[hidden]{display:none}
+.nextup{display:flex;align-items:center;gap:8px;width:calc(100% - 30px);margin:0 15px 10px;
+  min-height:40px;padding:7px 11px;border-radius:12px;text-align:start;
+  background:linear-gradient(135deg,rgba(122,92,255,.22),rgba(255,90,140,.16));
+  border:1px solid rgba(122,92,255,.42)}
+.nextup.quiet{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.10)}
+.nx-i{flex:none;font-size:17px;line-height:1}
+.nx-t{flex:1;min-width:0;font-size:12px;line-height:1.4;color:#cdd5ee;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nx-t b{color:#fff;font-weight:800}
 .stats{padding:14px 15px 2px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
 .stat{border-radius:13px;padding:7px 9px 8px;box-shadow:0 5px 14px rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.85);transform:rotate(var(--rot))}
 .stat--hunt{background:var(--mint);--rot:-2deg}
@@ -692,6 +702,11 @@ input{font-family:inherit}
 .quest-shots{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
 .shot{position:relative;width:78px;height:78px;border-radius:2px;overflow:hidden;background:#dfd8c4;box-shadow:0 3px 9px rgba(0,0,0,.3)}
 .shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot video{width:100%;height:100%;object-fit:cover;display:block}
+.shot-play{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
+  font-size:20px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7)}
+.movie-vid[hidden]{display:none}
+.movie-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#05060d}
 .shot-x{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;font-size:12px;line-height:1}
 .quest-add{width:100%;margin-top:10px;min-height:44px;border-radius:12px;background:rgba(31,78,121,.09);border:2px dashed rgba(31,78,121,.32);color:var(--ink);font-family:var(--hand);font-size:16px}
 .quest.done .quest-add{background:rgba(62,224,143,.14);border-color:rgba(31,78,121,.22)}
@@ -895,8 +910,12 @@ input{font-family:inherit}
    have to find the right tab. */
 @keyframes sosPulse{0%,100%{box-shadow:0 3px 10px rgba(214,25,52,.45),0 0 0 0 rgba(214,25,52,.5)}
                     70%{box-shadow:0 3px 10px rgba(214,25,52,.45),0 0 0 10px rgba(214,25,52,0)}}
-.sos-top{background:linear-gradient(150deg,#FF3B5C,#D61934);color:#fff;font-size:15px;
+.sos-top{width:50px;height:50px;border-radius:15px;background:linear-gradient(150deg,#FF3B5C,#D61934);
+  color:#fff;font-size:22px;line-height:1;
   border:2px solid rgba(255,255,255,.85);box-shadow:0 3px 10px rgba(214,25,52,.45);animation:sosPulse 3.4s ease-out infinite}
+/* The tap area reaches past the paint on every side, so a finger that
+   lands slightly off still counts. */
+.sos-top::after{content:'';position:absolute;inset:-7px}
 .sos-top:active{transform:scale(.94)}
 .reset-link{width:100%;margin-top:16px;min-height:44px;border-radius:12px;background:rgba(255,255,255,.05);
   border:1px dashed rgba(255,255,255,.2);color:#8b95b8;font-size:12.5px}
@@ -1006,6 +1025,7 @@ input{font-family:inherit}
 
 <div class="movie" id="movie" hidden>
   <div class="movie-img" id="movieImg"></div>
+  <video class="movie-vid" id="movieVid" playsinline hidden></video>
   <div class="movie-shade"></div>
   <div class="movie-txt">
     <div class="movie-day" id="movieDay"></div>
@@ -1216,6 +1236,7 @@ input{font-family:inherit}
         <button class="icon-btn sos-top" id="sosFab" data-act="sos" title="חירום" aria-label="כפתור חירום">🆘</button>
       </div>
       <div class="subtitle">19 ימים · 9–27 בספטמבר · 11 מגלי ארצות</div>
+      <button class="nextup" id="nextup" data-act="nextup" hidden></button>
     </header>
 
     <div class="stats">
@@ -1248,7 +1269,7 @@ input{font-family:inherit}
       <nav class="nav" id="nav"></nav>
     </div>
     <div id="burstHost"></div>
-    <input type="file" id="shotFile" accept="image/*" capture="environment" hidden>
+    <input type="file" id="shotFile" accept="image/*,video/*" capture="environment" hidden>
     <input type="file" id="albumFile" accept="application/json,.json" hidden>
     <input type="file" id="avatarFile" accept="image/*" hidden>
     <div class="busy" id="shotBusy" hidden><div class="busy-in">שומר את התמונה…</div></div>
@@ -1274,7 +1295,7 @@ const DAYS = [
     mission:"לספור כמה קטנועים עוברים ברחוב אחד בדקה. מי שניחש הכי קרוב — מנצח.",
     hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
     quest:"פורטרט של מישהו מהמשפחה בתוך הכאוס של הרובע הקדום — בלי שיסתכל למצלמה",
-    yt:"Hanoi Old Quarter night walk 4K",
+    yt:"Hanoi Old Quarter night walk 4K", ytId:"lVx4AIu9tbA",
     flights:[
       {code:"LY83",from:"TLV",to:"BKK",dep:"00:55",arr:"16:35",dur:"11:40",note:"אל על · תל אביב ← בנגקוק, יוצאים בלילה שבין שלישי לרביעי"},
       {code:"VN618",from:"BKK",to:"HAN",dep:"19:05",arr:"21:05",dur:"2:00",note:"מחליפים מטוס בבנגקוק וממשיכים להנוי"}],
@@ -1285,7 +1306,7 @@ const DAYS = [
     mission:"לצלם את שדה האורז הכי יפה שתראו מחלון הרכב — בלי שהנהג יעצור.",
     hotel:"לה שאמפ טו לה ריזורט", hotelEn:"Le Champ Tu Le Resort & Spa",
     quest:"צילום מחלון הרכב בנסיעה. האתגר: שיצא חד ולא מרוח",
-    yt:"Mu Cang Chai rice terraces drone",
+    yt:"Mu Cang Chai rice terraces drone", ytId:"4Rn-xLKJAbU",
     pics:["Mu Cang Chai.jpg","Chế Cu Nha, Mù Cang Chải, Yên Bái, Vietnam - panoramio.jpg","SÁNG SỚM Ở MÙ CANG CHẢI - panoramio.jpg"], cap:"עמק האורז", m:"Muong Lo Valley Nghia Lo" },
   { n:3, date:"ו׳ 11.9", region:"טו לה", color:C.violet, emoji:"🪂", title:"אקסטרים בבוקר, מים חמים אחרי",
     hl:[["09:00","🪂","פותחים את היום בגבהים: אומגה שחוצה את העמק באוויר, ופארק חבלים בין צמרות העצים. קסדה, אבזם, ונשימה עמוקה"],["13:00","♨️","מעיינות חמים טבעיים — מים שיוצאים רותחים ישר מתוך ההר, בלי דוד ובלי חשמל"],["17:00","🏘️","סיור בכפר מקומי: בתי עץ על עמודים, אוכל שמתבשל בחצר וילדים שמשחקים ברחוב. זה החלק שלא מופיע בתמונות"]],
@@ -1293,7 +1314,7 @@ const DAYS = [
     mission:"לרדת באומגה בלי לעצום עיניים. ואז לספר למי שכן עצם.",
     hotel:"לה שאמפ טו לה ריזורט", hotelEn:"Le Champ Tu Le Resort & Spa",
     quest:"רגע של אדרנלין — מישהו באמצע האומגה, באוויר",
-    yt:"Tu Le Vietnam hot spring resort",
+    yt:"Tu Le Vietnam hot spring resort", ytId:"Oy-Afp7ESA4",
     pics:["Khau Phạ nhìn từ trên cao.jpg","Chế Cu Nha, Mù Cang Chải, Yên Bái, Vietnam - panoramio (1).jpg","Mu Cang Chai.jpg"], cap:"מעיינות חמים", m:"Le Champ Tu Le Resort" },
   { n:4, date:"ש׳ 12.9", region:"סאפה", color:C.amber, emoji:"⛰️", title:"מעבר קאו פא ← סאפה",
     hl:[["09:00","🛣️","עוצרים במעבר קאו פא, אחד מארבעת מעברי ההרים הגדולים של וייטנאם. עומדים על הקצה ורואים את כל העמק מתחת"],["12:00","👣","יום כפרי אמיתי בכפר לה פאן טאן: תירס שגדל בין הסלעים, חזירים שמסתובבים חופשי, ונשים שרוקמות בפתח הבית"],["17:00","🏨","ממשיכים לסאפה — עיר הרים שלפעמים יושבת ממש בתוך ענן"]],
@@ -1301,7 +1322,7 @@ const DAYS = [
     mission:"למצוא חיה אחת שמסתתרת בתוך רקמה של בגד מקומי.",
     hotel:"מלון פיסטאצ׳יו · סאפה", hotelEn:"Pistachio Sapa Hotel",
     quest:"יד אחת בפריים: יד של מישהו מקומי, עובדת. בלי פנים",
-    yt:"Khau Pha Pass Vietnam drone",
+    yt:"Khau Pha Pass Vietnam drone", ytId:"M6u59SGjJAI",
     pics:["Khau Phạ.jpg","Khau Phạ Pass, Vietnam (Unsplash).jpg","KHAU PHẠ MÙA NƯỚC ĐỔ - panoramio.jpg"], cap:"מעבר קאו פא", m:"Khau Pha Pass" },
   { n:5, date:"א׳ 13.9", region:"סאפה", color:C.cyan, emoji:"🌉", title:"מפל האהבה וגשר הזכוכית",
     hl:[["09:00","🥾","טרק קצר ביער עד מפל האהבה — מאה מטר של מים שנופלים, ורסס קר שמגיע עד אליכם"],["13:00","🪟","גשר הזכוכית רונג מיי: הרצפה שקופה לגמרי, ומתחתיה רק אוויר והעמק"],["15:00","🚞","רכבת ההרים הייחודית של מואנג הואה — קרונות שחוצים את המדרון ומשקיפים על כל עמק סאפה"]],
@@ -1309,7 +1330,7 @@ const DAYS = [
     mission:"לצעוד על הזכוכית עד האמצע ולהסתכל למטה. אמיצים בלבד.",
     hotel:"מלון פיסטאצ׳יו · סאפה", hotelEn:"Pistachio Sapa Hotel",
     quest:"צילום דרך הזכוכית של הגשר, כלפי מטה. שיהיה מסחרר",
-    yt:"Rong May Glass Bridge Sapa",
+    yt:"Rong May Glass Bridge Sapa", ytId:"s65OaGMtr9Q",
     pics:["Nhảy dù lượn từ đèo Khau Phạ ngắm bản Lìm mông.jpg","Rice terraces in Sa Pa 09.jpg","Road and paddy fields in Sa Pa, Vietnam, 20240126 1202 3586.jpg"], cap:"גשר הזכוכית", m:"Rong May Glass Bridge Sapa" },
   { n:6, date:"ב׳ 14.9", region:"סאפה", color:C.mint, emoji:"🐃", title:"טרק בעמק מואנג הואה",
     hl:[["09:00","🌾","הליכה בין מדרגות אורז לכפר לאו צ׳אי"],["12:00","🏘️","טא ואן — הכפר של שבט הדזאי, בלב העמק"],["15:00","💦","קאט קאט, ובסוף מפל קאט קאט"]],
@@ -1317,7 +1338,7 @@ const DAYS = [
     mission:"לראות תאו מים אמיתי עובד בשדה — ולסמן אותו בציד המציאות.",
     hotel:"מלון פיסטאצ׳יו · סאפה", hotelEn:"Pistachio Sapa Hotel",
     quest:"שכבות: שדה אורז קדימה, הר מאחור, ערפל ביניהם",
-    yt:"Muong Hoa valley Sapa trekking",
+    yt:"Muong Hoa valley Sapa trekking", ytId:"WzwIIP3fcRY",
     pics:["Water buffaloes in Lào Cai, Sa Pa, Vietnam, 20240125 1244 3437.jpg","Water wheel in Cat Cat village, Sa Pa, Vietnam, 20240126 1142 3546.jpg","Cát Cát Village 1.jpg"], cap:"עמק מואנג הואה", m:"Ta Van Village Sapa" },
   { n:7, date:"ג׳ 15.9", region:"הנוי", color:C.pink, emoji:"🎢", title:"רכבת הרים + אוכל רחוב",
     hl:[["09:00","🎿","אלפיין קוסטר: מחליקים במסלול ארוך בהר — ואתם שולטים בבלמים"],["12:00","🚐","נסיעה חזרה להנוי"],["18:00","☕","סיור אוכל רחוב: באן קואון, בון צ׳ה וקפה ביצה"]],
@@ -1325,7 +1346,7 @@ const DAYS = [
     mission:"לטעום מנה אחת שלא הכרתם — ולדרג אותה מ-1 עד 10.",
     hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
     quest:"האוכל הכי מוזר שהזמנתם, מצולם מלמעלה כמו בתפריט",
-    yt:"Hanoi street food tour egg coffee",
+    yt:"Hanoi street food tour egg coffee", ytId:"b45Ei-5jtkk",
     pics:["Hanoi Street Food (95655835).jpeg","Street food preparation in Hanoi (49356318418).jpg","Street food - Hanoi (15657896380).jpg"], cap:"אוכל רחוב בהנוי", m:"Hanoi Old Quarter street food" },
   { n:8, date:"ד׳ 16.9", region:"הנוי", color:C.amber, emoji:"🛻", title:"ג׳יפים בסמטאות + פארק מים",
     hl:[["09:00","🚙","סיור ג׳יפ בסמטאות שרק מקומיים מכירים, ובית האופרה"],["12:00","🌊","אגם המערב — קוראים לו ׳מזגן העיר׳"],["15:00","🏄","ונציה הקטנה: פארק מים ומגלשות"]],
@@ -1333,7 +1354,7 @@ const DAYS = [
     mission:"לספור כמה מגלשות יש בפארק — ולנצח את כולם בירידה.",
     hotel:"מלון אנטולה · הנוי", hotelEn:"Anatole Hotel, Hanoi",
     quest:"תנועה: קטנוע חולף מטושטש, והרקע חד",
-    yt:"West Lake Hanoi jeep tour",
+    yt:"West Lake Hanoi jeep tour", ytId:"Df3_bjdvS0U",
     pics:["West Lake (Hanoi).jpg","Bicycle Tour, Tây Hồ, Hanoi (7060800725).jpg","Cycling around Tây Hồ District, Hanoi (6914731878).jpg"], cap:"פארק המים", m:"Hanoi Little Venice water park" },
   { n:9, date:"ה׳ 17.9", region:"הא לונג", color:C.cyan, emoji:"🚢", title:"מפליגים במפרץ הא לונג",
     hl:[["12:15","⛴️","עולים על ספינת Orchid — קבינה פרטית וארוחה תוך הפלגה"],["15:00","🕳️","מערת טרונג טראנג: 300 מטר של נטיפים בצורות מוזרות"],["17:30","🦑","שחייה במים הירוקים, ובלילה — דיג דיונונים מהסיפון"]],
@@ -1341,7 +1362,7 @@ const DAYS = [
     mission:"למצוא אי שנראה כמו חיה ולתת לו שם משפחתי.",
     hotel:"ספינת אורכיד קלאסיק", hotelEn:"Orchid Classic Cruise, Lan Ha Bay",
     quest:"שקיעה מהסיפון. בלי אף אחד בפריים",
-    yt:"Ha Long Bay Lan Ha cruise 4K",
+    yt:"Ha Long Bay Lan Ha cruise 4K", ytId:"B90H-8xetBs",
     pics:["Halong Bay in Vietnam.jpg","Ha Long bay tourism 34.jpg","View of sea from Titov Island, Ha Long Bay, Vietnam, 20240128 1337 3732.jpg"], cap:"מפרץ הא לונג", m:"Lan Ha Bay Cat Ba" },
   { n:10, date:"ו׳ 18.9", region:"נין בין", color:C.mint, emoji:"🛶", title:"בוקר מפנק על הסיפון ← נין בין",
     hl:[["07:30","🥐","בראנץ׳ על הסיפון מול צוקי הגיר: מזנון פתוח, פירות טרופיים וביצים בהזמנה. בלי למהר לשום מקום"],["10:00","🕳️","סיור מודרך במערות קאט בא — אולמות ענק בתוך ההר, נטיפים מוארים ומעברים צרים"],["13:00","🚐","יורדים מהספינה ונוסעים לנין בין"]],
@@ -1349,7 +1370,7 @@ const DAYS = [
     mission:"למצוא בתוך המערה צורה שנראית כמו חיה — ולשכנע את כולם שאתם צודקים.",
     hotel:"אמרלדה טאם קוק ריזורט", hotelEn:"Emeralda Tam Coc Resort, Ninh Binh",
     quest:"השתקפות במים — סלע, סירה או שמיים",
-    yt:"Cat Ba island cave tour",
+    yt:"Cat Ba island cave tour", ytId:"jEVO-CdzdOo",
     pics:["Bai Chay beach, Ha Long, Vietnam, 20240129 0915 3958.jpg","Halong ensemble (colour corrected).jpg","Ninh Binh-Tam Coc 04 voyage1.jpg"], cap:"מערות קאט בא", m:"Emeralda Tam Coc Resort" },
   { n:11, date:"ש׳ 19.9", region:"נין בין", color:C.violet, emoji:"🧗", title:"טאם קוק ומערת מואה",
     hl:[["09:00","🚣","שיט בין הרי הגיר — החותרים המקומיים חותרים ברגליים!"],["12:00","🛕","מקדש ביץ׳ דונג בין בריכות לוטוס"],["15:00","🪜","מערת מואה: 500 מדרגות אבן לפסגה, ונוף על כל העמק"]],
@@ -1357,7 +1378,7 @@ const DAYS = [
     mission:"לטפס את כל 500 המדרגות ולצלם סלפי בפסגה.",
     hotel:"אמרלדה טאם קוק ריזורט", hotelEn:"Emeralda Tam Coc Resort, Ninh Binh",
     quest:"מלמעלה: הצילום מפסגת מערת מואה, שרואים את כל העמק",
-    yt:"Tam Coc Mua Cave Ninh Binh drone",
+    yt:"Tam Coc Mua Cave Ninh Binh drone", ytId:"XwCptX0ZjIM",
     pics:["Tam Cốc-Bích Động in Ninh Binh province.jpg","2024-03-30-Mua Cave Dragon Mountain-3758.jpg","Mua Cave, Ninh Binh, Vietnam, 20240202 0926 4964.jpg"], cap:"טאם קוק", m:"Mua Cave Ninh Binh" },
   { n:12, date:"א׳ 20.9", region:"נין בין", color:C.pink, emoji:"🏎️", title:"יום אקסטרים באגם",
     hl:[["09:00","🏁","גו-קארט בין עצי אורן"],["11:00","🪢","זיפליין, קייאק ורכבי ATV באגם דונג צ׳ואונג"],["16:00","🚐","בערב חוזרים להנוי"]],
@@ -1373,7 +1394,7 @@ const DAYS = [
     mission:"למצוא בשוק פריט אחד מתחת ל-50,000 דונג ששווה כל שקל.",
     hotel:"מלון מריטל · הנוי", hotelEn:"Meritel Hotel, Hanoi",
     quest:"הרכבת עוברת. פריים אחד, אין הזדמנות שנייה",
-    yt:"Hanoi Train Street",
+    yt:"Hanoi Train Street", ytId:"RikSwe9wOjc",
     pics:["Old Quarter market, Hanoi, Vietnam, 20240204 1810 5887.jpg","Street Food vendors Soft crab Hanoi Vietnam.jpg","Old Quarter market, Hanoi, Vietnam, 20240123 0841 3046.jpg"], cap:"רחוב הרכבת", m:"Hanoi Train Street" },
   { n:14, date:"ג׳ 22.9", region:"הוי אן", color:C.cyan, emoji:"🛫", title:"טסים להוי אן ← פסטיבל האורות",
     hl:[["09:35","🛫","טיסה פנימית הנוי–דה נאנג, שעה ורבע באוויר. נוחתים ב-11:00 ונהג אוסף אותנו להוי אן"],["17:00","🏮","סיור מודרך בעיר העתיקה: בתים צהובים בני 400 שנה, גשר יפני ופנסי משי בכל פינה"],["20:00","🕯️","פסטיבל האורות על נהר הטו בון — משחררים פנס נר על המים ומבקשים משאלה"]],
@@ -1381,7 +1402,7 @@ const DAYS = [
     mission:"לשחרר פנס על הנהר ולא לספר לאף אחד מה ביקשתם.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"מסגרת בתוך מסגרת: לצלם דרך חלון, קשת או דלת",
-    yt:"Hoi An lantern festival night river",
+    yt:"Hoi An lantern festival night river", ytId:"_3EyEqQzwrc",
     flights:[
       {code:"VN165",from:"HAN",to:"DAD",dep:"09:35",arr:"11:00",dur:"1:25",note:"טיסה פנימית הנוי ← דה נאנג"}],
     pics:["Hội An lantern festival (44810593224).jpg","Hội An lantern festival (45536262991).jpg","Hội An lantern festival (45485644722).jpg"], cap:"פסטיבל האורות", m:"Hoi An Ancient Town" },
@@ -1391,7 +1412,7 @@ const DAYS = [
     mission:"לרדת באלפיין קוסטר בלי לגעת בבלם פעם אחת. מי שנגע — מודה.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"הידיים של גשר הזהב מזווית שאף אחד לא מצלם ממנה",
-    yt:"Ba Na Hills Golden Bridge alpine coaster",
+    yt:"Ba Na Hills Golden Bridge alpine coaster", ytId:"cX5K5wql_BE",
     pics:["The Golden Bridge, Ba Na Hills, Vietnam.jpg","Aerial view of the Golden Bridge, Ba Na Hills, Da Nang, Vietnam.jpg","Golden Bridge above the clouds Ba Na Hills Da Nang Vietnam.jpg"], cap:"בא נא הילס", m:"Golden Bridge Ba Na Hills Danang" },
   { n:16, date:"ה׳ 24.9", region:"הוי אן", color:C.mint, emoji:"👨‍🍳", title:"סירות סל וסדנת בישול",
     hl:[["08:30","🧺","שוק הוי אן — קונים חומרי גלם עם השף"],["09:45","🛢️","סירות סל עגולות ביער קוקוס המים — לומדים לחתור ולדוג סרטנים"],["10:30","🥞","סדנת בישול: דף אורז, חלב אורז ופנקייק באן שאו — ואוכלים"]],
@@ -1399,7 +1420,7 @@ const DAYS = [
     mission:"לגלגל ספרינג רול אחד לבד ולתת למישהו לטעום.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"תקריב של משהו שאתם מבשלים. קרוב מאוד",
-    yt:"Hoi An basket boat coconut village",
+    yt:"Hoi An basket boat coconut village", ytId:"bIlJGFWR9Bw",
     pics:["Hội An, Ancient Town, 2020-01 CN-10.jpg","Tofu noodle soup (Phở chay) - Pho Hanoi Authentic 2024-12-01.jpg","Hội An, Ancient Town, 2020-01 CN-11.jpg"], cap:"סירות הסל", m:"Hoi An Market" },
   { n:17, date:"ו׳ 25.9", region:"הוי אן", color:C.violet, emoji:"🏮", title:"ראפטינג בבוקר, מופע אש בלילה",
     hl:[["09:00","🌊","ראפטינג ומגלשות הרים ביער הואה פו ת׳אן: מים קרים, סירה שמתהפכת ומסלול מגלשות ארוך"],["15:00","🏖️","מועדון חוף: מיטות שיזוף מול הים, מוזיקה ואוכל עד השקיעה"],["20:00","🔥","מופע אש חי על החוף עם די-ג׳יי — לפידים, אקרובטיקה וקצב"]],
@@ -1407,7 +1428,7 @@ const DAYS = [
     mission:"לצלם את מופע האש בחשיפה ארוכה — שהלהבה תצא קו ולא נקודה.",
     hotel:"בל מרינה הוי אן", hotelEn:"Bel Marina Hoi An Resort",
     quest:"אור נגד חושך: פנס דולק בערב, והכול סביבו כהה",
-    yt:"Hoa Phu Thanh rafting Da Nang",
+    yt:"Hoa Phu Thanh rafting Da Nang", ytId:"QkxWUmGD5Dk",
     pics:["Hội An, Ancient Town, 2020-01 CN-01.jpg","Hội An, Ancient Town, 2020-01 CN-05.jpg","Hội An, Ancient Town, 2020-01 CN-06.jpg"], cap:"מופע האש על החוף", m:"Thu Bon River Hoi An" },
   { n:18, date:"ש׳ 26.9", region:"הנוי", color:C.cyan, emoji:"🧳", title:"קניות אחרונות וצ׳ק-ליסט אוכל",
     hl:[["09:00","🏊","היום האחרון בהוי אן שייך לכם: בריכה, שוק, או סיבוב אחרון בעיר העתיקה"],["18:05","🛫","טיסה דה נאנג–הנוי, שעה ורבע. נוחתים ב-19:30"],["21:00","🍜","מי שנשאר לו כוח — סיבוב לילה אחרון ברובע הקדום, לסגור מנות שעוד לא טעמנו"]],
@@ -1735,7 +1756,7 @@ const REGIONS = [
 const TABS = [
   { id:'days', icon:'📅', label:'יומן' }, { id:'hunt', icon:'🎮', label:'משחקים' },
   { id:'talk', icon:'🗣️', label:'מילים' }, { id:'badges', icon:'🏆', label:'הישגים' },
-  { id:'money', icon:'🍦', label:'גלידות' },
+  { id:'money', icon:'💰', label:'כסף' },
   { id:'radar', icon:'🧭', label:'סקר סודי' },
   { id:'music', icon:'🎧', label:'פסקול' },
   { id:'album', icon:'📸', label:'האלבום' }
@@ -2234,6 +2255,81 @@ function tripToday() {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const n = Math.round((today - start) / 86400000) + 1;
   return { n, inTrip: n >= 1 && n <= 19, until: 1 - n };
+}
+
+/* ══ what happens next ══════════════════════════════════════════════
+   The itinerary already knows every hour of every day; before this it
+   just sat there and let you find it. Departure is 9 Sep 00:55 from
+   Tel Aviv, so the whole thing has one anchor before the trip and
+   nineteen after it. */
+const TAKEOFF = new Date(TRIP_YEAR, TRIP_MONTH, 9, 0, 55);
+
+function minsOf(hhmm) {
+  const [h, m] = hhmm.split(':').map(Number);
+  return h * 60 + m;
+}
+
+/* Two numbers, largest unit first, so it reads the way a person counts:
+   days and hours far out, hours and minutes close in, minutes alone at
+   the end. */
+const COUNT = {
+  day:  [null, 'יום', 'יומיים'],
+  hour: [null, 'שעה', 'שעתיים'],
+  min:  [null, 'דקה', 'שתי דקות']
+};
+const plural = { day:'ימים', hour:'שעות', min:'דקות' };
+const count = (n, unit) => COUNT[unit][n] || (n + ' ' + plural[unit]);
+
+function untilText(ms) {
+  const mins = Math.max(0, Math.round(ms / 60000));
+  const d = Math.floor(mins / 1440), h = Math.floor((mins % 1440) / 60), m = mins % 60;
+  /* A vav takes a hyphen before a numeral ("ו-14 שעות") but not before a
+     word ("ושעתיים"). */
+  const and = x => (/^\d/.test(x) ? ' ו-' : ' ו') + x;
+  if (d) return h ? count(d, 'day') + and(count(h, 'hour')) : count(d, 'day');
+  if (h) return m ? count(h, 'hour') + and(count(m, 'min')) : count(h, 'hour');
+  if (m > 1) return count(m, 'min');
+  return 'רגע';
+}
+
+function nextUp() {
+  const t = tripToday();
+  const now = new Date();
+
+  if (!t.inTrip) {
+    if (t.until > 0) return { icon:'✈️', text:'ההמראה מתל אביב', at:TAKEOFF, before:true };
+    return null;                                   // the trip is behind us
+  }
+
+  const day = DAYS[t.n - 1];
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const row = dayRows(day).find(r => minsOf(r.time) > mins);
+  if (!row) return { done:true, day };
+
+  const at = new Date(now);
+  at.setHours(...row.time.split(':').map(Number), 0, 0);
+  return { icon:row.icon, text:row.text, at };
+}
+
+function paintNextUp() {
+  const el = $('#nextup');
+  if (!el) return;
+  const n = nextUp();
+  if (!n) { el.hidden = true; return; }
+  el.hidden = false;
+
+  if (n.done) {
+    el.classList.add('quiet');
+    el.innerHTML = '<span class="nx-i">🌙</span><span class="nx-t">' +
+      'זהו להיום — ' + esc(n.day.hotel) + '</span>';
+    return;
+  }
+  el.classList.toggle('quiet', !!n.before);
+  /* The itinerary lines are whole sentences; the strip has one line, so
+     it shows the opening clause and the day card holds the rest. */
+  const short = String(n.text).split(/[.,:—]/)[0].trim().slice(0, 46);
+  el.innerHTML = '<span class="nx-i">' + esc(n.icon) + '</span>' +
+    '<span class="nx-t"><b>בעוד ' + untilText(n.at - new Date()) + '</b> · ' + esc(short) + '</span>';
 }
 
 function paintSubtitle() {
@@ -2813,8 +2909,8 @@ function dayHTML(d) {
         ? '<button class="act act--chrono" data-act="chrono-open" data-n="' + d.n + '">🕰️ כרונו-לנס — לפגוש את ' + esc(CHRONO[d.region].name) + '</button>'
         : '') +
       (d.ytId
-        ? '<div class="tube"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(d.ytId) +
-          '?rel=0&modestbranding=1" title="video" loading="lazy" allowfullscreen ' +
+        ? '<div class="tube" data-tube="' + d.n + '"><iframe src="https://www.youtube-nocookie.com/embed/' +
+          esc(d.ytId) + '?rel=0&modestbranding=1&enablejsapi=1" title="video" loading="lazy" allowfullscreen ' +
           'referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'
         : (d.yt
             ? '<a class="act act--tube" href="https://www.youtube.com/results?search_query=' +
@@ -2912,8 +3008,8 @@ const vndNumber = () => parseInt(String(state.vnd).replace(/[^0-9]/g, ''), 10) |
 function moneyHTML() {
   const money = vndNumber();
   return '<div class="page">' +
-    headHTML('מחשבון גלידות 🍦', C.violet, true) +
-    '<p class="lead">בוייטנאם המחירים נראים ענקיים — אבל 50,000 דונג הם בערך שתי כפות גלידה. תקישו מספר ותראו.</p>' +
+    headHTML('כמה זה בכסף שלנו? 💰', C.violet, true) +
+    '<p class="lead">בוייטנאם המחירים נראים ענקיים — אבל 50,000 דונג הם בערך שתי כפות גלידה. תקישו מספר ותראו כמה זה באמת.</p>' +
     '<div class="pad">' +
       '<div class="pad-tape"></div>' +
       '<label class="pad-label" for="vnd">כמה דונג כתוב על המחיר?</label>' +
@@ -3164,7 +3260,11 @@ function albumHTML() {
           '<div class="quest-t">' + esc(d.quest) + '</div>' +
           (mine.length
             ? '<div class="quest-shots">' + mine.map(sh =>
-                '<div class="shot"><img src="' + shotURL(sh) + '" alt="">' +
+                '<div class="shot' + (sh.kind === 'video' ? ' is-vid' : '') + '">' +
+                (sh.kind === 'video'
+                  ? '<video src="' + shotURL(sh) + '" poster="' + stillURL(sh) + '"' +
+                    ' playsinline muted preload="metadata"></video><span class="shot-play">▶</span>'
+                  : '<img src="' + shotURL(sh) + '" alt="">') +
                 '<button class="shot-x" data-act="shot-del" data-id="' + sh.id + '">✕</button></div>').join('') + '</div>'
             : '') +
           (allStories[d.n] || []).map((st, i) =>
@@ -3318,6 +3418,7 @@ function renderHero() {
 function renderMain() {
   $('#main').innerHTML = VIEWS[state.tab]();
   if (state.tab === 'days' && state.open) syncReel(state.open);
+  armTubes();
 }
 
 function syncStats() {
@@ -3371,6 +3472,52 @@ function advance(n) {
 }
 
 const preload = urls => urls.forEach(u => { const i = new Image(); i.src = u; });
+
+/* ══ video fallback ═════════════════════════════════════════════════
+   A YouTube id is not a promise. Videos get deleted, go private, or have
+   embedding switched off by their owner, and every one of those leaves a
+   dead rectangle on the page. The iframe player reports all of them as
+   onError over postMessage (100/101/150), so when that arrives the frame
+   is replaced by the search link the app already falls back to. */
+const YT_DEAD = [100, 101, 150];
+
+function tubeFallback(n) {
+  const box = document.querySelector('[data-tube="' + n + '"]');
+  const d = DAYS.find(x => x.n === n);
+  if (!box || !d || !d.yt) return;
+  box.outerHTML = '<a class="act act--tube" href="https://www.youtube.com/results?search_query=' +
+    encodeURIComponent(d.yt) + '" target="_blank" rel="noopener">' +
+    '🎥 לראות סרטונים מהמקום<em>דורש אינטרנט</em></a>';
+}
+
+window.addEventListener('message', ev => {
+  if (!/youtube(-nocookie)?\.com$/.test((() => {
+    try { return new URL(ev.origin).hostname.replace(/^www\./, ''); } catch (e) { return ''; }
+  })())) return;
+  let msg;
+  try { msg = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data; } catch (e) { return; }
+  if (!msg || msg.event !== 'onError') return;
+  const code = +(msg.info && msg.info.errorCode !== undefined ? msg.info.errorCode : msg.info);
+  if (!YT_DEAD.includes(code)) return;
+  document.querySelectorAll('[data-tube]').forEach(box => {
+    const f = box.querySelector('iframe');
+    if (f && f.contentWindow === ev.source) tubeFallback(+box.dataset.tube);
+  });
+});
+
+/* The player only speaks once it has been spoken to. */
+function armTubes() {
+  document.querySelectorAll('[data-tube] iframe').forEach(f => {
+    if (f.dataset.armed) return;
+    f.dataset.armed = '1';
+    f.addEventListener('load', () => {
+      try {
+        f.contentWindow.postMessage(JSON.stringify(
+          { event:'listening', id:f.closest('[data-tube]').dataset.tube }), '*');
+      } catch (e) {}
+    });
+  });
+}
 
 /* ══ actions ════════════════════════════════════════════════════════ */
 function goTab(id) {
@@ -3504,6 +3651,12 @@ document.addEventListener('click', e => {
   if (act === 'scam-go')   { const f = scamsForDay(+el.dataset.n)[0];
                              state.scam = f ? f.id : null; persist(); goTab('money');
                              setTimeout(() => { const s = $('.scams'); if (s) s.scrollIntoView({ behavior:'smooth', block:'start' }); }, 90);
+                             return; }
+  if (act === 'nextup')    { const t = tripToday();
+                             if (t.inTrip && state.open !== t.n) openDay(t.n);
+                             goTab('days');
+                             const el = $('#day-' + t.n);
+                             if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
                              return; }
   if (act === 'install')   return void installApp();
   if (act === 'howto-x')   return closeHowto();
@@ -3869,7 +4022,73 @@ function loadImage(src) {
   });
 }
 
+/* A phone clip is enormous next to a photo: thirty seconds weighs about
+   what a hundred stills do, and IndexedDB has a quota that ends the trip
+   for everything else once it is gone. So clips are bounded on the way in
+   and the limit is stated in Hebrew rather than thrown as a quota error
+   halfway through Ha Long Bay. */
+const VIDEO_MAX_BYTES = 25 * 1024 * 1024;
+const VIDEO_MAX_SECS = 45;
+const isVideo = f => (f.type || '').startsWith('video/');
+
+/* The booklet prints on paper and the album grid wants something to show
+   before anyone taps: both need a still, so one frame is lifted out of
+   the clip and stored beside it. */
+function videoPoster(file) {
+  return new Promise(resolve => {
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video');
+    v.preload = 'metadata'; v.muted = true; v.playsInline = true;
+    const give = blob => { URL.revokeObjectURL(url); resolve(blob); };
+    const fail = () => give(null);
+    v.onerror = fail;
+    v.onloadeddata = () => {
+      try {
+        const scale = Math.min(1, 1280 / Math.max(v.videoWidth, v.videoHeight));
+        const c = document.createElement('canvas');
+        c.width = Math.round(v.videoWidth * scale) || 640;
+        c.height = Math.round(v.videoHeight * scale) || 360;
+        c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
+        c.toBlob(b => give(b), 'image/jpeg', 0.8);
+      } catch (e) { fail(); }
+    };
+    /* A hair into the clip — frame zero is often black. */
+    v.onloadedmetadata = () => { try { v.currentTime = Math.min(0.6, (v.duration || 1) / 3); } catch (e) {} };
+    v.src = url;
+    setTimeout(fail, 8000);
+  });
+}
+
+function videoDuration(file) {
+  return new Promise(resolve => {
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video');
+    v.preload = 'metadata';
+    v.onloadedmetadata = () => { URL.revokeObjectURL(url); resolve(v.duration || 0); };
+    v.onerror = () => { URL.revokeObjectURL(url); resolve(0); };
+    v.src = url;
+    setTimeout(() => resolve(0), 6000);
+  });
+}
+
+async function processVideo(file, caption, day) {
+  if (file.size > VIDEO_MAX_BYTES) {
+    throw new Error('הסרטון גדול מדי — ' + Math.round(file.size / 1048576) +
+      'MB. המקסימום הוא 25MB, בערך 30 שניות. צלמו קליפ קצר יותר.');
+  }
+  const secs = await videoDuration(file);
+  if (secs > VIDEO_MAX_SECS) {
+    throw new Error('הסרטון ארוך מדי — ' + Math.round(secs) +
+      ' שניות. המקסימום הוא 45 שניות, כדי שיישאר מקום לשאר הטיול.');
+  }
+  const poster = await videoPoster(file);
+  return { id: String(day).padStart(2,'0') + '-' + Math.random().toString(36).slice(2,9),
+           day, caption: caption || '', by: myName(), blob: file, poster,
+           kind:'video', secs: Math.round(secs), w:0, h:0 };
+}
+
 async function processShot(file, caption, day) {
+  if (isVideo(file)) return processVideo(file, caption, day);
   const url = URL.createObjectURL(file);
   const img = await loadImage(url);
   const MAX = 1600;
@@ -3924,7 +4143,18 @@ function shotURL(sh) {
   if (!shotUrls.has(sh.id)) shotUrls.set(sh.id, URL.createObjectURL(sh.blob));
   return shotUrls.get(sh.id);
 }
+/* Anywhere a still is required — the grid, the printed page — a clip
+   stands in with its poster frame, and only falls back to the clip
+   itself if the frame could not be lifted. */
+function stillURL(sh) {
+  if (sh.kind !== 'video') return shotURL(sh);
+  if (!sh.poster) return '';
+  const k = sh.id + ':p';
+  if (!shotUrls.has(k)) shotUrls.set(k, URL.createObjectURL(sh.poster));
+  return shotUrls.get(k);
+}
 function dropShotURL(id) {
+  if (shotUrls.has(id + ':p')) { URL.revokeObjectURL(shotUrls.get(id + ':p')); shotUrls.delete(id + ':p'); }
   if (shotUrls.has(id)) { URL.revokeObjectURL(shotUrls.get(id)); shotUrls.delete(id); }
 }
 
@@ -3961,7 +4191,8 @@ async function onShotPicked(e) {
   if (!file) { chronoCaptionHint = null; chronoCaptureActive = false; return; }
   const day = +e.target.dataset.day;
   const d = DAYS.find(x => x.n === day);
-  const caption = window.prompt('מה לכתוב על התמונה?\n(אפשר להשאיר ריק)',
+  const caption = window.prompt(isVideo(file) ? 'מה לכתוב מתחת לסרטון?\n(אפשר להשאיר ריק)'
+                                              : 'מה לכתוב על התמונה?\n(אפשר להשאיר ריק)',
     chronoCaptionHint || (d ? d.cap : '')) || '';
   chronoCaptionHint = null;
   const wasChrono = chronoCaptureActive; chronoCaptureActive = false;
@@ -3970,10 +4201,14 @@ async function onShotPicked(e) {
     const rec = await processShot(file, caption.trim(), day);
     await shotsPut(rec);
     await refreshShots(true);
-    celebrate('📸', 'נשמר ביום ' + day);
+    celebrate(isVideo(file) ? '🎬' : '📸', 'נשמר ביום ' + day);
     if (wasChrono) closeChrono();
   } catch (err) {
-    window.alert('לא הצלחתי לשמור את התמונה. אולי אין מספיק מקום בטלפון.');
+    /* A size or length refusal is a sentence we wrote; anything else is
+       the browser running out of room. Do not blur the two. */
+    window.alert(err && err.message && /MB|שניות/.test(err.message)
+      ? err.message
+      : 'לא הצלחתי לשמור. כנראה נגמר המקום בטלפון — נסו למחוק כמה פריטים מהאלבום.');
   } finally { busy.hidden = true; e.target.value = ''; }
 }
 
@@ -4330,18 +4565,51 @@ function openMovie() {
   movieIdx = 0;
   $('#movie').hidden = false;
   document.body.style.overflow = 'hidden';
+  /* paintMovie owns the clock now — a still starts the interval, a clip
+     stops it and hands the timing to the video. Starting one here as well
+     leaked a second interval and the film advanced twice per tick. */
   paintMovie();
-  movieTimer = setInterval(() => { movieIdx = (movieIdx + 1) % shots.length; paintMovie(); }, 3800);
   if (!state.audioPlaying) toggleMusic();
 }
+
+let movieCap = null, movieToken = 0;
+function movieNext() { movieIdx = (movieIdx + 1) % shots.length; paintMovie(); }
 
 function paintMovie() {
   const sh = shots[movieIdx];
   const d = DAYS.find(x => x.n === sh.day);
-  $('#movieImg').style.backgroundImage = cssUrl(shotURL(sh));
-  $('#movieImg').style.animation = 'none';
-  void $('#movieImg').offsetWidth;
-  $('#movieImg').style.animation = 'kb 8s ease-in-out infinite alternate';
+  const vid = $('#movieVid');
+
+  /* Three things can try to advance a clip — its 'ended' event, the stall
+     cap, and a failed play() — and any of them can fire after the film has
+     already moved on, skipping a frame. The token means only callbacks
+     belonging to the frame currently on screen are obeyed. */
+  const token = ++movieToken;
+  const step = () => { if (token === movieToken) movieNext(); };
+
+  if (sh.kind === 'video') {
+    /* Hand the clock to the clip: the slideshow interval would cut it off
+       mid-sentence, so it is stopped and the clip's own end advances the
+       film. The cap is there for a clip that stalls and never ends. */
+    clearInterval(movieTimer); movieTimer = null;
+    clearTimeout(movieCap);
+    $('#movieImg').style.backgroundImage = '';
+    $('#movieImg').style.animation = 'none';
+    vid.hidden = false;
+    vid.src = shotURL(sh);
+    vid.onended = step;
+    movieCap = setTimeout(step, (sh.secs || 20) * 1000 + 4000);
+    vid.play().catch(() => { clearTimeout(movieCap); movieCap = setTimeout(step, 5000); });
+  } else {
+    vid.hidden = true; vid.onended = null;
+    if (vid.src) { vid.pause(); vid.removeAttribute('src'); vid.load(); }
+    clearTimeout(movieCap);
+    if (!movieTimer) movieTimer = setInterval(movieNext, 3800);
+    $('#movieImg').style.backgroundImage = cssUrl(shotURL(sh));
+    $('#movieImg').style.animation = 'none';
+    void $('#movieImg').offsetWidth;
+    $('#movieImg').style.animation = 'kb 8s ease-in-out infinite alternate';
+  }
   $('#movieCap').textContent = sh.caption || (d ? d.title : '');
   $('#movieDay').textContent = 'DAY ' + sh.day + (d ? ' · ' + d.date : '');
   $('#movieBar').style.width = ((movieIdx + 1) / shots.length * 100) + '%';
@@ -4349,6 +4617,9 @@ function paintMovie() {
 
 function closeMovie() {
   clearInterval(movieTimer); movieTimer = null;
+  clearTimeout(movieCap); movieCap = null;
+  const v = $('#movieVid');
+  if (v) { v.onended = null; v.pause(); v.removeAttribute('src'); v.load(); v.hidden = true; }
   $('#movie').hidden = true;
   document.body.style.overflow = '';
   if (state.audioPlaying) toggleMusic();
@@ -4376,7 +4647,8 @@ function openBooklet() {
         '<div class="bk-meta">' + esc(d.date) + ' · ' + esc(d.region) +
           (d.hotel ? ' · ' + esc(d.hotel) : '') + '</div>' +
         '<div class="bk-grid">' + (byDay[d.n] || []).map(sh =>
-          '<figure><img src="' + shotURL(sh) + '" alt="">' +
+          '<figure' + (sh.kind === 'video' ? ' class="is-vid"' : '') + '>' +
+          '<img src="' + stillURL(sh) + '" alt="">' +
           (sh.caption || sh.by ? '<figcaption>' + esc(sh.caption || '') +
             (sh.by ? '<em>' + esc(sh.by) + '</em>' : '') + '</figcaption>' : '') +
           '</figure>').join('') + '</div>' +
@@ -4707,6 +4979,9 @@ load();
 renderHero();
 renderNav();
 paintSubtitle();
+paintNextUp();
+setInterval(paintNextUp, 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) paintNextUp(); });
 renderMain();
 renderMusicBar();
 syncStats();
