@@ -370,7 +370,7 @@ input{font-family:inherit}
 
 /* ── bottom nav ───────────────────────────────────────────────────── */
 .dock{position:sticky;bottom:0;z-index:30}
-.nav{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;padding:8px 4px 12px;background:linear-gradient(180deg,rgba(15,20,40,.70),rgba(13,16,32,.99));backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.08)}
+.nav{display:grid;grid-template-columns:repeat(9,1fr);gap:2px;padding:8px 4px 12px;background:linear-gradient(180deg,rgba(15,20,40,.70),rgba(13,16,32,.99));backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.08)}
 .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:52px;border-radius:12px;transition:all .2s var(--ease);background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.09);color:#8b97bd;padding:0 1px}
 .tab.on{background:var(--paper);color:var(--ink);border:2px solid #fff;transform:rotate(-2deg) translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.4);font-weight:800}
 .tab-icon{font-size:16px;line-height:1}
@@ -956,6 +956,31 @@ input{font-family:inherit}
 .sos-field span{display:block;font-size:12px;color:#ffd9df;margin-bottom:4px;font-weight:700}
 .sos-field input{width:100%;font-family:var(--mono);font-size:17px;font-weight:700;color:var(--ink);
   background:#fff;border:2px solid rgba(31,78,121,.3);border-radius:10px;padding:10px;direction:ltr;text-align:left;outline:none}
+
+/* ── group chat ───────────────────────────────────────────────────── */
+.chat-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:10px;margin-top:8px}
+.chat-list{display:flex;flex-direction:column;gap:7px;max-height:min(52vh,440px);overflow-y:auto;padding:6px 4px}
+.chat-empty{text-align:center;font-size:12.5px;color:#93a0c4;padding:26px 10px;margin:0}
+.chat-daysep{align-self:center;font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.4px;
+  color:#93a0c4;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  padding:3px 11px;border-radius:999px;margin:8px 0 4px}
+.chat-row{display:flex}
+.chat-row.mine{justify-content:flex-end}
+.chat-bub{max-width:78%;background:var(--paper);border-radius:14px 14px 14px 3px;padding:7px 11px 8px;
+  box-shadow:0 4px 12px rgba(0,0,0,.35);transform:rotate(-.6deg)}
+.chat-row.mine .chat-bub{border-radius:14px 14px 3px 14px;background:linear-gradient(150deg,#FFE9C7,var(--paper));transform:rotate(.6deg)}
+.chat-who{display:flex;align-items:baseline;gap:7px;font-family:var(--script);font-weight:700;font-size:14px;color:var(--stamp);margin-bottom:1px}
+.chat-who time{font-family:var(--mono);font-weight:400;font-size:9px;color:#8a8370}
+.chat-txt{font-size:13.5px;line-height:1.5;color:#2a2f3d;white-space:pre-wrap;word-break:break-word}
+.chat-row-in{display:flex;gap:7px;margin-top:9px}
+.chat-input{flex:1;min-width:0;background:var(--paper);border:2px solid rgba(31,78,121,.22);border-radius:13px;
+  padding:11px 13px;font-size:14px;color:var(--ink)}
+.chat-input::placeholder{color:#8a8fa8}
+.chat-send{flex:none;width:46px;height:46px;border-radius:13px;font-size:19px;
+  background:linear-gradient(135deg,var(--cyan,#5CE1E6),#3bb7bc);box-shadow:0 4px 12px rgba(92,225,230,.4)}
+.chat-send:active{transform:scale(.93)}
+.chat-me{margin-top:8px;font-size:11px;color:#93a0c4;text-align:center}
+.chat-me b{color:#cdd5ee;font-weight:700;cursor:pointer;border-bottom:1px dashed rgba(205,213,238,.5)}
 
 /* ── expense modal ────────────────────────────────────────────────── */
 .xmodal[hidden]{display:none}
@@ -1758,6 +1783,7 @@ const TABS = [
   { id:'talk', icon:'🗣️', label:'מילים' }, { id:'badges', icon:'🏆', label:'הישגים' },
   { id:'money', icon:'💰', label:'כסף' },
   { id:'radar', icon:'🧭', label:'סקר סודי' },
+  { id:'chat', icon:'💬', label:'צ׳אט' },
   { id:'music', icon:'🎧', label:'פסקול' },
   { id:'album', icon:'📸', label:'האלבום' }
 ];
@@ -3298,6 +3324,110 @@ function radarGeo() {
   );
 }
 
+/* ══ group chat ═════════════════════════════════════════════════════
+   Everything else in this app runs offline, by design (see README). A
+   shared, live group chat cannot: it is the one deliberate exception, a
+   small hosted Supabase project (free tier) standing in for the family's
+   WhatsApp thread so the conversation is saved instead of scrolling away.
+   No SDK, no build step — just fetch() against Supabase's REST API,
+   staying true to "one file, no libraries" everywhere else. */
+const CHAT_URL = 'https://fnxgxffvpcfnsqipntad.supabase.co/rest/v1/messages';
+const CHAT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZueGd4ZmZ2cGNmbnNxaXBudGFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NzU3NDEsImV4cCI6MjEwNDQ1MTc0MX0.vYUTOCZi4gnNaxMTTKZwFg_zvm_zKMyd1cuMNvCq24A';
+let chatMessages = [];
+let chatLoadedOnce = false;
+let chatSending = false;
+
+async function pollChat() {
+  try {
+    const res = await fetch(CHAT_URL + '?select=id,name,body,created_at&order=created_at.asc&limit=300', {
+      headers: { apikey: CHAT_KEY, Authorization: 'Bearer ' + CHAT_KEY }
+    });
+    if (!res.ok) throw new Error('bad status');
+    chatMessages = await res.json();
+  } catch (e) { /* offline or unreachable — keep showing the last known messages */ }
+  chatLoadedOnce = true;
+  if (state.tab === 'chat') renderChatList();
+}
+
+async function chatSend() {
+  const input = $('#chatInput');
+  if (!input || chatSending) return;
+  const body = input.value.trim();
+  if (!body) return;
+  const name = myName() || 'אנונימי';
+  chatSending = true;
+  input.disabled = true;
+  try {
+    const res = await fetch(CHAT_URL, {
+      method: 'POST',
+      headers: {
+        apikey: CHAT_KEY, Authorization: 'Bearer ' + CHAT_KEY,
+        'Content-Type': 'application/json', Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ name, body })
+    });
+    if (res.ok) input.value = '';
+    else window.alert('ההודעה לא נשלחה — נסו שוב.');
+  } catch (e) {
+    window.alert('אין חיבור לאינטרנט כרגע. ההודעה לא נשלחה.');
+  }
+  chatSending = false;
+  input.disabled = false;
+  input.focus();
+  void pollChat();
+}
+
+const chatDay  = ts => new Date(ts).toLocaleDateString('he-IL', { weekday:'long', day:'numeric', month:'short' });
+const chatTime = ts => new Date(ts).toLocaleTimeString('he-IL', { hour:'2-digit', minute:'2-digit' });
+
+function chatBubbleHTML(m) {
+  const mine = m.name === myName();
+  return '<div class="chat-row' + (mine ? ' mine' : '') + '">' +
+    '<div class="chat-bub">' +
+      '<div class="chat-who">' + esc(m.name) + '<time>' + chatTime(m.created_at) + '</time></div>' +
+      '<div class="chat-txt">' + esc(m.body) + '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function chatListHTML() {
+  if (!chatLoadedOnce) return '<p class="chat-empty">טוען הודעות…</p>';
+  if (!chatMessages.length) return '<p class="chat-empty">אין עדיין הודעות. תהיו הראשונים לכתוב! ✍️</p>';
+  let out = '', lastDay = null;
+  chatMessages.forEach(m => {
+    const d = chatDay(m.created_at);
+    if (d !== lastDay) { out += '<div class="chat-daysep">' + esc(d) + '</div>'; lastDay = d; }
+    out += chatBubbleHTML(m);
+  });
+  return out;
+}
+
+/* Patches the list in place rather than going through renderMain(), so a
+   background poll never yanks focus away from mid-typed text. */
+function renderChatList() {
+  const list = $('#chatList');
+  if (!list) return;
+  const wasNearBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 60;
+  list.innerHTML = chatListHTML();
+  if (wasNearBottom) list.scrollTop = list.scrollHeight;
+}
+
+function chatHTML() {
+  const who = myName();
+  return '<div class="page">' +
+    headHTML('הקבוצה מדברת 💬', C.cyan, true) +
+    '<p class="lead">חדר צ׳אט אחד לכל המשפחה, במקום קבוצת הוואטסאפ — כל הודעה נשמרת כאן לכל הטיול.</p>' +
+    '<div class="chat-box">' +
+      '<div class="chat-list" id="chatList">' + chatListHTML() + '</div>' +
+      '<div class="chat-row-in">' +
+        '<input class="chat-input" id="chatInput" type="text" maxlength="500" placeholder="כתבו הודעה…" autocomplete="off">' +
+        '<button class="chat-send" data-act="chat-send" aria-label="שליחה">📮</button>' +
+      '</div>' +
+      '<div class="chat-me">כותבים בתור <b data-act="who">' + esc(who || 'אנונימי') + ' ✎</b></div>' +
+    '</div>' +
+  '</div>';
+}
+
 function radarHTML() {
   return '<div class="page">' +
     headHTML('הסקר הסודי 🧭', C.mint) +
@@ -3395,7 +3525,7 @@ function musicHTML() {
   '</div>';
 }
 
-const VIEWS = { days:daysHTML, hunt:huntHTML, talk:talkHTML, badges:badgesHTML, money:moneyHTML, radar:radarHTML, music:musicHTML, album:albumHTML };
+const VIEWS = { days:daysHTML, hunt:huntHTML, talk:talkHTML, badges:badgesHTML, money:moneyHTML, radar:radarHTML, chat:chatHTML, music:musicHTML, album:albumHTML };
 
 /* ══ render ═════════════════════════════════════════════════════════ */
 function renderNav() {
@@ -3527,6 +3657,11 @@ function goTab(id) {
   renderNav();
   renderMain();
   window.scrollTo({ top:0, behavior:'smooth' });
+  if (id === 'chat') {
+    void pollChat();
+    const list = $('#chatList');
+    if (list) list.scrollTop = list.scrollHeight;
+  }
 }
 
 function openDay(n) {
@@ -3677,6 +3812,7 @@ document.addEventListener('click', e => {
   if (act === 'book-print') return window.print();
   if (act === 'reset')     return reset();
   if (act === 'tab')       return goTab(el.dataset.id);
+  if (act === 'chat-send') return void chatSend();
   if (act === 'hunt')      return toggleHunt(el.dataset.id);
   if (act === 'say')       return say(el.dataset.id);
   if (act === 'day-open')  return openDay(+el.dataset.n);
@@ -3708,6 +3844,13 @@ document.addEventListener('click', e => {
   if (act === 'chrono-quest') return toggleChronoQuest(+el.dataset.i);
   if (act === 'chrono-vibe')  return pickChronoVibe(el.dataset.v);
   if (act === 'chrono-capture') return chronoCaptureGo();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.target && e.target.id === 'chatInput' && e.key === 'Enter') {
+    e.preventDefault();
+    void chatSend();
+  }
 });
 
 document.addEventListener('change', e => {
@@ -5002,6 +5145,9 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) mayb
   if ($('#gate').hidden && !setupDone()) openSetup(0);
 })();
 void refreshShots(true);
+void pollChat();
+setInterval(pollChat, 4000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) void pollChat(); });
 })();
 </script>
 </body>
