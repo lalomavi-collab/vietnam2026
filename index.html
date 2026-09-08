@@ -981,6 +981,30 @@ input{font-family:inherit}
 .chat-send:active{transform:scale(.93)}
 .chat-me{margin-top:8px;font-size:11px;color:#93a0c4;text-align:center}
 .chat-me b{color:#cdd5ee;font-weight:700;cursor:pointer;border-bottom:1px dashed rgba(205,213,238,.5)}
+.chat-pin{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:11.5px;color:#93a0c4;cursor:pointer;user-select:none}
+.chat-pin input{width:15px;height:15px;accent-color:var(--cyan)}
+.chat-pin.on{color:#B9F7F9;font-weight:700}
+
+/* prominent header entry point, same pulse treatment as the SOS button */
+.icon-btn.chat-top{background:linear-gradient(150deg,var(--cyan,#5CE1E6),#3bb7bc);color:#04303a;
+  animation:sosPulse 3.4s ease-out infinite;animation-delay:1.7s}
+.chat-badge{position:absolute;top:-4px;inset-inline-start:-4px;min-width:17px;height:17px;padding:0 3px;
+  border-radius:99px;background:var(--stamp);color:#fff;font-family:var(--mono);font-weight:700;
+  font-size:10px;line-height:17px;text-align:center;border:2px solid #0d1020}
+.chat-badge[hidden]{display:none}
+
+/* ── chat welcome popup (once) ────────────────────────────────────────
+   Same modal shell as gametime/scampop (.gt-card/.gt-b/.gt-skip). */
+.chatwelcome[hidden]{display:none}
+.chatwelcome{position:fixed;inset:0;z-index:247;display:grid;place-items:center;padding:22px;
+  background:rgba(6,8,18,.86);backdrop-filter:blur(6px)}
+.cw-card{border-top:5px solid var(--cyan,#5CE1E6)}
+.cw-emoji{font-size:50px;line-height:1}
+
+/* ── pinned announcement banner (reuses .offer's paper-note shell) ───── */
+.offer.announce{outline:3px solid var(--cyan,#5CE1E6);outline-offset:-3px}
+.offer.announce .offer-txt b::before{content:'📌 ';}
+.offer.announce .offer-go{background:linear-gradient(135deg,var(--cyan,#5CE1E6),#3bb7bc);color:#04303a}
 
 /* ── expense modal ────────────────────────────────────────────────── */
 .xmodal[hidden]{display:none}
@@ -1140,6 +1164,16 @@ input{font-family:inherit}
   </div>
 </div>
 
+<div class="chatwelcome" id="chatwelcome" hidden>
+  <div class="gt-card cw-card">
+    <div class="cw-emoji">💬</div>
+    <h2>הצטרפו לשיחה!</h2>
+    <p>יש עכשיו חדר צ'אט אחד לכל המשפחה, במקום קבוצת הוואטסאפ, וכל הודעה נשמרת כאן לכל הטיול. ממש מתרגשים שתצטרפו!</p>
+    <button class="gt-b main" data-act="cw-open">בואו נדבר 💬</button>
+    <button class="gt-skip" data-act="cw-close">אחר כך</button>
+  </div>
+</div>
+
 <div class="quiz" id="quiz" hidden>
   <div class="qz-card" id="quizBody"></div>
 </div>
@@ -1258,6 +1292,9 @@ input{font-family:inherit}
           <div class="title-note"><span>וייטנאם 2026</span></div>
         </div>
         <button class="icon-btn music" id="musicBtn" data-act="music" title="מוזיקה" aria-label="מוזיקת רקע">🔇</button>
+        <button class="icon-btn chat-top" data-act="tab" data-id="chat" title="צ׳אט המשפחה" aria-label="צ׳אט המשפחה">
+          💬<span class="chat-badge" id="chatBadge" hidden></span>
+        </button>
         <button class="icon-btn sos-top" id="sosFab" data-act="sos" title="חירום" aria-label="כפתור חירום">🆘</button>
       </div>
       <div class="subtitle">19 ימים · 9–27 בספטמבר · 11 מגלי ארצות</div>
@@ -1268,6 +1305,14 @@ input{font-family:inherit}
       <div class="stat stat--hunt"><div class="stat-k">ציד</div><div class="stat-v" id="statHunt">0/12</div></div>
       <div class="stat stat--days"><div class="stat-k">ימים</div><div class="stat-v" id="statDays">0/19</div></div>
       <div class="stat stat--badges"><div class="stat-k">מדליות</div><div class="stat-v" id="statBadges">0/10</div></div>
+    </div>
+
+    <div class="offer announce" id="announce" hidden>
+      <div class="offer-txt">
+        <b id="announceTitle"></b>
+        <span id="announceBody"></span>
+      </div>
+      <button class="offer-go" data-act="announce-close">✓ הבנתי</button>
     </div>
 
     <div class="offer install" id="install" hidden>
@@ -3336,17 +3381,26 @@ const CHAT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 let chatMessages = [];
 let chatLoadedOnce = false;
 let chatSending = false;
+let chatPinChecked = false;
+
+/* Last message id this device has actually looked at (chat tab open),
+   for the header badge — separate from the announcement's own "seen"
+   flag below, which tracks the pinned banner instead. */
+const CHAT_LASTSEEN = 'vn-chat-lastseen';
+const ANNOUNCE_SEEN = 'vn-announce-seen';
 
 async function pollChat() {
   try {
-    const res = await fetch(CHAT_URL + '?select=id,name,body,created_at&order=created_at.asc&limit=300', {
+    const res = await fetch(CHAT_URL + '?select=id,name,body,created_at,pinned&order=created_at.asc&limit=300', {
       headers: { apikey: CHAT_KEY, Authorization: 'Bearer ' + CHAT_KEY }
     });
     if (!res.ok) throw new Error('bad status');
     chatMessages = await res.json();
   } catch (e) { /* offline or unreachable — keep showing the last known messages */ }
   chatLoadedOnce = true;
-  if (state.tab === 'chat') renderChatList();
+  if (state.tab === 'chat') { renderChatList(); markChatSeen(); }
+  updateChatBadge();
+  updateAnnouncementBanner();
 }
 
 async function chatSend() {
@@ -3355,6 +3409,7 @@ async function chatSend() {
   const body = input.value.trim();
   if (!body) return;
   const name = myName() || 'אנונימי';
+  const pinned = chatPinChecked;
   chatSending = true;
   input.disabled = true;
   try {
@@ -3364,9 +3419,9 @@ async function chatSend() {
         apikey: CHAT_KEY, Authorization: 'Bearer ' + CHAT_KEY,
         'Content-Type': 'application/json', Prefer: 'return=minimal'
       },
-      body: JSON.stringify({ name, body })
+      body: JSON.stringify({ name, body, pinned })
     });
-    if (res.ok) input.value = '';
+    if (res.ok) { input.value = ''; chatPinChecked = false; const cb = $('#chatPin'); if (cb) cb.checked = false; }
     else window.alert('ההודעה לא נשלחה — נסו שוב.');
   } catch (e) {
     window.alert('אין חיבור לאינטרנט כרגע. ההודעה לא נשלחה.');
@@ -3376,6 +3431,66 @@ async function chatSend() {
   input.focus();
   void pollChat();
 }
+
+function toggleChatPin(on) { chatPinChecked = on; }
+
+/* ── unread badge on the header button ────────────────────────────── */
+function markChatSeen() {
+  if (!chatMessages.length) return;
+  try { localStorage.setItem(CHAT_LASTSEEN, String(chatMessages[chatMessages.length - 1].id)); } catch (e) {}
+  updateChatBadge();
+}
+
+function updateChatBadge() {
+  const badge = $('#chatBadge');
+  if (!badge) return;
+  let lastSeen = 0;
+  try { lastSeen = +localStorage.getItem(CHAT_LASTSEEN) || 0; } catch (e) {}
+  const n = chatMessages.filter(m => m.id > lastSeen).length;
+  if (n && state.tab !== 'chat') { badge.textContent = n > 9 ? '9+' : String(n); badge.hidden = false; }
+  else badge.hidden = true;
+}
+
+/* ── pinned announcement banner, visible from any tab ─────────────────
+   The newest message posted with pinned:true, until someone dismisses
+   it on this device or a newer pinned message replaces it — same
+   per-device "seen id" idiom as the scam popup and game-time modal. */
+function updateAnnouncementBanner() {
+  const box = $('#announce');
+  if (!box) return;
+  const pins = chatMessages.filter(m => m.pinned);
+  const latest = pins.length ? pins[pins.length - 1] : null;
+  if (!latest) { box.hidden = true; return; }
+  let seen = null;
+  try { seen = localStorage.getItem(ANNOUNCE_SEEN); } catch (e) {}
+  if (String(latest.id) === seen) { box.hidden = true; return; }
+  $('#announceTitle').textContent = 'הודעה מ' + latest.name;
+  $('#announceBody').textContent = latest.body;
+  box.dataset.id = latest.id;
+  box.hidden = false;
+}
+
+function closeAnnouncement() {
+  const box = $('#announce');
+  if (!box) return;
+  try { localStorage.setItem(ANNOUNCE_SEEN, box.dataset.id || ''); } catch (e) {}
+  box.hidden = true;
+}
+
+/* ── one-time welcome popup, same shell as gametime/scampop ──────────
+   Shown once ever, and only once nothing else is already on screen. */
+const CHAT_WELCOME_SEEN = 'vn-chat-welcome-seen';
+
+function maybeOfferChatWelcome() {
+  try { if (localStorage.getItem(CHAT_WELCOME_SEEN)) return; } catch (e) {}
+  if (!$('#gate').hidden || !$('#setup').hidden || !$('#gametime').hidden ||
+      !$('#scampop').hidden || !$('#quiz').hidden || !$('#chrono').hidden) return;
+  $('#chatwelcome').hidden = false;
+  try { localStorage.setItem(CHAT_WELCOME_SEEN, '1'); } catch (e) {}
+}
+
+function closeChatWelcome() { $('#chatwelcome').hidden = true; }
+function openChatWelcome() { closeChatWelcome(); goTab('chat'); }
 
 const chatDay  = ts => new Date(ts).toLocaleDateString('he-IL', { weekday:'long', day:'numeric', month:'short' });
 const chatTime = ts => new Date(ts).toLocaleTimeString('he-IL', { hour:'2-digit', minute:'2-digit' });
@@ -3423,6 +3538,10 @@ function chatHTML() {
         '<input class="chat-input" id="chatInput" type="text" maxlength="500" placeholder="כתבו הודעה…" autocomplete="off">' +
         '<button class="chat-send" data-act="chat-send" aria-label="שליחה">📮</button>' +
       '</div>' +
+      '<label class="chat-pin' + (chatPinChecked ? ' on' : '') + '">' +
+        '<input type="checkbox" id="chatPin" data-act="chat-pin"' + (chatPinChecked ? ' checked' : '') + '>' +
+        '📌 הודעה נעוצה לכולם (כמו שעת נחיתה או יציאה)' +
+      '</label>' +
       '<div class="chat-me">כותבים בתור <b data-act="who">' + esc(who || 'אנונימי') + ' ✎</b></div>' +
     '</div>' +
   '</div>';
@@ -3659,8 +3778,11 @@ function goTab(id) {
   window.scrollTo({ top:0, behavior:'smooth' });
   if (id === 'chat') {
     void pollChat();
+    markChatSeen();
     const list = $('#chatList');
     if (list) list.scrollTop = list.scrollHeight;
+  } else {
+    updateChatBadge();
   }
 }
 
@@ -3813,6 +3935,10 @@ document.addEventListener('click', e => {
   if (act === 'reset')     return reset();
   if (act === 'tab')       return goTab(el.dataset.id);
   if (act === 'chat-send') return void chatSend();
+  if (act === 'chat-pin')  return toggleChatPin(el.checked);
+  if (act === 'cw-open')   return openChatWelcome();
+  if (act === 'cw-close')  return closeChatWelcome();
+  if (act === 'announce-close') return closeAnnouncement();
   if (act === 'hunt')      return toggleHunt(el.dataset.id);
   if (act === 'say')       return say(el.dataset.id);
   if (act === 'day-open')  return openDay(+el.dataset.n);
@@ -5139,6 +5265,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) mayb
 setTimeout(maybeOfferGame, 1500);
 setInterval(maybeOfferGame, 5 * 60 * 1000);   // a window can open mid-session
 document.addEventListener('visibilitychange', () => { if (!document.hidden) maybeOfferGame(); });
+setTimeout(maybeOfferChatWelcome, 2000);      // after the safety/game popups get first refusal
 (async () => {
   photosBanked = ('caches' in window) && (await cachedCount()) >= ALL_PHOTOS.length;
   /* Already through the gate on a previous visit but never set up. */
