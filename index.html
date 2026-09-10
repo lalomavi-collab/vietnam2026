@@ -511,6 +511,13 @@ input{font-family:inherit}
   border:1px solid rgba(92,225,230,.26)}
 .scam-end b{display:block;font-size:13px;color:#B9F7F9;margin-bottom:4px}
 .scam-end p{margin:0;font-size:12.5px;line-height:1.65;color:#a8b6cf;text-wrap:pretty}
+.day-shoot{display:flex;align-items:center;gap:9px;width:100%;text-align:start;min-height:48px;
+  margin-top:12px;padding:9px 12px;border-radius:13px;font-size:13px;font-weight:700;
+  background:rgba(62,224,143,.13);border:1px solid rgba(62,224,143,.36);color:#BFF5DA}
+.ds-i{flex:none;font-size:17px;line-height:1}
+.ds-t{flex:1;min-width:0}
+.ds-n{flex:none;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:rgba(62,224,143,.3);
+  color:#fff;font-size:12px;display:grid;place-items:center}
 .day-scam{display:flex;align-items:center;gap:8px;width:100%;text-align:start;min-height:46px;
   margin-top:12px;padding:9px 12px;border-radius:13px;font-size:12.5px;font-weight:700;
   background:linear-gradient(150deg,rgba(255,90,110,.22),rgba(214,25,52,.13));
@@ -1339,7 +1346,7 @@ input{font-family:inherit}
       <nav class="nav" id="nav"></nav>
     </div>
     <div id="burstHost"></div>
-    <input type="file" id="shotFile" accept="image/*,video/*" capture="environment" hidden>
+    <input type="file" id="shotFile" accept="image/*,video/*" multiple hidden>
     <input type="file" id="albumFile" accept="application/json,.json" hidden>
     <input type="file" id="avatarFile" accept="image/*" hidden>
     <div class="busy" id="shotBusy" hidden><div class="busy-in">שומר את התמונה…</div></div>
@@ -1729,6 +1736,38 @@ const TRIVIA = [
 ];
 const TRIVIA_MAX = TRIVIA.reduce((t, s) => t + s.qs.reduce((x, q) => x + q.p, 0), 0);
 const qid = (si, qi) => si + '-' + qi;
+
+/* The thirty questions were written with the right answer at the top far
+   too often — 19 of 30 at position א, and ד correct exactly never. A
+   child who always taps the first option scores 63% without reading
+   anything. The options are reordered before they are shown.
+
+   In the trivia tab the order is fixed per player: an answer already
+   given is stored as an index, so a reshuffle would silently change what
+   it means. Seeding it with the player's name also means two children
+   comparing screens do not see the same positions. The speed round keeps
+   nothing, so it reshuffles every round. */
+function hashStr(str) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h >>> 0;
+}
+function permutation(n, seed) {
+  const idx = [...Array(n).keys()];
+  let st = (seed >>> 0) || 1;
+  const rnd = () => (st = (Math.imul(st, 1664525) + 1013904223) >>> 0) / 4294967296;
+  for (let i = n - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [idx[i], idx[j]] = [idx[j], idx[i]];
+  }
+  return idx;
+}
+function shuffleQ(q, seed) {
+  const order = permutation(q.a.length, seed);
+  return { ...q, a: order.map(i => q.a[i]), c: order.indexOf(q.c) };
+}
+/* Same question, same player, same order — every render, forever. */
+const triviaQ = (si, qi) => shuffleQ(TRIVIA[si].qs[qi], hashStr(qid(si, qi) + '|' + myName()));
 
 /* Forty-one personal missions. Forty-one is prime, and each person is
    handed pool[(day * 7 + their index) % 41] — so on any given day the
@@ -2691,7 +2730,9 @@ function startQuiz() {
     const j = Math.floor(Math.random() * (i + 1));
     [all[i], all[j]] = [all[j], all[i]];
   }
-  quiz = { qs: all.slice(0, QUIZ_N), i: 0, score: 0, picked: null, t0: 0, left: QUIZ_SECS, done: false };
+  /* Fresh positions every round — nothing is stored, so nothing breaks. */
+  const picked = all.slice(0, QUIZ_N).map(q => shuffleQ(q, (Math.random() * 4294967296) >>> 0));
+  quiz = { qs: picked, i: 0, score: 0, picked: null, t0: 0, left: QUIZ_SECS, done: false };
   $('#quiz').hidden = false;
   document.body.style.overflow = 'hidden';
   askQuiz();
@@ -2787,6 +2828,14 @@ function paintQuiz() {
 
 function toggleMission(n) {
   const has = state.missions.includes(n);
+  /* Three points for tapping a button was too easy, and the podium made
+     it tempting. Claiming the mission now needs a photo from that day —
+     tapping without one opens the camera instead of arguing. */
+  if (!has && !shots.some(x => x.day === n)) {
+    celebrate('📷', 'קודם תמונה מהיום הזה');
+    setTimeout(() => shoot(n), 650);
+    return;
+  }
   const missions = has ? state.missions.filter(x => x !== n) : [...state.missions, n];
   const badged = applyChange({ missions });
   $('#daysList').innerHTML = DAYS.map(dayHTML).join('');
@@ -2796,7 +2845,8 @@ function toggleMission(n) {
 
 function triviaScore() {
   let pts = 0, right = 0, done = 0;
-  TRIVIA.forEach((set, si) => set.qs.forEach((q, qi) => {
+  TRIVIA.forEach((set, si) => set.qs.forEach((_raw, qi) => {
+    const q = triviaQ(si, qi);
     const a = state.answers[qid(si, qi)];
     if (a === undefined) return;
     done++;
@@ -2808,7 +2858,7 @@ function triviaScore() {
 function answerQ(si, qi, pick) {
   const key = qid(si, qi);
   if (state.answers[key] !== undefined) return;      // one shot per question
-  const q = TRIVIA[si].qs[qi];
+  const q = triviaQ(si, qi);
   state.answers = { ...state.answers, [key]: pick };
   applyChange({ answers: state.answers });
   renderMain();
@@ -2835,7 +2885,8 @@ function triviaHTML() {
       return '<div class="tv-set">' +
         '<div class="tv-set-h">' + esc(set.icon) + ' ' + esc(set.set) +
           '<i>' + answered + '/' + set.qs.length + '</i></div>' +
-        set.qs.map((q, qi) => {
+        set.qs.map((_raw, qi) => {
+          const q = triviaQ(si, qi);
           const key = qid(si, qi);
           const given = state.answers[key];
           const shown = given !== undefined;
@@ -2960,11 +3011,24 @@ function dayHTML(d) {
         '<div class="mission-k">המשימה הסודית של היום</div>' +
         '<div class="mission-v">' + esc(d.mission) + '</div>' +
       '</div>' +
-      (myName() ? '<button class="mine' + (state.missions.includes(d.n) ? ' on' : '') + '" data-act="mission" data-n="' + d.n + '">' +
-        '<span class="mine-k">המשימה האישית של ' + esc(myName()) + ' · 3 נק׳</span>' +
-        '<span class="mine-v">' + esc(myMission(d.n)) + '</span>' +
-        '<span class="mine-tick">' + (state.missions.includes(d.n) ? '✓ בוצע' : 'לסמן כבוצע') + '</span>' +
-      '</button>' : '') +
+      (myName() ? (() => {
+        const claimed = state.missions.includes(d.n);
+        const proof = shots.some(x => x.day === d.n);
+        return '<button class="mine' + (claimed ? ' on' : '') + '" data-act="mission" data-n="' + d.n + '">' +
+          '<span class="mine-k">המשימה האישית של ' + esc(myName()) + ' · 3 נק׳</span>' +
+          '<span class="mine-v">' + esc(myMission(d.n)) + '</span>' +
+          '<span class="mine-tick">' + (claimed ? '✓ בוצע'
+            : proof ? 'לסמן כבוצע' : '📷 צריך תמונה מהיום') + '</span>' +
+        '</button>';
+      })() : '') +
+
+      '<button class="day-shoot" data-act="shoot" data-n="' + d.n + '">' +
+        '<span class="ds-i">📷</span>' +
+        '<span class="ds-t">' + (shots.filter(x => x.day === d.n).length
+          ? 'להוסיף עוד תמונה ליום הזה' : 'להוסיף תמונה או סרטון ליום הזה') + '</span>' +
+        (shots.filter(x => x.day === d.n).length
+          ? '<span class="ds-n">' + shots.filter(x => x.day === d.n).length + '</span>' : '') +
+      '</button>' +
 
       (scamsForDay(d.n).length
         ? '<button class="day-scam" data-act="scam-go" data-n="' + d.n + '"><span class="day-scam-i">🚨</span> ' +
@@ -4436,7 +4500,16 @@ async function refreshShots(rerender) {
   coverURL = cover ? shotURL(cover) : '';
   shots = shots.filter(x => x.day !== 0);
   paintCover();
-  if (rerender && state.tab === 'album') renderMain();
+  /* The day card now shows a photo count and gates the personal mission
+     on having one, so adding a picture from the diary has to repaint the
+     diary — not only the album. Without this the card sits there looking
+     as though nothing happened. */
+  if (!rerender) return;
+  if (state.tab === 'album') renderMain();
+  else if (state.tab === 'days') {
+    const list = $('#daysList');
+    if (list) { list.innerHTML = DAYS.map(dayHTML).join(''); if (state.open) syncReel(state.open); }
+  }
 }
 
 /* One hidden input, retargeted per day. */
@@ -4453,32 +4526,48 @@ function shoot(day) {
 }
 
 async function onShotPicked(e) {
-  const file = e.target.files && e.target.files[0];
+  const files = Array.from((e.target.files || []));
   /* A capture kicked off from Chrono-Lens tags the next shoot() call — if
      the file picker gets cancelled, that tag must not leak onto the next,
      unrelated photo taken from the album tab. */
-  if (!file) { chronoCaptionHint = null; chronoCaptureActive = false; return; }
+  if (!files.length) { chronoCaptionHint = null; chronoCaptureActive = false; return; }
   const day = +e.target.dataset.day;
   const d = DAYS.find(x => x.n === day);
-  const caption = window.prompt(isVideo(file) ? 'מה לכתוב מתחת לסרטון?\n(אפשר להשאיר ריק)'
-                                              : 'מה לכתוב על התמונה?\n(אפשר להשאיר ריק)',
+  /* One caption for the batch: asking five times for five pictures from
+     the same afternoon is how people stop adding pictures. */
+  const many = files.length > 1;
+  const caption = window.prompt(
+    many ? files.length + ' פריטים — מה לכתוב על כולם?\n(אפשר להשאיר ריק)'
+         : isVideo(files[0]) ? 'מה לכתוב מתחת לסרטון?\n(אפשר להשאיר ריק)'
+                             : 'מה לכתוב על התמונה?\n(אפשר להשאיר ריק)',
     chronoCaptionHint || (d ? d.cap : '')) || '';
   chronoCaptionHint = null;
   const wasChrono = chronoCaptureActive; chronoCaptureActive = false;
   const busy = $('#shotBusy'); busy.hidden = false;
+  const label = busy.querySelector('.busy-in');
+  let saved = 0; const failed = [];
   try {
-    const rec = await processShot(file, caption.trim(), day);
-    await shotsPut(rec);
+    for (const file of files) {
+      if (many && label) label.textContent = 'שומר… ' + (saved + 1) + ' מתוך ' + files.length;
+      /* One bad file out of ten must not lose the other nine. */
+      try {
+        await shotsPut(await processShot(file, caption.trim(), day));
+        saved++;
+      } catch (err) { failed.push(err && err.message ? err.message : 'שגיאה'); }
+    }
     await refreshShots(true);
-    celebrate(isVideo(file) ? '🎬' : '📸', 'נשמר ביום ' + day);
-    if (wasChrono) closeChrono();
-  } catch (err) {
-    /* A size or length refusal is a sentence we wrote; anything else is
-       the browser running out of room. Do not blur the two. */
-    window.alert(err && err.message && /MB|שניות/.test(err.message)
-      ? err.message
-      : 'לא הצלחתי לשמור. כנראה נגמר המקום בטלפון — נסו למחוק כמה פריטים מהאלבום.');
-  } finally { busy.hidden = true; e.target.value = ''; }
+    if (saved) celebrate(files.some(isVideo) ? '🎬' : '📸',
+      (many ? saved + ' נשמרו' : 'נשמר') + ' ביום ' + day);
+    if (failed.length) window.alert(
+      (saved ? 'נשמרו ' + saved + ' מתוך ' + files.length + '.\n\n' : '') +
+      (/MB|שניות/.test(failed[0]) ? failed[0]
+        : 'לא הצלחתי לשמור. כנראה נגמר המקום בטלפון — נסו למחוק כמה פריטים מהאלבום.'));
+    if (wasChrono && saved) closeChrono();
+  } finally {
+    busy.hidden = true;
+    if (label) label.textContent = 'שומר את התמונה…';
+    e.target.value = '';
+  }
 }
 
 /* ══ chrono-lens engine ═════════════════════════════════════════════
